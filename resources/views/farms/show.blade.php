@@ -1,34 +1,7 @@
 @extends('layouts.userArea')
 
 @section('content')
-@if(auth()->user()->id == $pageData->farm->owner)
-<div class="modal" id="deleteModal">
-	<form method="post" action="{{url('/farms/'.$pageData->farm->id)}}">
-	@csrf
-	@method('DELETE')
-	</form>
-  <div class="modal-background"></div>
-  <div class="modal-card ">
-    <header class="modal-card-head has-background-danger">
-      <p class="modal-card-title has-text-white">Delete Farm</p>
-      
-    </header>
-    <section class="modal-card-body">
-		<p class="title is-4"><strong>Are You Sure You Want To Delete Your Farm?</strong></p>
-		<div class="field is-grouped">
-			<div class="control">
-				<button class="button is-danger is-large" id="deleteYes">Yes</button>
-			</div>
-			<div class="control">
-				<button class="button is-info is-large" id="deleteNo">No</button>
-			</div>
-		</div>
-		
-      
-    </section>
-  </div>
-</div>
-@endif
+<div class="hidden" id="farmId"><input type="hidden" name="id" value="{{$pageData->farm->id}}"/></div>
 <div class="columns">
 	<div class="column is-four-fifths has-text-left" id="farmName">
 		<h1 class="title is-1 " >{{$pageData->farm->name}}</h1>
@@ -69,7 +42,7 @@
 					<a class="dropdown-item is-bold has-text-centered has-text-info" id="rename">
 						<strong>Re-name Farm</strong>
 					</a>
-					<a class="dropdown-item has-text-danger has-text-centered" id="delete">
+					<a class="dropdown-item has-text-danger has-text-centered" id="deleteFarm">
 						<strong>Delete Farm</strong>
 					</a>
 				</div>

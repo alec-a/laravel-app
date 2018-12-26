@@ -27,8 +27,8 @@ Route::resource('farms','farmController');
 Route::put('farms/join/{farm}','farmController@join');
 Route::put('farms/leave/{farm}','farmController@leave');
 
-
-
+Route::post('ajax/modal','modalController@get');
+Route::post('ajax/modal/farms','modalController@farms');
 
 
 route::group(array('prefix' => 'account'), function(){

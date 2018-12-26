@@ -18,6 +18,7 @@
   crossorigin="anonymous"></script>
     </head>
     <body>
+		<div id="token">@csrf</div>
 		<script
   src="{{ asset('js/userArea.js')}}" ></script>
 		@if (Route::has('login'))
@@ -81,7 +82,9 @@
 				</div>
 			</nav>
 		@endif
-		
+		<div id="modal">
+			
+		</div>
         <section class="section">
             <div class="container">
 				<div class='columns'>
@@ -112,6 +115,7 @@
 							</ul>
 						</aside>
 					</div>
+				
 					<div class='column is-two-thirds top'>
 						@yield('content')
 					</div>
