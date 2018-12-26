@@ -38,19 +38,13 @@ $(document).ready(function(){
 				}
 				if(formData['_token'].length > 0 && formData['farmName'].length >0){
 					formData['ajax'] = true;
-					$.ajaxSetup({
-						headers: {
-							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-						}
-					});
 					formData = {...formData};
-					
 					$.ajax({
-						type: "POST",
-						url: "/farms",
-						data: formData,
-						success: showNewFarm
-					});
+				type: "POST",
+				url: "/farms",
+				data: formData,
+				success: showNewFarm
+			});
 				}			
 			});
 			$("#newClose").click(function(){
@@ -60,18 +54,10 @@ $(document).ready(function(){
 			
 		});
 		
-		$("#delete").click(function(){
-			$('#deleteModal').addClass('is-active');
-			$("#deleteYes").focus();
-			$("#deleteNo").click(function(){
-				$('#deleteModal').removeClass('is-active');
-			});
-			
-			$("#deleteYes").click(function(){
-				$('#deleteModal').removeClass('is-active');
-				$('#deleteModal form').submit();
-			});
-			
+		$("#deleteFarm").click(function(){
+			var extras = {};
+			extras.farmId = $("#farmId input").val();
+			getModal('farms','delete',extras);
 		});
 		
 		$("#rename").click(function(){
@@ -121,4 +107,35 @@ $(document).ready(function(){
 			$('#newModal input[name="farmName"]').val('');
 		}
 		return true;
+	}
+	
+	function insertModal(data, textStatus, jqXHR){
+		$("#modal").html(data);
+	}
+	
+	function getModal(controller, name, extras=null){
+		$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+			});
+			var formData = [];
+			
+			
+			
+			formData['_token'] = $("#token input").val();
+			formData['controller'] = controller;
+			formData['name'] = name;
+			for(var key in extras){
+				formData[key] = extras[key];
+			}
+			
+			formData = {...formData};
+
+			$.ajax({
+				type: "POST",
+				url: "/ajax/modal/"+controller,
+				data: formData,
+				success: insertModal
+			});
 	}
