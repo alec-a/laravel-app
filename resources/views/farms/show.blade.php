@@ -58,7 +58,14 @@
 				</button>
 			</div>
 			<div class="dropdown-menu" id="dropdown-menu1" role="menu">
-				<div class="dropdown-content ">	
+				<div class="dropdown-content ">
+					<a class="dropdown-item is-bold has-text-centered" id="fields">
+						<strong>Add Fields</strong>
+					</a>
+					<a class="dropdown-item is-bold has-text-centered" id="season">
+						<strong>Next Season</strong>
+					</a>
+					<hr class="dropdown-divider">
 					<a class="dropdown-item is-bold has-text-centered has-text-info" id="rename">
 						<strong>Re-name Farm</strong>
 					</a>
@@ -97,48 +104,28 @@
 <div class='columns'>
 	@if(auth()->user()->id == $pageData->farm->owner || auth()->user()->farm_id == $pageData->farm->id)
 	
-	<div class="column">
-		<div class="tile is-ancestor">
-			<div class="tile is-vertical is-8">
-			  <div class="tile">
-				<div class="tile is-parent is-vertical">
-					 <article class="tile is-child notification is-info">
-					<p class="title">Info</p>
-					<p class="">Season: {{$pageData->farm->season}}</p>
-					<p class="">Owner: {{$pageData->farm->farmOwner->name}}</p>
-				  </article>
-				  <article class="tile is-child notification is-warning">
-					<p class="title">Members</p>
-					<p class="subtitle">{{$pageData->farm->workers->count()}}</p>
-					
-					<ul>
-					@foreach($pageData->farm->workers as $worker)
-						<li>{{$worker->name}}</li>						
-					@endforeach
-					</ul>
-				  </article>
-				</div>
-				<div class="tile is-parent">
-					<article class="tile is-child notification is-success">
-					  <p class="title">Worklogs</p>
-					</article>
-				</div>
-			  </div>
-			</div>
-			<div class="tile is-parent">
-			  <article class="tile is-child notification is-link">
-				<div class="content">
-				  <p class="title">Discussion</p>
-				  <p class="subtitle">With even more content<BR/>test<BR/>test<BR/>test<BR/>test<BR/>test<BR/>test<BR/>test<BR/>test<BR/>test<BR/>test<BR/>test<BR/>test<BR/>test<BR/>test<BR/>test</p>
-				  <div class="content">
-					<!-- Content -->
-				  </div>
-				</div>
-			  </article>
-			</div>
+	<div class="column is-one-third">
+		<div class="box is-fullheight has-text-weight-bold">
+		<h3 class="title is-3">Info</h3>
+		<p>Season: {{$pageData->farm->season}}</p>
+		<p>Owner: {{$pageData->farm->farmOwner->name}}</p>
 		</div>
 	</div>
-	
+	<div class="column is-one-third">
+		<div class="box is-fullheight has-text-weight-bold">
+		<h3 class="title is-3">Members</h3>
+		<p class="subtitle">{{$pageData->farm->workers->count()}}</p>
+			@foreach($pageData->farm->workers as $worker)
+				<li>{{$worker->name}}</li>						
+			@endforeach
+		</ul>
+		</div>
+	</div>
+	<div class="column is-one-third">
+		<div class="box is-fullheight has-text-weight-bold">
+		<h3 class="title is-3">Worklogs</h3>
+		</div>
+	</div>
 	
 	
 	@else
