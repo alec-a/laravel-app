@@ -26,6 +26,7 @@ $(document).ready(function(){
 		//Farms Js
 		$("#new").click(function(){
 			$('#newModal').addClass('is-active');
+			$('#newModal input[name="farmName"]').focus();
 			$("#newCreate").click(function(evt){
 				evt.stopImmediatePropagation();
 				evt.preventDefault();
@@ -100,17 +101,24 @@ $(document).ready(function(){
 	
 	function showNewFarm(data, textStatus, jqXHR){
 		var bottomRow = $('#farms .columns').last();
-		var numInRow = $(bottomRow).children('.column').length;
-		var lastInRow  = $(bottomRow).children('.column').last();
-		
-		if(numInRow == 3){
-			$(bottomRow).after('<div class="columns">'+data+'</div>');
+		if(bottomRow.length > 0){
+			var numInRow = $(bottomRow).children('.column').length;
+			var lastInRow  = $(bottomRow).children('.column').last();
+
+			if(numInRow == 3){
+				$(bottomRow).after('<div class="columns">'+data+'</div>');
+			}
+			else{
+				$(lastInRow).after(data);
+			}
+
+			$('#newModal').removeClass('is-active');
+			$('#newModal input[name="farmName"]').val('');
 		}
 		else{
-			$(lastInRow).after(data);
+			$("#farms").html('<div class="columns">'+data+'</div>');
+			$('#newModal').removeClass('is-active');
+			$('#newModal input[name="farmName"]').val('');
 		}
-		
-		$('#newModal').removeClass('is-active');
-		$('#newModal input[name="farmName"]').val('');
 		return true;
 	}
