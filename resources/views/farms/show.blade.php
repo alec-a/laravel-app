@@ -32,15 +32,15 @@
 			</div>
 			<div class="dropdown-menu" id="dropdown-menu1" role="menu">
 				<div class="dropdown-content ">
-					<a class="dropdown-item is-bold has-text-centered" id="fields">
+					<a class="dropdown-item is-bold has-text-centered has-text-light is-static" id="fields">
 						<strong>Add Fields</strong>
 					</a>
-					<a class="dropdown-item is-bold has-text-centered" id="season">
+					<a class="dropdown-item is-bold has-text-centered has-text-light is-static" id="season">
 						<strong>Next Season</strong>
 					</a>
 					<hr class="dropdown-divider">
 					<a class="dropdown-item is-bold has-text-centered has-text-info" id="rename">
-						<strong>Re-name Farm</strong>
+						<strong>Re-Name Farm</strong>
 					</a>
 					<a class="dropdown-item has-text-danger has-text-centered" id="deleteFarm">
 						<strong>Delete Farm</strong>
@@ -76,29 +76,43 @@
 
 <div class='columns'>
 	@if(auth()->user()->id == $pageData->farm->owner || auth()->user()->farm_id == $pageData->farm->id)
+	<div class="column is-two-thirds">
+		<div class="box has-text-weight-bold">
+			<h3 class="title is-3 has-text-centered">Fields</h3>
+			<article class="notification is-primary">Please Add Fields To The Farm (coming Soon)</article>
+		</div>
+		<div class="box has-text-weight-bold">
+			<h3 class="title is-3 has-text-centered">Worklogs</h3>
+			<article class="notification is-warning">
+				<p>Worklogs Can Only Be Created When The Farm Has Fields</p>
+			</article>
+		</div>
+		<div class="box has-text-weight-bold">
+			<h3 class="title is-3 has-text-centered">Discussion</h3>
+		</div>
+	</div>
+		
+	<div class="column is-one-third">
+		<div class="box has-text-weight-bold">
+			<h3 class="title is-3">Info</h3>
+			<p>Season: {{$pageData->farm->season}}</p>
+			<p>Owner: {{$pageData->farm->farmOwner->name}}</p>
+		</div>
+		<div class="box has-text-weight-bold">
+			<h3 class="title is-3">Members</h3>
+			@if ($pageData->farm->workers->count() > 0 )
+			<p class="subtitle">{{$pageData->farm->workers->count()}}</p>
+				@foreach($pageData->farm->workers as $worker)
+					<li>{{$worker->name}}</li>						
+				@endforeach
+			</ul>
+			@else
+			<article class="notification is-info">The Farm Has No Staff, Get Recruiting!</article>
+			@endif
+		</div>
+	</div>
+
 	
-	<div class="column is-one-third">
-		<div class="box is-fullheight has-text-weight-bold">
-		<h3 class="title is-3">Info</h3>
-		<p>Season: {{$pageData->farm->season}}</p>
-		<p>Owner: {{$pageData->farm->farmOwner->name}}</p>
-		</div>
-	</div>
-	<div class="column is-one-third">
-		<div class="box is-fullheight has-text-weight-bold">
-		<h3 class="title is-3">Members</h3>
-		<p class="subtitle">{{$pageData->farm->workers->count()}}</p>
-			@foreach($pageData->farm->workers as $worker)
-				<li>{{$worker->name}}</li>						
-			@endforeach
-		</ul>
-		</div>
-	</div>
-	<div class="column is-one-third">
-		<div class="box is-fullheight has-text-weight-bold">
-		<h3 class="title is-3">Worklogs</h3>
-		</div>
-	</div>
 	
 	
 	@else
