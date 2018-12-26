@@ -88,9 +88,9 @@
         <section class="section">
             <div class="container">
 				<div class='columns'>
-					<div class='column is-one-quarter'>
+					<div class='column is-one-quarter has-background-light is-fullheight' id="dashboardSideNav">
 						<aside class="menu">
-							<p class="menu-label">
+							<p class="menu-label is-size-6">
 							  General
 							</p>
 							<ul class="menu-list">
@@ -99,7 +99,7 @@
 							  <li><a href="{{url('/account')}}" class="{{$pageData->activeNav=='account'? 'is-active':''}}">Account</a></li>
 							  <li><a href="{{url('/account/messages')}}" class="{{$pageData->activeNav=='messages'? 'is-active':''}}">Messages</a></li>
 							</ul>
-							<p class="menu-label">
+							<p class="menu-label is-size-6">
 							  Administration
 							</p>
 							<ul class="menu-list">
@@ -116,7 +116,7 @@
 						</aside>
 					</div>
 				
-					<div class='column is-two-thirds top'>
+					<div class='column is-four-fifths top'>
 						@yield('content')
 					</div>
 				</div>

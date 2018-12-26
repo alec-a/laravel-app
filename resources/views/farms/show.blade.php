@@ -93,13 +93,14 @@
 	</div>
 		
 	<div class="column is-one-third">
-		<div class="box has-text-weight-bold">
-			<h3 class="title is-3">Info</h3>
+		<div class="box has-text-weight-bold is-radiusless is-shadowless is-paddingless">
+			<h3 class="title is-3 has-text-centered">Info</h3>
 			<p>Season: {{$pageData->farm->season}}</p>
 			<p>Owner: {{$pageData->farm->farmOwner->name}}</p>
 		</div>
-		<div class="box has-text-weight-bold">
-			<h3 class="title is-3">Members</h3>
+		<hr/>
+		<div class="box has-text-weight-bold  is-radiusless is-shadowless is-paddingless">
+			<h3 class="title is-3 has-text-centered">Members</h3>
 			@if ($pageData->farm->workers->count() > 0 )
 			<p class="subtitle">{{$pageData->farm->workers->count()}}</p>
 				@foreach($pageData->farm->workers as $worker)
@@ -110,6 +111,7 @@
 			<article class="notification is-info">The Farm Has No Staff, Get Recruiting!</article>
 			@endif
 		</div>
+		<hr/>
 	</div>
 
 	

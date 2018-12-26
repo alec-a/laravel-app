@@ -25,7 +25,8 @@ and open the template in the editor.
 	text-align: center !important;
 }
 .top {
-	margin: 16px auto 0 auto;
+	margin: 0px auto 16px auto;
+	padding-top: 0px;
 }
 .is-fullheight {
 	height: 100%;
@@ -35,4 +36,15 @@ and open the template in the editor.
 }
 .hidden {
 	display:none;
+}
+
+#dashboardSideNav {
+	border-radius: 6px;
+}
+
+#hr-top{
+	margin-top: 0px;
+}
+#hr-top{
+	margin-top: 0px;
 }
