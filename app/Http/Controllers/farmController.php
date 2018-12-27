@@ -5,6 +5,8 @@ namespace Lakeview\Http\Controllers;
 use Lakeview\Farm;
 use Illuminate\Http\Request;
 use \Illuminate\Http\Response;
+use Illuminate\Contracts\Validation\Validator;
+
 
 class farmController extends Controller
 {
@@ -13,10 +15,12 @@ class farmController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+	
 	public function __construct()
     {
 		parent::__construct();
         $this->middleware('auth');
+		
     }
 	
     public function index()
@@ -46,16 +50,25 @@ class farmController extends Controller
     {
 		/*ajax*/
 		$userId = auth()->id();
-		$farmData['name'] = $request->farmName;
-		$farmData['owner'] = $userId;
-		$farm = Farm::create($farmData);
-        if(isset($request->ajax)){
-			return view('farms.store', ['farm' => $farm])->render();
+		$this->return = back();
+		if(isset($request->farmName) && !empty($request->farmName)){
+			$farmData['name'] = $request->farmName;
+			$farmData['owner'] = $userId;
+			$farm = Farm::create($farmData);
+			if(isset($request->ajax)){
+				if($farm->exists){
+					$this->return->status = 'success';
+					$this->return->response = view('farms.store', ['farm' => $farm])->render();
+				}
+				$this->return = json_encode($this->return);
+			}
 		}
-		else
-		{
-			return back();
+		else{
+			$this->return->status
 		}
+		
+		
+		return $this->return;
     }
 
     /**

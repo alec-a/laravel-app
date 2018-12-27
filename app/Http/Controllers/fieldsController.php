@@ -13,6 +13,13 @@ class fieldsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+	
+	
+	
+	public function __construct() {
+		parent::__construct();
+	}
+	
     public function index()
     {
         //
@@ -36,20 +43,26 @@ class fieldsController extends Controller
      */
     public function store(Request $request)
     {
+		if(isset($request->ajax)){
+			$server = $request->server();
+			$farmId = intval(str_replace($server['HTTP_ORIGIN'].'/farms/', '', $server['HTTP_REFERER']));
+			$fieldData = array(
+				'name' => $request->name,
+				'crop_id' => intval($request->crop_id),
+				'farm_id' => $farmId
+			);
+			$field = Fields::create($fieldData);
+			
+			if($field->exists){
+				$this->return->response = view('fields.store',['field' => $field])->render();
+				$this->return->status = 'success';
+			}
+			
+			$this->return = json_encode($this->return);
+		}
 		
-		$server = $request->server();
-		$farmId = intval(str_replace($server['HTTP_ORIGIN'].'/farms/', '', $server['HTTP_REFERER']));
-		$fieldData = array(
-			'name' => $request->name,
-			'crop_id' => intval($request->crop_id),
-			'farm_id' => $farmId
-		);
 		
-		$field = Fields::create($fieldData);
-		
-		
-		
-        return view('fields.store',['field' => $field])->render();
+		return $this->return;
     }
 
     /**

@@ -45,26 +45,45 @@ function newFarm(evt){
 }
 
 function showNewFarm(data, textStatus, jqXHR){
-	var bottomRow = $('#farms .columns').last();
-	if(bottomRow.length > 0){
-		var numInRow = $(bottomRow).children('.column').length;
-		var lastInRow  = $(bottomRow).children('.column').last();
+	data = JSON.parse(data);
+	
+	if(data.status == 'success'){
+		var bottomRow = $('#farms .columns').last();
+		
+		if(bottomRow.length > 0){
+			if($(bottomRow).html().length > 0)
+			{
 
-		if(numInRow == 3){
-			$(bottomRow).after('<div class="columns">'+data+'</div>');
+				var numInRow = $(bottomRow).children('.column').length;
+				var lastInRow  = $(bottomRow).children('.column').last();
+				console.log(numInRow)
+				if(numInRow == 3){
+					console.log('new Row');
+					$(bottomRow).after('<div class="columns">'+data.response+'</div>');
+				}
+				else if(numInRow == 0){
+					$(bottomRow).html(data.response);
+				}		
+				else{
+					console.log('same Row');
+					$(lastInRow).after(data.response);
+				}
+			}
+			else{
+				$(bottomRow).html(data.response);
+			}
 		}
 		else{
-			$(lastInRow).after(data);
+			$("#farms").html('<div class="columns">'+data.response+'</div>');
 		}
-
 		$('#newModal').removeClass('is-active');
 		$('#newModal input[name="farmName"]').val('');
 	}
 	else{
-		$("#farms").html('<div class="columns">'+data+'</div>');
-		$('#newModal').removeClass('is-active');
-		$('#newModal input[name="farmName"]').val('');
+		//Errors
 	}
+	
+	
 	return true;
 }
 
@@ -117,21 +136,28 @@ function newField(evt){
 	
 }
 function showNewField(data, textStatus, jqXHR){
-	if($('#fieldsNotification').length > 0){
-		$('#fieldsNotification').fadeOut(500, function(){
-			$('#fields').append(data);
-		});
+	data = JSON.parse(data);
+	//validation
+	
+	if(data.status == 'success'){
+		if($('#fieldsNotification').length > 0){
+			$('#fieldsNotification').fadeOut(500, function(){
+				$('#fields').append(data.response);
+			});
+
+		}
+		else{
+			$('#fields').append(data.response);
+		}
+		$('#newFieldForm input[name="name"]').val('');
+		$('#newFieldForm select').val('Crop');
+		$('#newFieldForm select').first('option').attr('selected');
+	}
+	else
+	{
+		//erros
 		
 	}
-	else{
-		$('#fields').append(data);
-	}
-	
-	$('#newFieldForm input[name="name"]').val('');
-	$('#newFieldForm select').val('Crop');
-	$('#newFieldForm select').first('option').attr('selected');
-	
-	
 }
 
 function editField(field){

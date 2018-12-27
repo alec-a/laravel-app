@@ -13,9 +13,17 @@ class Controller extends BaseController
 	
 	public $pageData;
 	
+	public $return;
+
+
 	public function __construct() {
 		$mainPage = Page::where('parent',null)->first();
 		$navItems = $mainPage->children()->get();
+		
+		$this->return = new \stdClass();
+		$this->return->status = 'fail';
+		$this->return->response = null;
+		$this->return->errors = null;
 		
 		$this->pageData = new \stdClass(['title', 'uri']);
 		$this->pageData->activeNav = '';
