@@ -7,10 +7,9 @@ $(document).ready(function(){
 	
 	//field
 	$('#newFieldForm').submit(function(evt){ newField(evt);	});
-	$('.editField').click(function(){ editField($(this)); });
-	$('.deleteField').click(function(){ deleteField($(this)); });
-	$('#fields .columns').hover(function(){ fieldHover($(this)); }, function(){ fieldUnhover($(this)); });
+	
 });
+optionEvents();
 
 
 
@@ -115,6 +114,7 @@ function newField(evt){
 		data: formData,
 		success: showNewField
 	});
+	
 }
 function showNewField(data, textStatus, jqXHR){
 	if($('#fieldsNotification').length > 0){
@@ -127,8 +127,7 @@ function showNewField(data, textStatus, jqXHR){
 		$('#fields').append(data);
 	}
 	
-	$('#fields .columns').hover(function(){ fieldHover($(this)); }, function(){ fieldUnhover($(this)); });
-	$('#newFieldForm input').val('');
+	$('#newFieldForm input[name="name"]').val('');
 	$('#newFieldForm select').val('Crop');
 	$('#newFieldForm select').first('option').attr('selected');
 	
@@ -200,4 +199,12 @@ function deleteField(button){
 	var extras = {};
 	extras.fieldId = $(button).val();
 	getModal('fields','delete',extras);
+}
+
+function optionEvents(){
+	
+	$(document).on("click", '.editField', function(){ editField($(this)); });
+	$(document).on("click", '.deleteField', function(){ deleteField($(this)); });
+	$(document).on("mouseenter", '#fields .columns', function(){ fieldHover($(this)); });
+	$(document).on("mouseleave", '#fields .columns', function(){ fieldUnhover($(this)); });
 }
