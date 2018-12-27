@@ -180,9 +180,8 @@
 		</div>
 		<hr/>
 		<div class="box has-text-weight-bold  is-radiusless is-shadowless is-paddingless">
-			<h3 class="title is-3 has-text-centered">Members</h3>
+			<h3 class="title is-3 has-text-centered">{{$pageData->farm->workers->count() }} Member{{($pageData->farm->workers->count() < 1 || $pageData->farm->workers->count() > 1)?'s':''}}</h3>
 			
-			<p class="subtitle">{{$pageData->farm->workers->count()}}</p>
 				<ul>
 					<li><span>{{$pageData->farm->farmOwner->name}} <strong class="has-text-info">Owner</strong></span>
 					@if ($pageData->farm->workers->count() > 0 )
