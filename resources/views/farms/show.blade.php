@@ -186,7 +186,7 @@
 				<ul>
 					<li><span>{{$pageData->farm->farmOwner->name}} <strong class="has-text-info">Owner</strong></span>
 					@if ($pageData->farm->workers->count() > 0 )
-						<ul>
+						<ul id="workers">
 						@foreach($pageData->farm->workers as $worker)
 							<li>{{$worker->name}}</li>
 						@endforeach
