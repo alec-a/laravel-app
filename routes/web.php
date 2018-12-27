@@ -32,7 +32,7 @@ Route::resource('ajax/field','fieldsController')->parameters(['field' => 'fields
 Route::post('ajax/modal','modalController@get');
 Route::post('ajax/modal/farms','modalController@farms');
 Route::post('ajax/modal/fields','modalController@field');
-
+Route::delete('/fields/{fields}', 'fieldsController@destroy');
 
 route::group(array('prefix' => 'account'), function(){
 	Route::get('register/confirmed','Auth\RegisterController@confirmed');

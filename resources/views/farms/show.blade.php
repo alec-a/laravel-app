@@ -133,7 +133,7 @@
 			</div>
 				@else
 			</div>
-			<article class="notification is-primary">Please Add Fields To The Farm</article>
+			<article class="notification is-primary" id="fieldsNotification">Please Add Fields To The Farm</article>
 			@endif
 			<div class="columns">
 				<div class="column">

@@ -1,13 +1,14 @@
 
 <div class="modal is-active" id="deleteModal">
-	<form method="post" action="{{url('/farms/'.$fieldId)}}">
+	<form method="post" action="{{url('/fields/'.$fieldId)}}">
 	@csrf
 	@method('DELETE')
+	<input type="hidden" name="farm_id" value="{{$farmId}}"/>
 	</form>
   <div class="modal-background"></div>
   <div class="modal-card ">
     <header class="modal-card-head has-background-danger">
-      <p class="modal-card-title has-text-white">Delete Farm</p>
+      <p class="modal-card-title has-text-white">Delete Field</p>
       
     </header>
     <section class="modal-card-body">

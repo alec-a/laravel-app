@@ -112,8 +112,11 @@ class fieldsController extends Controller
      * @param  \Lakeview\Fields  $fields
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Fields $fields)
+    public function destroy(Request $request, Fields $fields)
     {
-        //
+        $fields->delete();
+		
+		
+		return redirect(url('/farms/'.$request->farm_id));
     }
 }

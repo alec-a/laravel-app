@@ -117,10 +117,17 @@ function newField(evt){
 	});
 }
 function showNewField(data, textStatus, jqXHR){
+	if($('#fieldsNotification').length > 0){
+		$('#fieldsNotification').fadeOut(500, function(){
+			$('#fields').append(data);
+		});
+	}
+	
 	$('#newFieldForm input').val('');
 	$('#newFieldForm select').val('Crop');
 	$('#newFieldForm select').first('option').attr('selected');
-	$('#fields').append(data);
+	
+	
 }
 
 function editField(field){
@@ -187,5 +194,5 @@ function showUpdatedField(data, textStatus, jqXHR){
 function deleteField(button){
 	var extras = {};
 	extras.fieldId = $(button).val();
-	getModal('field','delete',extras);
+	getModal('fields','delete',extras);
 }
