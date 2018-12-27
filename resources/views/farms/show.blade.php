@@ -181,20 +181,15 @@
 		<hr/>
 		<div class="box has-text-weight-bold  is-radiusless is-shadowless is-paddingless">
 			<h3 class="title is-3 has-text-centered">{{$pageData->farm->workers->count() }} Member{{($pageData->farm->workers->count() < 1 || $pageData->farm->workers->count() > 1)?'s':''}}</h3>
-			
-				<ul>
-					<li><span>{{$pageData->farm->farmOwner->name}} <strong class="has-text-info">Owner</strong></span>
-					@if ($pageData->farm->workers->count() > 0 )
-						<ul id="workers">
-						@foreach($pageData->farm->workers as $worker)
-							<li>{{$worker->name}}</li>
-						@endforeach
-						</ul>
-					</li>
+			@if ($pageData->farm->workers->count() > 0 )
+				<ul id="workers">
+				@foreach($pageData->farm->workers as $worker)
+					<li>{{$worker->name}}</li>
+				@endforeach
 				</ul>
 			@else
-			</ul>
-			<article class="notification is-info">The Farm Has No Staff, Get Recruiting!</article>
+			
+				<article class="notification is-info">The Farm Has No Staff, Get Recruiting!</article>
 			@endif
 		</div>
 		<hr/>
