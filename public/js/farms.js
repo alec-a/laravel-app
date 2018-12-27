@@ -106,7 +106,7 @@ function newField(evt){
 	evt.stopImmediatePropagation();
 	evt.preventDefault();
 
-	var formData = $(this);
+	var formData = $('#newFieldForm');
 	formData = formData.serializeArray();
 	formData.push({name:'ajax',value:true});
 	$.ajax({
