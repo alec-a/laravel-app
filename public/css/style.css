@@ -51,4 +51,6 @@ and open the template in the editor.
 
 #workers {
 	margin-left: 6px;
+	list-style: inside;
+	list-style-type: circle;
 }

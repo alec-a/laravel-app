@@ -117,7 +117,7 @@
 						</aside>
 					</div>
 				
-					<div class='column is-four-fifths top'>
+					<div class='column is-four-fifths top is-capitalized'>
 						@yield('content')
 					</div>
 				</div>
