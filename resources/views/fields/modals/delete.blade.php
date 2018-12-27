@@ -1,6 +1,6 @@
 
 <div class="modal is-active" id="deleteModal">
-	<form method="post" action="{{url('/farms/'.$farmId)}}">
+	<form method="post" action="{{url('/farms/'.$fieldId)}}">
 	@csrf
 	@method('DELETE')
 	</form>
@@ -11,7 +11,7 @@
       
     </header>
     <section class="modal-card-body">
-		<p class="title is-4"><strong>Are You Sure You Want To Delete Your Farm?</strong></p>
+		<p class="title is-4"><strong>Are You Sure You Want To Delete This Field</strong></p>
 		<div class="field is-grouped">
 			<div class="control">
 				<button class="button is-danger is-large" id="deleteYes">Yes</button>

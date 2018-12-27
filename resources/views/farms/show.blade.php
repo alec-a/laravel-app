@@ -1,5 +1,9 @@
 @extends('layouts.userArea')
 
+@section('scripts')
+<script src="{{asset('js/farms.js')}}"></script>
+@endsection
+
 @section('content')
 <div class="hidden" id="farmId"><input type="hidden" name="id" value="{{$pageData->farm->id}}"/></div>
 <div class="columns">
@@ -32,7 +36,7 @@
 			</div>
 			<div class="dropdown-menu" id="dropdown-menu1" role="menu">
 				<div class="dropdown-content ">
-					<a class="dropdown-item is-bold has-text-centered has-text-light is-static" id="fields">
+					<a class="dropdown-item is-bold has-text-centered has-text-light is-static" id="addFields">
 						<strong>Add Fields</strong>
 					</a>
 					<a class="dropdown-item is-bold has-text-centered has-text-light is-static" id="season">
@@ -79,7 +83,83 @@
 	<div class="column is-two-thirds">
 		<div class="box has-text-weight-bold">
 			<h3 class="title is-3 has-text-centered">Fields</h3>
-			<article class="notification is-primary">Please Add Fields To The Farm (coming Soon)</article>
+			<div id="fields">
+				<form id="editFieldForm" method="post" class="hidden">
+						@csrf
+						@method('PUT')
+						<div class="field has-addons">
+							<div class="control is-expanded">
+								<input id="fieldName" type="text" name="name" class="input" placeholder="Name Or Number"/>
+							</div>
+							<div class="control">
+								<div class="select">
+									<select id="fieldCrop" name="crop_id">
+										<option disabled selected>Crop</option>
+										@foreach(Lakeview\Crops::all() as $crop)
+										<option value="{{$crop->id}}">{{$crop->name}}</option>
+										@endforeach
+									</select>
+								</div>
+							</div>
+							<div class="control">
+								<button class="button is-primary" type="submit" id="saveField"><span class="icon is-small"><i class="fas fa-check"></i></span><span class="hidden">save</span></button>
+							</div>
+							<div class="control">
+								<button class="button is-warning" type="button" id="cancelEditField"><span class="icon is-small"><i class="fas fa-times"></i></span><span class="hidden">Cancel</span></button>
+							</div>
+						</div>
+					</form>
+				@if($pageData->farm->fields->count() > 0)
+				
+					@foreach($pageData->farm->fields as $field)
+					<div class="columns farmField" id="field_{{$field->id}}">
+						<div class="column is-one-fifth options">
+							<div class="hidden">
+								 <div class="field is-grouped">
+									<div class="control">
+										<button name="fieldId" value="{{$field->id}}" class="button is-danger deleteField"><span class="icon is-small"><i class="fas fa-trash-alt"></i></span></button>
+									</div>
+									<div class="control">
+										<button name="fieldId" value="{{$field->id}}" class="button is-link editField"><span class="icon is-small"><i class="fas fa-pencil-alt"></i></span></button>
+									</div>
+								 </div>
+							</div>
+						</div>
+						<div class="column is-two-fifths fieldName">{{$field->name}}</div>
+						<div class="column is-two-fifths fieldCrop">{{$field->crop->name}}</div>
+						
+					</div>
+					@endforeach
+			</div>
+				@else
+			</div>
+			<article class="notification is-primary">Please Add Fields To The Farm</article>
+			@endif
+			<div class="columns">
+				<div class="column">
+					<form id="newFieldForm" method="post">
+						@csrf
+						<div class="field has-addons">
+							<div class="control is-expanded">
+								<input type="text" name="name" class="input" placeholder="Name Or Number"/>
+							</div>
+							<div class="control">
+								<div class="select">
+									<select name="crop_id">
+										<option disabled selected>Crop</option>
+										@foreach(Lakeview\Crops::all() as $crop)
+										<option value="{{$crop->id}}">{{$crop->name}}</option>
+										@endforeach
+									</select>
+								</div>
+							</div>
+							<div class="control">
+								<button class="button is-primary" type="submit" id="newField"><span class="icon is-small"><i class="fas fa-plus"></i></span><span>Add</span></button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
 		</div>
 		<div class="box has-text-weight-bold">
 			<h3 class="title is-3 has-text-centered">Worklogs</h3>

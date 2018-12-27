@@ -85,6 +85,7 @@
 		<div id="modal">
 			
 		</div>
+		@yield('scripts')
         <section class="section">
             <div class="container">
 				<div class='columns'>

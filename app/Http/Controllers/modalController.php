@@ -14,4 +14,9 @@ class modalController extends Controller
 		return view($request->controller.'.modals.'.$request->name,['farmId' => $farm->id])->render();
 		
 	}
+	
+	public function fields(Request $request){
+		$field = Fields::where('id',$request->fieldId)->first();
+		return view($request->controller.'.modals.'.$request->name,['fieldId' => $field->id])->render();
+	}
 }

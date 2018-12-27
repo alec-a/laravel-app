@@ -1,5 +1,9 @@
 @extends('layouts.userArea')
 
+@section('scripts')
+<script src="{{asset('js/farms.js')}}"></script>
+@endsection
+
 @section('content')
 <div class="modal" id="newModal">
 	

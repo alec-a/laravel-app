@@ -18,4 +18,8 @@ class Farm extends Model
 	public function workers(){
 		return $this->hasMany(User::class);
 	}
+	
+	public function fields(){
+		return $this->hasMany(Fields::class);		
+	}
 }
