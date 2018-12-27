@@ -1,7 +1,6 @@
 $(document).ready(function(){
 	//farm
 	$("#new").click(function(evt){ newFarm(evt); });
-	$('#fields .columns').hover(function(){ fieldHover($(this)); }, function(){ fieldUnhover($(this)); });
 	$("#deleteFarm").click(function(){ deleteFarm(); });
 	$("#rename").click(function(){ renameFarm(); });
 	$('#cancelRename').click(function(){ cancelRename(); });	
@@ -10,6 +9,7 @@ $(document).ready(function(){
 	$('#newFieldForm').submit(function(evt){ newField(evt);	});
 	$('.editField').click(function(){ editField($(this)); });
 	$('.deleteField').click(function(){ deleteField($(this)); });
+	$('#fields .columns').hover(function(){ fieldHover($(this)); }, function(){ fieldUnhover($(this)); });
 });
 
 
@@ -121,8 +121,13 @@ function showNewField(data, textStatus, jqXHR){
 		$('#fieldsNotification').fadeOut(500, function(){
 			$('#fields').append(data);
 		});
+		
+	}
+	else{
+		$('#fields').append(data);
 	}
 	
+	$('#fields .columns').hover(function(){ fieldHover($(this)); }, function(){ fieldUnhover($(this)); });
 	$('#newFieldForm input').val('');
 	$('#newFieldForm select').val('Crop');
 	$('#newFieldForm select').first('option').attr('selected');
