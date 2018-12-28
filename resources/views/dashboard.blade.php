@@ -6,9 +6,11 @@
 		<h1 class="title is-1">Dashboard</h1>
 		<div class="box">
 			<h3 class="title is-3 has-text-centered">Issues</h3>
+			<p class="subtitle has-text-centered is-size-4">All Reported Issues</p>
+			<hr/>
 			@foreach($pageData->versions as $version)
 			<div class="content version">
-			<h4 class="title is-4 {{$version->active? 'has-text-success':'has-text-info'}}">Version {{$version->name}}</h4>
+			<h4 class="title is-4 {{$version->active? 'has-text-success':'has-text-info'}} has-text-centered">{{$version->name}}</h4>
 				@if ($version->issues->count() > 0)
 					@foreach($version->issues as $issue)
 					<div class="card issue">
@@ -82,7 +84,7 @@
 				<h4 class="title is-4 has-text-centered has-text-grey-light">No Reported Issues</h4>
 				@endif
 			</div>
-			@if ($loop->count > 1 && !$loop->last)
+			@if(!$loop->last && $loop->count > 1)
 			<hr/>
 			@endif
 			@endforeach
