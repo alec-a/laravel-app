@@ -74,6 +74,8 @@
 						@endif
 					  </div>
 					@endforeach
+				@else
+				<h4 class="title is-4 has-text-centered has-text-grey-light">No Reported Issues</h4>
 				@endif
 			</div>
 			@if ($loop->count > 1 && !$loop->last)
