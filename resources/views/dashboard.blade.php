@@ -3,8 +3,9 @@
 @section('content')
 <div class="columns">
 	<div class="column">
+		<h1 class="title is-1">Dashboard</h1>
 		<div class="box">
-			<h1 class="title is-1 has-text-grey-dark has-text-centered">Issues</h1>
+			<h3 class="title is-3 has-text-centered">Issues</h3>
 			@foreach($pageData->versions as $version)
 			<div class="content version">
 			<h4 class="title is-4 {{$version->active? 'has-text-success':'has-text-info'}}">Version {{$version->name}}</h4>
@@ -22,8 +23,10 @@
 						  
 							<div class="media">
 								<div class="media-left">
-								  @if($issue->open)
+								  @if($issue->open && !$issue->re_open)
 								  <p class="subtitle has-text-danger has-text-weight-bold">Open</p>
+								  @elseif($issue->re_open)
+									<p class="subtitle has-text-danger has-text-weight-bold">Re-Opened</p>
 								  @else
 								   <p class="subtitle has-text-primary has-text-weight-bold">Closed</p>
 								  @endif
