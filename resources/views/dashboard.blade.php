@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="columns">
-	<div class="column is-two-thirds">
+	<div class="column">
 		<div class="box">
 			@foreach($pageData->versions as $version)
 			<div class="content version">
@@ -84,11 +84,7 @@
 			@endforeach
 		</div>
 	</div>
-	<div class="column is-one-third" id="newIssueContainer">
-		<div class="box is-pinned">
-			<a href="/issue/create" class="button is-primary is-fullwidth is-large"><strong>Report A New Issue</strong></a>
-		</div>
-	</div>
+	
 </div>
 
 <scirpt></scirpt>

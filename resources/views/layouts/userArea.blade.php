@@ -55,6 +55,9 @@
 										</div>
 									</div>
 								@else
+								<div class="navbar-item">
+									<a href="/issue/create" class="button is-primary is-fullwidth is-normal"><strong>Report A New Issue</strong></a>
+								</div>
                             <div class="navbar-item">
 								<div class='field has-addons'>
 									<p class="control">

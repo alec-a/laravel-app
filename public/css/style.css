@@ -91,6 +91,7 @@ and open the template in the editor.
 #newIssueContainer .is-pinned{
 	position: fixed;
     top: 88px;
+	left: 50%;
     width: 313.59px;
 }
 

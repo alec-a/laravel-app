@@ -41,7 +41,7 @@
 								<button type="submit" class="button is-primary is-medium">Create</button>
 							</div>
 							<div class="control">
-								<a href="{{url('/dashboard')}}" class="button is-light is-medium">Cancel</a>
+								<a href="{{url()->previous()}}" class="button is-light is-medium">Cancel</a>
 							</div>
 						</div>
 					</div>
