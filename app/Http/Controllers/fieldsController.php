@@ -144,9 +144,21 @@ class fieldsController extends Controller
      */
     public function destroy(Request $request, Fields $fields)
     {
-        $fields->delete();
+		$field = $fields;
+		if($fields->delete()){
+			$this->output->status = 'success';
+			$this->output->response = $field;
+		}
+		
+        if(isset($request->ajax)){
+			$this->output = json_encode($this->output);
+		}
+		else{
+			$this->output = back();
+		}
 		
 		
-		return redirect(url('/farms/'.$request->farm_id));
+		
+		return $this->output;
     }
 }

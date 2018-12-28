@@ -1,4 +1,7 @@
 $(document).ready(function(){
+	//display
+	isExpandable();
+	
 	//farm
 	$("#new").click(function(evt){ newFarm(evt); });
 	$("#deleteFarm").click(function(){ deleteFarm(); });
@@ -151,7 +154,9 @@ function fieldUnhover(field){
 function newField(evt){
 	evt.stopImmediatePropagation();
 	evt.preventDefault();
-
+	if($("#newErrors").length > 0){
+		$("#newErrors").remove();
+	}
 	var formData = getFormData($('#newFieldForm'));
 	$.ajax({
 		type: "POST",
@@ -165,21 +170,29 @@ function showNewField(data, textStatus, jqXHR){
 	data = JSON.parse(data);
 	
 	if(data.status == 'success'){
+		var expandable = $('#fields').parents('.expandable').first();
 		if($('#fieldsNotification').length > 0){
 			
 			if($('#worklogNotification').length > 0){
-				$('#worklogNotification').fadeOut(500, function (){ $('#worklogs').fadeIn(500); });
+				$('#worklogNotification').fadeOut(400, function (){ $('#newWorklogContent').fadeIn(400); });
 			}
 			$('#fieldsNotification').fadeOut(500, function(){
+				
+				
 				$('#fields').append(data.response);
+				resizeContainer(expandable);
+				isExpandable();
 			});
 
 		}
 		else{
 			if($('#worklogNotification').length > 0){
-				$('#worklogNotification').fadeOut(500, function (){ $('#worklogs').fadeIn(500); });
+				$('#worklogNotification').fadeOut(400, function (){ $('#newWorklogContent').fadeIn(400); });
 			}
+			
 			$('#fields').append(data.response);
+			resizeContainer(expandable);
+			isExpandable();
 		}
 		$('#newFieldForm input[name="name"]').val('');
 		$('#newFieldForm select').val('Crop');
@@ -188,6 +201,12 @@ function showNewField(data, textStatus, jqXHR){
 	else
 	{
 		//erros
+		var errorsHtml = '';
+		for(var i = 0; i < data.errors.length; i++){
+			errorsHtml += '<p class="help is-danger">'+data.errors[i]+'</p>';
+		}
+		$("#newFieldForm .field").last().after('<div class="field" id="newErrors">'+errorsHtml+'</div>');
+		
 		
 	}
 }
@@ -264,6 +283,102 @@ function deleteField(button){
 	extras.fieldId = $(button).val();
 	getModal('fields','delete',extras);
 }
+function deleteFieldConf(form){
+	var formData = getFormData($(form));
+	var action = $(form).attr('action');
+	$.ajax({
+		type:'post',
+		url:action,
+		data: formData,
+		success: deleteFieldReturn
+	});
+}
+
+function deleteFieldReturn(data){
+	data = JSON.parse(data);
+	if(data.status == 'success'){
+		$('#field_'+data.response.id).fadeOut(800, function(){$(this).remove();resizeContainer($("#fieldsBox"));isExpandable();});
+		$('#deleteModal').fadeOut(300,function(){$(this).remove();});
+		if($("#fields").find('columns').length < 1){
+			$('#fieldsNotification').fadeIn(800);
+			$('#newWorklogContent').fadeOut(400, function(){$('#worklogNotification').fadeIn(400);});
+		}
+	}
+	else
+	{
+		var errorsHtml = '';
+		for(var i = 0; i < data.errors.length; i++){
+			errorsHtml += '<p class="help is-danger">'+data.errors[i]+'</p>';
+		}
+		$('#deleteModal .modal-card-body').find('.title').after(errorsHtml);
+	}
+}
+
+
+
+
+
+function isExpandable(){
+	$('.expandable').each(function(){
+		
+		var contentHeight = $(this).find('.expandContent').first().height();
+		var containerHeight = $(this).find('.expandContainer').first().height();
+		console.log('isExpandable');
+		if($(this).hasClass('open'))
+		{
+			if($(this).find('.expandIcon').length > 0){
+				$(this).find('.expandIcon').first().html('<i class="fas fa-chevron-up"></i>');
+			}else{
+				$(this).find('.title').first().append('<span class="expandIcon is-size-4"><i class="fas fa-chevron-up"></i></span>');
+			}
+		}else if(contentHeight > 150){
+			$(this).find('.title').first().append('<span class="expandIcon is-size-4"><i class="fas fa-chevron-down"></i></span>');
+		}
+		else{
+			$(this).find('.expandIcon').remove();
+		}
+	});
+}
+
+function expandContainer(expandable){
+	var containerHeight = $(expandable).find('.expandContainer').first().height();
+	var contentHeight = $(expandable).find('.expandContent').first().height();
+	if(contentHeight > containerHeight){
+		$(expandable).find('.expandIcon').first().children().first().removeClass('fa-chevron-down').addClass('fa-chevron-up');
+		$(expandable).find('.expandContainer').first().animate({height: contentHeight},800,function(){
+			$(expandable).addClass('open');
+		});
+	}
+}
+
+function closeContainer(expandable){
+	$(expandable).removeClass('open');
+		$(expandable).find('.expandIcon').first().children().first().removeClass('fa-chevron-up').addClass('fa-chevron-down');
+		$(expandable).find('.expandContainer').first().animate({height: '150px'},800);
+}
+
+function resizeContainer(expandable){
+	
+	var contentHeight = $(expandable).find('.expandContent').first().height();
+	var containerHeight = $(expandable).find('.expandContainer').first().height();
+	if(contentHeight > containerHeight || contentHeight > 150){
+		//expand
+		expandContainer(expandable);
+	}
+	else{
+		//close
+		closeContainer(expandable);
+	}
+}
+
+function clickContainer(expandable){
+	if($(expandable).hasClass('open')){
+		closeContainer(expandable);
+	}
+	else{
+		expandContainer(expandable);
+	}
+}
 
 function optionEvents(){
 	
@@ -272,4 +387,6 @@ function optionEvents(){
 	$(document).on("click", '#saveFarmName', function(evt){ updateFarmName(evt); });
 	$(document).on("mouseenter", '#fields .columns', function(){ fieldHover($(this)); });
 	$(document).on("mouseleave", '#fields .columns', function(){ fieldUnhover($(this)); });
+	$(document).on( "click", ".expandable .title", function(evt){ clickContainer($(this).parent('.expandable')); });
+//	$(document).on( "focusout", "#fieldsBox", function(){ collpaseBox($(this)); });
 }

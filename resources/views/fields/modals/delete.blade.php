@@ -1,6 +1,6 @@
 
-<div class="modal is-active" id="deleteModal">
-	<form method="post" action="{{url('/fields/'.$fieldId)}}">
+<div class="modal" id="deleteModal">
+	<form method="post" id="deleteForm" action="{{url('/fields/'.$fieldId)}}">
 	@csrf
 	@method('DELETE')
 	<input type="hidden" name="farm_id" value="{{$farmId}}"/>
@@ -28,15 +28,21 @@
 </div>
 
 <script>
+	$(document).ready(function(){
+		$('#deleteModal').css({display:'flex',opacity:'0'});
+		$('#deleteModal').animate({opacity:'1'},400,function(){$(this).addClass('is-active');});
+	});
 	$("#deleteYes").focus();
 			$("#deleteNo").click(function(){
-				$('#deleteModal').removeClass('is-active');
-				$('#deleteModal').remove();
+				$('#deleteModal').fadeOut(400, function(){$(this).remove();});
+				
 			});
 			
-			$("#deleteYes").click(function(){
-				$('#deleteModal').removeClass('is-active');
-				$('#deleteModal form').submit();
+			$("#deleteYes").click(function(evt){
+				evt.stopImmediatePropagation();
+				evt.preventDefault();
+				
+				deleteFieldConf($("#deleteForm"));
 			});
 	
 </script>

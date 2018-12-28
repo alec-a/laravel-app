@@ -8,6 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Contracts\Validation\Validator;
 use Lakeview\Page;
+use Lakeview\Version;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -26,7 +27,9 @@ class Controller extends BaseController
 		$this->output->response = null;
 		$this->output->errors = null;
 		
+		
 		$this->pageData = new \stdClass(['title', 'uri']);
+		$this->pageData->version = Version::where('active','=',true)->take(1)->get()->first();
 		$this->pageData->activeNav = '';
 		$this->pageData->navItems = $navItems;
 		$this->pageData->data = new \stdClass();

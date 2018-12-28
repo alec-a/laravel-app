@@ -78,64 +78,64 @@
 	</div>
 </div>
 
+
+@if(auth()->user()->id == $pageData->farm->owner || auth()->user()->farm_id == $pageData->farm->id)
 <div class='columns'>
-	@if(auth()->user()->id == $pageData->farm->owner || auth()->user()->farm_id == $pageData->farm->id)
 	<div class="column is-two-thirds">
-		<div class="box has-text-weight-bold">
+		<div class="box has-text-weight-bold expandable" id="fieldsBox">
 			<h3 class="title is-3 has-text-centered">Fields</h3>
-			<div id="fields">
-				<form id="editFieldForm" method="post" class="hidden">
-						@csrf
-						@method('PUT')
-						<div class="field has-addons">
-							<div class="control is-expanded">
-								<input id="fieldName" type="text" name="fieldName" class="input" placeholder="Name Or Number"/>
-							</div>
-							<div class="control">
-								<div class="select">
-									<select id="fieldCrop" name="crop_id">
-										<option disabled selected>Crop</option>
-										@foreach(Lakeview\Crops::all() as $crop)
-										<option value="{{$crop->id}}">{{$crop->name}}</option>
-										@endforeach
-									</select>
+			<div class="is-clipped expandContainer" >
+				<div id="fields" class="expandContent">
+					<form id="editFieldForm" method="post" class="hidden">
+							@csrf
+							@method('PUT')
+							<div class="field has-addons">
+								<div class="control is-expanded">
+									<input id="fieldName" type="text" name="fieldName" class="input" placeholder="Name Or Number"/>
+								</div>
+								<div class="control">
+									<div class="select">
+										<select id="fieldCrop" name="crop_id">
+											<option disabled selected>Crop</option>
+											@foreach(Lakeview\Crops::all() as $crop)
+											<option value="{{$crop->id}}">{{$crop->name}}</option>
+											@endforeach
+										</select>
+									</div>
+								</div>
+								<div class="control">
+									<button class="button is-primary" type="submit" id="saveField"><span class="icon is-small"><i class="fas fa-check"></i></span><span class="hidden">save</span></button>
+								</div>
+								<div class="control">
+									<button class="button is-warning" type="button" id="cancelEditField"><span class="icon is-small"><i class="fas fa-times"></i></span><span class="hidden">Cancel</span></button>
 								</div>
 							</div>
-							<div class="control">
-								<button class="button is-primary" type="submit" id="saveField"><span class="icon is-small"><i class="fas fa-check"></i></span><span class="hidden">save</span></button>
+						</form>
+					<article class="notification is-primary {{$pageData->farm->fields->count() > 0 ? 'hidden':''}}" id="fieldsNotification">Please Add Fields To The Farm</article>
+					@if($pageData->farm->fields->count() > 0)
+						@foreach($pageData->farm->fields as $field)
+						<div class="columns farmField" id="field_{{$field->id}}">
+							<div class="column is-one-fifth options">
+								<div class="hidden">
+									 <div class="field is-grouped">
+										<div class="control">
+											<button name="fieldId" value="{{$field->id}}" class="button is-danger deleteField"><span class="icon is-small"><i class="fas fa-trash-alt"></i></span></button>
+										</div>
+										<div class="control">
+											<button name="fieldId" value="{{$field->id}}" class="button is-link editField"><span class="icon is-small"><i class="fas fa-pencil-alt"></i></span></button>
+										</div>
+									 </div>
+								</div>
 							</div>
-							<div class="control">
-								<button class="button is-warning" type="button" id="cancelEditField"><span class="icon is-small"><i class="fas fa-times"></i></span><span class="hidden">Cancel</span></button>
-							</div>
+							<div class="column is-two-fifths fieldName">{{$field->name}}</div>
+							<div class="column is-two-fifths fieldCrop">{{($field->crop)? $field->crop->name:''}}</div>
+
 						</div>
-					</form>
-				@if($pageData->farm->fields->count() > 0)
-				
-					@foreach($pageData->farm->fields as $field)
-					<div class="columns farmField" id="field_{{$field->id}}">
-						<div class="column is-one-fifth options">
-							<div class="hidden">
-								 <div class="field is-grouped">
-									<div class="control">
-										<button name="fieldId" value="{{$field->id}}" class="button is-danger deleteField"><span class="icon is-small"><i class="fas fa-trash-alt"></i></span></button>
-									</div>
-									<div class="control">
-										<button name="fieldId" value="{{$field->id}}" class="button is-link editField"><span class="icon is-small"><i class="fas fa-pencil-alt"></i></span></button>
-									</div>
-								 </div>
-							</div>
-						</div>
-						<div class="column is-two-fifths fieldName">{{$field->name}}</div>
-						<div class="column is-two-fifths fieldCrop">{{($field->crop)? $field->crop->name:''}}</div>
-						
-					</div>
-					@endforeach
+						@endforeach
+					@endif
+				</div>
 			</div>
-				@else
-			</div>
-			<article class="notification is-primary" id="fieldsNotification">Please Add Fields To The Farm</article>
-			@endif
-			<div class="columns">
+			<div class="columns" id="newFieldFormContainer">
 				<div class="column">
 					<form id="newFieldForm" method="post">
 						@csrf
@@ -161,28 +161,21 @@
 				</div>
 			</div>
 		</div>
-		<div class="box has-text-weight-bold">
+		<div class="box has-text-weight-bold" id="worklogsBox">
 			<h3 class="title is-3 has-text-centered">Worklogs</h3>
-			@if($pageData->farm->fields->count() > 0)
-			<div id="worklogs">
-				<div class="field">
-					<div class="control">
-						<button class="button is-primary is-fullwidth">New Worklog</button>
+			<div class="is-clipped expandContainer">
+				<div id="worklogs" class="expandContent">
+					<article id ="worklogNotification" class="notification is-warning {{$pageData->farm->fields->count() > 0? 'hidden':''}}">
+						<p>Worklogs Can Only Be Created When The Farm Has Fields</p>
+					</article>
+				
+					<div class="field {{$pageData->farm->fields->count() > 0? '':'hidden'}}" id="newWorklogContent">
+						<div class="control">
+							<button class="button is-primary is-fullwidth">New Worklog</button>
+						</div>
 					</div>
 				</div>
 			</div>
-			@else
-			<article id ="worklogNotification" class="notification is-warning">
-				<p>Worklogs Can Only Be Created When The Farm Has Fields</p>
-			</article>
-			<div id="worklogs" class="hidden">
-				<div class="field">
-					<div class="control">
-						<button class="button is-primary is-fullwidth">New Worklog</button>
-					</div>
-				</div>
-			</div>
-			@endif
 		</div>
 		<div class="box has-text-weight-bold">
 			<h3 class="title is-3 has-text-centered">Discussion</h3>
@@ -211,12 +204,12 @@
 		</div>
 		<hr/>
 	</div>
-
+</div>
 	
 	
 	
-	@else
-	
+@else
+<div class='columns'>
 	<div class="column is-two-thirds top">
 		<form method='post' action='{{url('/farms/join/'.$pageData->farm->id)}}'>
 			@csrf
@@ -228,7 +221,6 @@
 			</div>
 		</form>
 	</div>
-	
-	@endif
 </div>
+@endif
 @endsection

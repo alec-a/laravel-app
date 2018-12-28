@@ -54,3 +54,49 @@ and open the template in the editor.
 	list-style: inside;
 	list-style-type: circle;
 }
+
+#fieldsBox {
+	position: relative;
+}
+
+.expandable .title {
+	cursor: pointer;
+}
+
+.expandContainer {
+	height: 150px;
+}
+
+.expandIcon{
+	padding-left: 20px;
+}
+
+.expandable.open .expandContainer {
+	height: auto !important;
+	overflow: visible !important;
+}
+
+#newFieldFormContainer {
+	margin-top: 10px;
+}
+
+.is-strike{
+	text-decoration: line-through;
+}
+
+#newIssueContainer{
+	position: relative;
+}
+
+#newIssueContainer .is-pinned{
+	position: fixed;
+    top: 88px;
+    width: 313.59px;
+}
+
+.version .issue {
+	margin-bottom: 20px;
+}
+.version .issue:last-child{
+	margin-bottom: 0px;
+}
