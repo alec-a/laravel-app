@@ -43,26 +43,39 @@ class fieldsController extends Controller
      */
     public function store(Request $request)
     {
-		if(isset($request->ajax)){
+		
+		$validator = \Validator::make($request->all(),[
+			'name' => 'required'
+		]);
+		if($validator->fails()){
+			$this->output->status = 'fail';
+			$this->output->errors = $validator->errors()->all();
+		}
+		else{
 			$server = $request->server();
 			$farmId = intval(str_replace($server['HTTP_ORIGIN'].'/farms/', '', $server['HTTP_REFERER']));
-			$fieldData = array(
-				'name' => $request->name,
-				'crop_id' => intval($request->crop_id),
-				'farm_id' => $farmId
-			);
+			$fieldData['name'] = $request->name;
+			$fieldData['crop_id'] = intval($request->crop_id);
+			$fieldData['farm_id'] = $farmId;
 			$field = Fields::create($fieldData);
-			
 			if($field->exists){
-				$this->return->response = view('fields.store',['field' => $field])->render();
-				$this->return->status = 'success';
+				$this->output->response = view('fields.store',['field' => $field])->render();
+				$this->output->status = 'success';
 			}
-			
-			$this->return = json_encode($this->return);
+			else{
+				$this->output->errors[]="Field Could Not Be Created";
+			}
+		}
+		
+		if(isset($request->ajax)){
+			$this->output = json_encode($this->output);
+		}
+		else{
+			$this->output = back()->withErrors($validator->errors()->all());
 		}
 		
 		
-		return $this->return;
+		return $this->output;
     }
 
     /**
@@ -96,27 +109,31 @@ class fieldsController extends Controller
      */
     public function update(Request $request, Fields $fields)
     {
-		if(isset($request->ajax)){
-			$return = new \stdClass();
-			$return->status = 'fail';
-		
-			$fields->name = $request->name;
+		$validator = \Validator::make($request->all(),[
+			'fieldName' => 'required'
+		]);
+		if($validator->fails()){
+			$this->output->status = 'fail';
+			$this->output->errors = $validator->errors()->all();
+		}
+		else{
+			$fields->name = $request->fieldName;
 			$fields->crop_id = intval($request->crop_id);
 			if($fields->save()){
-				$return->status = 'success';
-				$return->response = $fields;
-				$return->response->crop = $fields->crop;
+				$this->output->status = 'success';
+				$this->output->response = $fields;
+				$this->output->response->crop = $fields->crop;
 			}
-			else{
-				$return->error = "Unable To Save Changes";
-			}
-			
-			return json_encode($return);
+			$this->output->errors[]="Field Could Not Be Saved";
 		}
-		
+		if(isset($request->ajax)){
+			$this->output = json_encode($this->output);
+		}
        else{
-		   return back();
+			$this->output = back()->withErrors($validator->errors()->all());
 	   }
+	   
+	   return $this->output;
     }
 
     /**

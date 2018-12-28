@@ -5,7 +5,7 @@ namespace Lakeview\Http\Controllers;
 use Lakeview\Farm;
 use Illuminate\Http\Request;
 use \Illuminate\Http\Response;
-use Illuminate\Contracts\Validation\Validator;
+
 
 
 class farmController extends Controller
@@ -48,27 +48,37 @@ class farmController extends Controller
      */
     public function store(Request $request)
     {
-		/*ajax*/
-		$userId = auth()->id();
-		$this->return = back();
-		if(isset($request->farmName) && !empty($request->farmName)){
-			$farmData['name'] = $request->farmName;
-			$farmData['owner'] = $userId;
-			$farm = Farm::create($farmData);
-			if(isset($request->ajax)){
-				if($farm->exists){
-					$this->return->status = 'success';
-					$this->return->response = view('farms.store', ['farm' => $farm])->render();
-				}
-				$this->return = json_encode($this->return);
-			}
+		//$this->output = back();
+		$validator = \Validator::make($request->all(),[
+			'farmName' => 'required|min:5'
+		]);
+		
+		if($validator->fails()){
+			$this->output->status = 'fail';
+			$this->output->errors = $validator->errors()->all();
 		}
 		else{
-			$this->return->status
+			$farmData['name'] = $request->farmName;
+			$farmData['owner'] = auth()->user()->id;
+			$farm = Farm::create($farmData);
+			if($farm->exists){
+				$this->output->status = 'success';
+				$this->output->response = view('farms.store', ['farm' => $farm])->render();
+			}
+			else
+			{
+				$this->output->errors[]="Farm Could Not Be Created";
+			}
 		}
 		
-		
-		return $this->return;
+		if(isset($request->ajax)){
+			$this->output = json_encode($this->output);
+		}
+		else{
+			$this->output = back()->withErrors($validator->errors()->all());
+		}
+				
+		return $this->output;
     }
 
     /**
@@ -104,11 +114,33 @@ class farmController extends Controller
      */
     public function update(Request $request, Farm $farm)
     {
-        
+        $validator = \Validator::make($request->all(),[
+			'farmName' => 'required|min:5'
+		]);
 		
-		$farm->name = $request->name;
-		$farm->save();
-		return back();
+		if($validator->fails()){
+			$this->output->status = 'fail';
+			$this->output->errors = $validator->errors()->all();
+		}
+		else{
+		
+			$farm->name = $request->farmName;
+			$farm->save();
+		
+			if($farm->exists()){
+				$this->output->status = 'success';
+				$this->output->response = $farm;
+			}
+		}
+		
+		if(isset($request->ajax)){
+			$this->output = json_encode($this->output);
+		}
+		else{
+			$this->output = back()->withErrors($validator->errors()->all());
+		}
+				
+		return $this->output;
 	}
 
     /**

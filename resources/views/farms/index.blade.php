@@ -14,7 +14,7 @@
       
     </header>
     <section class="modal-card-body">
-		
+		<form id="newFarmForm" method="post">
 		<div class="field">
 			@csrf
 			<label class="label is-large" for="farmName">Name Your Farm</label>
@@ -30,7 +30,7 @@
 				<button class="button is-info is-large" id="newClose">Close</button>
 			</div>
 		</div>
-		
+		</form>
       
     </section>
   </div>

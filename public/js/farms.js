@@ -19,24 +19,18 @@ function newFarm(evt){
 	$('#newModal').addClass('is-active');
 	$('#newModal input[name="farmName"]').focus();
 	$("#newCreate").click(function(evt){
+		
+		$('#newModal .help').each(function(){$(this).remove();});
 		evt.stopImmediatePropagation();
 		evt.preventDefault();
-		console.log('click');
-		var inputs = $("#newModal input");
-		var formData = [];
-		for(var i = 0; i < inputs.length; i++){
-			formData[inputs[i].name] = inputs[i].value;
-		}
-		if(formData['_token'].length > 0 && formData['farmName'].length >0){
-			formData['ajax'] = true;
-			formData = {...formData};
-			$.ajax({
-				type: "POST",
-				url: "/farms",
-				data: formData,
-				success: showNewFarm
-			});
-		}			
+		var formData = getFormData($('#newFarmForm'));
+		$.ajax({
+			type: "POST",
+			url: "/farms",
+			data: formData,
+			success: showNewFarm
+		});
+					
 	});
 	$("#newClose").click(function(){
 		$('#newModal input[name="farmName"]').val('');
@@ -81,6 +75,11 @@ function showNewFarm(data, textStatus, jqXHR){
 	}
 	else{
 		//Errors
+		var errorsHtml = '';
+		for(var i = 0; i < data.errors.length; i++){
+			errorsHtml += '<p class="help is-danger">'+data.errors[i]+'</p>';
+		}
+		$('#newModal input[name="farmName"]').parent('.control').after(errorsHtml);
 	}
 	
 	
@@ -95,9 +94,38 @@ function renameFarm(){
 	$("#farmName form .input").focus();
 }
 
+function updateFarmName(evt){
+	evt.stopImmediatePropagation();
+	evt.preventDefault();
+	
+	$("#farmName .help").each(function(){$(this).remove()});
+	var formData = getFormData($('#farmName form'));
+	$.ajax({
+		method:'post',
+		url:'/farms/'+$("#farmId input").val(),
+		data: formData,
+		success: function(data){
+			data = JSON.parse(data);
+			if(data.status == 'success'){
+				$('#farmName form').hide();
+				$("#farmName form .input:text").val('');
+				$("#farmName h1").text(data.response.name).show();
+			}
+			else{
+				var errorsHtml = '';
+				for(var i = 0; i < data.errors.length; i++){
+					errorsHtml += '<p class="help is-danger">'+data.errors[i]+'</p>';
+				}
+				$("#farmName .field").first().before('<div class="field">'+errorsHtml+'</div>');
+			}
+		}		
+	});
+}
+
 function cancelRename(){
 	$("#farmName form").hide();
 	$("#farmName h1").show();
+	$("#farmName .help").each(function(){$(this).remove()});
 }
 
 function deleteFarm(){
@@ -124,9 +152,7 @@ function newField(evt){
 	evt.stopImmediatePropagation();
 	evt.preventDefault();
 
-	var formData = $('#newFieldForm');
-	formData = formData.serializeArray();
-	formData.push({name:'ajax',value:true});
+	var formData = getFormData($('#newFieldForm'));
 	$.ajax({
 		type: "POST",
 		url: "/ajax/field",
@@ -137,16 +163,22 @@ function newField(evt){
 }
 function showNewField(data, textStatus, jqXHR){
 	data = JSON.parse(data);
-	//validation
 	
 	if(data.status == 'success'){
 		if($('#fieldsNotification').length > 0){
+			
+			if($('#worklogNotification').length > 0){
+				$('#worklogNotification').fadeOut(500, function (){ $('#worklogs').fadeIn(500); });
+			}
 			$('#fieldsNotification').fadeOut(500, function(){
 				$('#fields').append(data.response);
 			});
 
 		}
 		else{
+			if($('#worklogNotification').length > 0){
+				$('#worklogNotification').fadeOut(500, function (){ $('#worklogs').fadeIn(500); });
+			}
 			$('#fields').append(data.response);
 		}
 		$('#newFieldForm input[name="name"]').val('');
@@ -196,10 +228,9 @@ function cancelEditField(button){
 function updateField(evt, button){
 	evt.stopImmediatePropagation();
 	evt.preventDefault();
+	$('form#editField .help').each(function(){$(this).remove();});
 	var id = $(button).val();
-	var formData = $('form#editField').serializeArray();
-	formData.push({name:'ajax',value:true});
-	
+	var formData = getFormData($('form#editField'));
 	
 	$.ajax({
 		type: "POST",
@@ -219,6 +250,13 @@ function showUpdatedField(data, textStatus, jqXHR){
 		$('#field_'+data.response.id).next('.edit').remove();
 		$('.farmField .options').each(function(){ $(this).css('visibility','visible');});
 	}
+	else{
+		var errorsHtml = '';
+		for(var i = 0; i < data.errors.length; i++){
+			errorsHtml += '<p class="help is-danger">'+data.errors[i]+'</p>';
+		}	
+		$('form#editField .field').first().before('<div class="field">'+errorsHtml+'</div>');
+	}
 }
 
 function deleteField(button){
@@ -231,6 +269,7 @@ function optionEvents(){
 	
 	$(document).on("click", '.editField', function(){ editField($(this)); });
 	$(document).on("click", '.deleteField', function(){ deleteField($(this)); });
+	$(document).on("click", '#saveFarmName', function(evt){ updateFarmName(evt); });
 	$(document).on("mouseenter", '#fields .columns', function(){ fieldHover($(this)); });
 	$(document).on("mouseleave", '#fields .columns', function(){ fieldUnhover($(this)); });
 }

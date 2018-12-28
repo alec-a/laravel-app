@@ -59,3 +59,13 @@ $.ajaxSetup({
 		success: insertModal
 	});
 }
+
+function getFormData(form,extras=[]){
+	var data = $(form).serializeArray();
+	
+	for(var i = 0; i < extras.length; i++){
+		data.push(extras[i]);
+	}
+	data.push({name:'ajax',value:true});
+	return data;
+}

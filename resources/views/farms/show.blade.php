@@ -11,13 +11,13 @@
 		<h1 class="title is-1 " >{{$pageData->farm->name}}</h1>
 		<form method="post" class="hidden" action="{{url('/farms/'.$pageData->farm->id.'')}}">
 			@csrf
-			@method('put');
+			@method('put')
 			<div class="field has-addons">
 				<div class="control">
-					<input type="text" name="name" value="" class="input is-1 is-large"/>
+					<input type="text" name="farmName" value="" class="input is-1 is-large"/>
 				</div>
 				<div class="control">
-					<button class="button is-large is-info">Save</button>
+					<button class="button is-large is-info" type="submit" id="saveFarmName">Save</button>
 				</div>
 				<div class="control">
 					<p class="button is-large is-light" id="cancelRename">Cancel</p>
@@ -89,7 +89,7 @@
 						@method('PUT')
 						<div class="field has-addons">
 							<div class="control is-expanded">
-								<input id="fieldName" type="text" name="name" class="input" placeholder="Name Or Number"/>
+								<input id="fieldName" type="text" name="fieldName" class="input" placeholder="Name Or Number"/>
 							</div>
 							<div class="control">
 								<div class="select">
@@ -126,7 +126,7 @@
 							</div>
 						</div>
 						<div class="column is-two-fifths fieldName">{{$field->name}}</div>
-						<div class="column is-two-fifths fieldCrop">{{$field->crop->name}}</div>
+						<div class="column is-two-fifths fieldCrop">{{($field->crop)? $field->crop->name:''}}</div>
 						
 					</div>
 					@endforeach
@@ -163,9 +163,26 @@
 		</div>
 		<div class="box has-text-weight-bold">
 			<h3 class="title is-3 has-text-centered">Worklogs</h3>
-			<article class="notification is-warning">
+			@if($pageData->farm->fields->count() > 0)
+			<div id="worklogs">
+				<div class="field">
+					<div class="control">
+						<button class="button is-primary is-fullwidth">New Worklog</button>
+					</div>
+				</div>
+			</div>
+			@else
+			<article id ="worklogNotification" class="notification is-warning">
 				<p>Worklogs Can Only Be Created When The Farm Has Fields</p>
 			</article>
+			<div id="worklogs" class="hidden">
+				<div class="field">
+					<div class="control">
+						<button class="button is-primary is-fullwidth">New Worklog</button>
+					</div>
+				</div>
+			</div>
+			@endif
 		</div>
 		<div class="box has-text-weight-bold">
 			<h3 class="title is-3 has-text-centered">Discussion</h3>

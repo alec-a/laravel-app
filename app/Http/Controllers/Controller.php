@@ -6,6 +6,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Contracts\Validation\Validator;
 use Lakeview\Page;
 class Controller extends BaseController
 {
@@ -20,10 +21,10 @@ class Controller extends BaseController
 		$mainPage = Page::where('parent',null)->first();
 		$navItems = $mainPage->children()->get();
 		
-		$this->return = new \stdClass();
-		$this->return->status = 'fail';
-		$this->return->response = null;
-		$this->return->errors = null;
+		$this->output = new \stdClass();
+		$this->output->status = 'fail';
+		$this->output->response = null;
+		$this->output->errors = null;
 		
 		$this->pageData = new \stdClass(['title', 'uri']);
 		$this->pageData->activeNav = '';
@@ -367,5 +368,9 @@ class Controller extends BaseController
 		);
 		
 	}
+	
+	protected function failedValidation(Validator $validator) {
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
+    }
 	
 }
