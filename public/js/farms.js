@@ -299,7 +299,7 @@ function deleteFieldReturn(data){
 	if(data.status == 'success'){
 		$('#field_'+data.response.id).fadeOut(800, function(){$(this).remove();resizeContainer($("#fieldsBox"));isExpandable();});
 		$('#deleteModal').fadeOut(300,function(){$(this).remove();});
-		if($("#fields").find('columns').length < 1){
+		if($("#fields").find('.columns').length < 1){
 			$('#fieldsNotification').fadeIn(800);
 			$('#newWorklogContent').fadeOut(400, function(){$('#worklogNotification').fadeIn(400);});
 		}
