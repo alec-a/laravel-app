@@ -4,6 +4,7 @@
 <div class="columns">
 	<div class="column">
 		<div class="box">
+			<h1 class="title is-1 has-text-grey-dark has-text-centered">Issues</h1>
 			@foreach($pageData->versions as $version)
 			<div class="content version">
 			<h4 class="title is-4 {{$version->active? 'has-text-success':'has-text-info'}}">Version {{$version->name}}</h4>
