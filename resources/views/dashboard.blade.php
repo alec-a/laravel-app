@@ -1,6 +1,33 @@
 @extends('layouts.userArea')
 
 @section('content')
+<script>
+function closeIssue(issueForm){
+	$("#closeIssue").addClass('is-active');
+	$("#modalOk").click(function(evt, issueFom){
+		$(issueForm).find('#close_comment').first().val($("#modalComment").val());
+		$(issueForm).submit();
+	});
+}
+</script>
+<div class="modal" id="closeIssue">
+	<div class="modal-background"></div>
+	<div class="modal-card">
+		 <section class="modal-card-body">
+			 <div class="field">
+				 <label class="label">Comment</label>
+				 <div class="control">
+					 <textarea id="modalComment" class='textarea'></textarea>
+				 </div>
+			 </div>
+			 <div class="field is-grouped is-grouped-centered">
+				 <div class="control">
+					 <button id="modalOk" class='button is-success is-large'>Ok</button>
+				 </div>
+			 </div>
+		</section>
+	</div>
+</div>
 <div class="columns">
 	<div class="column">
 		<h1 class="title is-1">Dashboard</h1>
@@ -41,7 +68,8 @@
 									<div clas="content">
 										<p class="is-size-7">Opened On <strong><time datetime="{{$issue->created_at}}">{{$issue->created_at->format('d-m-Y @ H:i')}}</time></strong> By <strong>{{$issue->author->name}}</strong></p>
 										@if(!$issue->open)
-										<p class="is-size-7">Closed On <strong><time datetime="{{$issue->closed_at}}">{{$issue->closed_at->format('d-m-Y @ H:i')}}</time></strong> By <strong>{{$issue->closedBy->name}}</strong></p>
+										<p class="is-size-7">Closed On <strong><time datetime="{{$issue->closed_at}}">{{$issue->closed_at->format('d-m-Y @ H:i')}}</time></strong> By <strong>{{$issue->closedBy->name}}</strong> {!! empty($issue->close_comment)? '':' With Comment:<br/><strong>'.$issue->close_comment.'</strong>' !!}</p>
+										
 										@endif
 										@if($issue->re_open)
 										<p class="is-size-7">Re-Opened On <strong><time datetime="{{$issue->re_opened_at}}">{{$issue->re_opened_at->format('d-m-Y @ H:i')}}</time></strong> By <strong>{{$issue->reOpenedBy->name}}</strong></p>
@@ -65,7 +93,8 @@
 								@csrf()
 								@method('put')
 								<input type="hidden" name='closeIssue' value="true"/>
-								<a class="card-footer-item" onclick="$('#close_{{$issue->id}}').submit();">Close</a>
+								<textarea id="close_comment" name="close_comment" class="hidden"></textarea>
+								<a class="card-footer-item" onclick="closeIssue($('#close_{{$issue->id}}'))">Close</a>
 							</form>	
 							@endif
 							@if (auth()->user()->role == 1)

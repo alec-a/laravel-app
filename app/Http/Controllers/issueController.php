@@ -97,6 +97,7 @@ class issueController extends Controller
 			$issue->re_open = 0;
 			$issue->open = 0;
 			$issue->close_id = auth()->user()->id;
+			$issue->close_comment = $request->close_comment;
 			$issue->closed_at = $date->format('Y-m-d G:i:s');
 		}
 		else{
