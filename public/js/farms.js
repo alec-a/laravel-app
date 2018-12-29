@@ -105,7 +105,7 @@ function updateFarmName(evt){
 	var formData = getFormData($('#farmName form'));
 	$.ajax({
 		method:'post',
-		url:'/farms/'+$("#farmId input").val(),
+		url:'/farm/'+$("#farmId input").val(),
 		data: formData,
 		success: function(data){
 			data = JSON.parse(data);

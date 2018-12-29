@@ -19,7 +19,7 @@ class Issue extends Model
 		return $this->belongsTo(User::class,'close_id','id');
 	}
 	public function reOpenedBy(){
-		return $this->belongsTo(User::class,'close_id','id');
+		return $this->belongsTo(User::class,'re_open_id','id');
 	}
 	
 }

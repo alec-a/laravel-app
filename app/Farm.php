@@ -22,4 +22,8 @@ class Farm extends Model
 	public function fields(){
 		return $this->hasMany(Fields::class);		
 	}
+	
+	public function worklogs(){
+		return $this->hasMany(Worklog::class);
+	}
 }

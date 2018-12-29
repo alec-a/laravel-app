@@ -49,7 +49,7 @@
 	
 	
 	
-	<a class="column is-one-third" href="{{url('farms/'.$farm->id)}}">
+	<a class="column is-one-third" href="{{url('farm/'.$farm->id)}}">
 		<div class="box is-fullheight has-text-centered">
 			<img src="{{asset('/img/barn.png')}}"></img>
 			<hr/>

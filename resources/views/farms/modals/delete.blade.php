@@ -1,6 +1,6 @@
 
 <div class="modal is-active" id="deleteModal">
-	<form method="post" action="{{url('/farms/'.$farmId)}}">
+	<form method="post" action="{{url('/farm/'.$farmId)}}">
 	@csrf
 	@method('DELETE')
 	</form>

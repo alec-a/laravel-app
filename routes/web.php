@@ -18,21 +18,42 @@
 
 
 
-Route::group(array('prefix' => 'dashboard'), function(){
-		Route::get('/','dashboardController@index');
-		
-});
 
-Route::resource('farms','farmController');
-Route::put('farms/join/{farm}','farmController@join');
-Route::put('farms/leave/{farm}','farmController@leave');
+Route::get('dashboard','dashboardController@index');
+
+route::resource('farms','farmController')->only(['index','store']);
+Route::resource('farm','farmController')->except(['index','store']);
+Route::put('farm/join/{farm}','farmController@join');
+Route::put('farm/leave/{farm}','farmController@leave');
+
+Route::delete('/fields/{fields}', 'fieldsController@destroy');
 
 Route::resource('ajax/field','fieldsController')->parameters(['field' => 'fields']);
-Route::resource('issue', 'issueController');
+
+Route::resource('farm/{farm}/worklogs','worklogController')->only(['index','store']);
+Route::resource('farm/{farm}/worklog','worklogController')->except(['index','store']);
+Route::resource('ajax/farm/{farm}/worklogs','worklogController')->only(['index','store']);
+Route::resource('ajax/farm/{farm}/worklog','worklogController')->except(['index','store']);
+
+Route::resource('farm/{farm}/worklog/{worklog}/fields','worklogFieldController')->only(['index','store'])->parameters(['field' => 'worklogField']);
+Route::resource('farm/{farm}/worklog/{worklog}/field','worklogFieldController')->except(['index','store'])->parameters(['field' => 'worklogField']);
+Route::resource('ajax/farm/{farm}/worklog/{worklog}/fields','worklogFieldController')->only(['index','store'])->parameters(['field' => 'worklogField']);
+Route::resource('ajax/farm/{farm}/worklog/{worklog}/field','worklogFieldController')->except(['index','store'])->parameters(['field' => 'worklogField']);
+
+
+Route::resource('farm/{farm}/worklog/{worklog}/field/{worklogField}/tasks','worklogTaskController')->only(['index','store']);
+Route::resource('farm/{farm}/worklog/{worklog}/field/{worklogField}/tasks','worklogTaskController')->except(['index','store']);
+Route::resource('ajax/farm/{farm}/worklog/{worklog}/field/{worklogField}/tasks','worklogTaskController')->only(['index','store']);
+Route::resource('ajax/farm/{farm}/worklog/{worklog}/field/{worklogField}/task','worklogTaskController')->except(['index','store']);
+
+Route::resource('tasks','taskController')->only(['index','store']);
+Route::resource('task','taskController')->except(['index','store']);
+Route::resource('ajax/tasks','taskController')->only(['index','store']);
+Route::resource('ajax/task','taskController')->except(['index','store']);
+
 Route::post('ajax/modal','modalController@get');
 Route::post('ajax/modal/farms','modalController@farms');
 Route::post('ajax/modal/fields','modalController@field');
-Route::delete('/fields/{fields}', 'fieldsController@destroy');
 
 route::group(array('prefix' => 'account'), function(){
 	Route::get('register/confirmed','Auth\RegisterController@confirmed');
