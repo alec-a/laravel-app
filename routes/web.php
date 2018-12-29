@@ -32,8 +32,12 @@ Route::resource('ajax/field','fieldsController')->parameters(['field' => 'fields
 
 Route::resource('farm/{farm}/worklogs','worklogController')->only(['index','store']);
 Route::resource('farm/{farm}/worklog','worklogController')->except(['index','store']);
-Route::resource('ajax/farm/{farm}/worklogs','worklogController')->only(['index','store']);
-Route::resource('ajax/farm/{farm}/worklog','worklogController')->except(['index','store']);
+Route::post('ajax/farm/{farm}/worklogs', 'worklogController@index');
+Route::post('ajax/farm/{farm}/worklogs/store', 'worklogController@store');
+Route::post('ajax/farm/{farm}/worklog/edit', 'worklogController@edit');
+Route::post('ajax/farm/{farm}/worklog/create', 'worklogController@create');
+Route::post('ajax/farm/{farm}/worklog/{worklog}', 'worklogController@show');
+Route::resource('ajax/farm/{farm}/worklog','worklogController')->except(['index','store','edit','create']);
 
 Route::resource('farm/{farm}/worklog/{worklog}/fields','worklogFieldController')->only(['index','store'])->parameters(['field' => 'worklogField']);
 Route::resource('farm/{farm}/worklog/{worklog}/field','worklogFieldController')->except(['index','store'])->parameters(['field' => 'worklogField']);
@@ -50,6 +54,8 @@ Route::resource('tasks','taskController')->only(['index','store']);
 Route::resource('task','taskController')->except(['index','store']);
 Route::resource('ajax/tasks','taskController')->only(['index','store']);
 Route::resource('ajax/task','taskController')->except(['index','store']);
+
+Route::resource('issue', 'issueController');
 
 Route::post('ajax/modal','modalController@get');
 Route::post('ajax/modal/farms','modalController@farms');

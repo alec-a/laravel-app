@@ -17,13 +17,13 @@ class CreateWorklogTasksTable extends Migration
             $table->increments('id');
 			$table->unsignedInteger('worklog_id');
 			$table->unsignedInteger('field_id');
-			$table->unsignedInteger('task_id');
-			$table->string('task_option');
-			$table->text('note');
+			$table->unsignedInteger('task_id')->nullable();
+			$table->string('task_option')->nullable();
+			$table->text('note')->nullable();
 			$table->tinyInteger('status')->default(0);
 			$table->tinyInteger('priority')->default(0);
-			$table->timestamp('completed_on');
-			$table->unsignedInteger('completed_by_id');
+			$table->timestamp('completed_on')->nullable();
+			$table->unsignedInteger('completed_by_id')->nullable();
             $table->timestamps();
         });
     }

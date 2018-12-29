@@ -87,13 +87,13 @@ class issueController extends Controller
     public function update(Request $request, Issue $issue)
     {
 		$date = new \DateTime('NOW');
-        if($request->re_open){
+        if($request->re_openIssue){
 			$issue->re_open = 1;
 			$issue->open = 1;
 			$issue->re_open_id = auth()->user()->id;
 			$issue->re_opened_at = $date->format('Y-m-d G:i:s');
 		}
-		elseif($request->close){
+		elseif($request->closeIssue){
 			$issue->re_open = 0;
 			$issue->open = 0;
 			$issue->close_id = auth()->user()->id;

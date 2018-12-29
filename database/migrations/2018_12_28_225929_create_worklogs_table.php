@@ -16,7 +16,7 @@ class CreateWorklogsTable extends Migration
         Schema::create('worklogs', function (Blueprint $table) {
             $table->increments('id');
 			$table->unsignedinteger('farm_id');
-			$table->string('name');
+			$table->string('name')->nullable();
 			$table->integer('season');
             $table->timestamps();
         });

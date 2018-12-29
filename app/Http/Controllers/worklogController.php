@@ -13,9 +13,30 @@ class worklogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Farm $farm)
+	public function __construct() {
+		parent::__construct();
+		$this->middleware('auth');
+		$this->pageData->activeNav = 'farms';
+		$uri = request()->server('PATH_INFO');
+		$this->ajax = strpos($uri, 'ajax');
+	}
+	
+    public function index(Request $request, Farm $farm)
     {
-        dd($farm->fields->count());
+		$this->pageData->farm = $farm;
+		$this->output->status = 'success';
+		$this->output->response = new \stdClass();
+		$this->output->response->farm = $farm;
+		
+		if($this->ajax){
+			$this->output = json_encode($this->output);
+		}
+		else{
+			$this->output = view('worklog.index',['pageData'=>$this->pageData])->render();
+		}
+		
+		return $this->output;
+		
     }
 
     /**
@@ -45,9 +66,20 @@ class worklogController extends Controller
      * @param  \Lakeview\Worklog  $worklog
      * @return \Illuminate\Http\Response
      */
-    public function show(Worklog $worklog)
+    public function show(Farm $farm, Worklog $worklog)
     {
-        //
+		$this->pageData->worklog = $worklog;
+		$this->output->status = 'success';
+		$this->output->response = $worklog;
+		
+		if($this->ajax){
+			$this->output = json_encode($this->output);
+		}
+		else{
+			$this->output = view('worklog.show', ['pageData' => $this->pageData])->render();
+		}
+		
+		return $this->output;
     }
 
     /**

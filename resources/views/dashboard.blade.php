@@ -24,13 +24,13 @@
 						<div class="card-content">
 						  
 							<div class="media">
-								<div class="media-left">
+								<div class="media-left" id="issueTags">
 								  @if($issue->open && !$issue->re_open)
-								  <p class="subtitle has-text-danger has-text-weight-bold">Open</p>
+								  <p class="button is-medium is-active is-warning has-text-weight-bold has-default-cursor is-radiusless is-fullwidth">Open</p>
 								  @elseif($issue->re_open)
-									<p class="subtitle has-text-danger has-text-weight-bold">Re-Opened</p>
+								  <p class="button is-medium is-active is-danger has-text-weight-bold has-default-cursor is-radiusless is-fullwidth">Re Opened</p>
 								  @else
-								   <p class="subtitle has-text-primary has-text-weight-bold">Closed</p>
+								   <p class="button is-medium is-active is-success has-text-weight-bold has-default-cursor is-radiusless is-fullwidth">Closed</p>
 								  @endif
 								</div>
 								<div class="media-content">
@@ -57,23 +57,23 @@
 							<form method="post" action="{{url('/issue/'.$issue->id)}}" class="card-footer-item" id="reOpen_{{$issue->id}}">
 								@csrf()
 								@method('put')
-								<input type="hidden" name='re_open' value="true"/>
+								<input type="hidden" name='re_openIssue' value="true"/>
 								<a class="card-footer-item" onclick="$('#reOpen_{{$issue->id}}').submit();">Re-Open</a>
 							</form>	
 							@elseif ($issue->open || $issue->re_open)
 							<form method="post" action="{{url('/issue/'.$issue->id)}}" class="card-footer-item" id="close_{{$issue->id}}">
 								@csrf()
 								@method('put')
-								<input type="hidden" name='close' value="true"/>
+								<input type="hidden" name='closeIssue' value="true"/>
 								<a class="card-footer-item" onclick="$('#close_{{$issue->id}}').submit();">Close</a>
 							</form>	
 							@endif
 							@if (auth()->user()->role == 1)
-							<form method="post" action="{{url('/issue/'.$issue->id)}}" class="card-footer-item" id="close_{{$issue->id}}">
+							<form method="post" action="{{url('/issue/'.$issue->id)}}" class="card-footer-item" id="delete_{{$issue->id}}">
 								@csrf()
 								@method('delete')
-								<input type="hidden" name='close' value="true"/>
-								<a class="card-footer-item"  onclick="$('#close_{{$issue->id}}').submit();">Delete</a>
+								<input type="hidden" name='deleteIssue' value="true"/>
+								<a class="card-footer-item"  onclick="$('#delete_{{$issue->id}}').submit();">Delete</a>
 							</form>	
 							@endif
 						  </footer>
