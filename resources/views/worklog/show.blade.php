@@ -12,6 +12,10 @@
 <div class="modal is-active">
   <div class="modal-background"></div>
   <div class="modal-card" id="worklogModal">
+	  <header class="modal-card-head">
+      <p class="modal-card-title">All Fields & Tasks</p>
+      <a href="{{url()->previous()}}" class="delete" aria-label="close"></a>
+    </header>
 	  <section class="modal-card-body">
 		@foreach($worklog->fields as $field)
 			<div class="columns field-row">

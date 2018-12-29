@@ -26,4 +26,8 @@ class Farm extends Model
 	public function worklogs(){
 		return $this->hasMany(Worklog::class);
 	}
+	
+	public function currentWorklog(){
+		return $this->hasMany(Worklog::class)->whereHas('farm', function($query){ $query->where('season', '=', $this->season); });
+	}
 }

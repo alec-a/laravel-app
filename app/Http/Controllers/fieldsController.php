@@ -4,6 +4,9 @@ namespace Lakeview\Http\Controllers;
 
 use Lakeview\Fields;
 use Lakeview\Farm;
+use Lakeview\Task;
+use Lakeview\WorklogField;
+use Lakeview\WorklogTask;
 use Illuminate\Http\Request;
 
 class fieldsController extends Controller
@@ -54,16 +57,42 @@ class fieldsController extends Controller
 		else{
 			$server = $request->server();
 			$farmId = intval(str_replace($server['HTTP_ORIGIN'].'/farm/', '', $server['HTTP_REFERER']));
+			$farm = Farm::find($farmId);
 			$fieldData['name'] = $request->name;
 			$fieldData['crop_id'] = intval($request->crop_id);
 			$fieldData['farm_id'] = $farmId;
+			
+			
+
 			$field = Fields::create($fieldData);
 			if($field->exists){
+				if($farm->worklogs->count() > 0 && $farm->currentWorklog->first()->exists)
+				{
+					$worklogField = new WorklogField;
+					$worklogField->worklog_id = $farm->currentWorklog->first()->id;
+					$worklogField->field_id = $field->id;
+					$worklogField->crop_id = $field->crop_id;
+					$worklogField->save();
+					
+					$tasks = Task::all();
+					foreach($tasks as $task){
+						$worklogTask = new WorklogTask;
+						$worklogTask->worklog_id = $farm->currentWorklog->first()->id;
+						$worklogTask->field_id = $field->id;
+						$worklogTask->task_id = $task->id;
+						$worklogTask->save();
+					}
+				}
+				
 				$this->output->response = view('fields.store',['field' => $field])->render();
 				$this->output->status = 'success';
+				
 			}
 			else{
+				
+				
 				$this->output->errors[]="Field Could Not Be Created";
+				
 			}
 		}
 		

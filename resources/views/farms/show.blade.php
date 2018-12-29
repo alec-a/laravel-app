@@ -163,19 +163,49 @@
 		</div>
 		<div class="box has-text-weight-bold" id="worklogsBox">
 			<h3 class="title is-3 has-text-centered">Worklogs</h3>
-			<div class="is-clipped expandContainer">
-				<div id="worklogs" class="expandContent">
+				<div id="worklogs" class="">
 					<article id ="worklogNotification" class="notification is-warning {{$pageData->farm->fields->count() > 0? 'hidden':''}}">
 						<p>Worklogs Can Only Be Created When The Farm Has Fields</p>
 					</article>
 				
-					<div class="field {{$pageData->farm->fields->count() > 0? '':'hidden'}}" id="newWorklogContent">
-						<div class="control">
-							<a href="{{url('/farm/'.$pageData->farm->id.'/worklog/create')}}" class="button is-primary is-fullwidth">New Worklog</a>
+					<div class="field {{$pageData->farm->fields->count() > 0? '':'hidden'}} is-grouped" id="newWorklogContent">
+						
+							@if(!empty($pageData->farm->worklogs))
+							<div class="control is-expanded">
+								<a href="{{url('/farm/'.$pageData->farm->id.'/worklogs')}}" class="button is-link is-fullwidth">View All Worklogs</a>
+							</div>
+							@endif
+						
+						<div class="control {{empty($pageData->farm->worklogs)? 'is-expanded':''}}">
+							<a href="{{url('/farm/'.$pageData->farm->id.'/worklog/create')}}" class="button is-primary {{empty($pageData->farm->worklogs)? 'is-fullwidth':''}}">New Worklog</a>
 						</div>
 					</div>
+					
+					@if(!empty($pageData->farm->worklogs))
+					<section id="worklogList">
+						@foreach($pageData->farm->worklogs as $worklog)
+							@if($loop->iteration < 3)
+								<div class="columns worklog">
+									<div class="column">
+										<a href="{{url('/farm/'.$pageData->farm->id.'/worklog/'.$worklog->id)}}">
+										<div class="card">
+											<header class="card-header">
+												<p class="card-header-title">
+													{{empty($worklog->name)? 'Season '.$worklog->season:$worklog->name.' (Season '.$worklog->season.')'}}
+												</p>
+											</header>
+											<div class="card-content">
+												<p>Hello</p>
+											</div>
+										</div>
+										</a>
+									</div>
+								</div>
+							@endif
+						@endforeach
+					</section>
+					@endif
 				</div>
-			</div>
 		</div>
 		<div class="box has-text-weight-bold">
 			<h3 class="title is-3 has-text-centered">Discussion</h3>
