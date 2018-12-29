@@ -54,7 +54,6 @@
 				@endforeach
 				
 			</div>
-		<hr class="is-marginless has-background-grey-light"/>
 		@endforeach
 	  </section>
   </div>

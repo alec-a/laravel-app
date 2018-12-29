@@ -123,9 +123,16 @@ and open the template in the editor.
 }
 #worklogModal .task{
 	border-left: 2px solid hsl(0, 0%, 71%);
+	
+}
+#worklogModal .field:not(:last-child) {
+    margin-bottom: 0px !important;
 }
 
-#worklogModal .field-row{
+#worklogModal .field-row .column.field, #worklogModal .field-row .column.task{
 	margin-bottom:0px;
+	height: 108px !important;
+	border-bottom: 2px solid hsl(0, 0%, 71%);
+	
 }
 
