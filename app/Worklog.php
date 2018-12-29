@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Worklog extends Model
 {
-    public function tasks(){
+	protected $guarded = ['id','created_at','updated_at'];
+	public function tasks(){
 		return $this->hasMany(WorklogTask::class, 'worklog_id', 'id');
 	}
 	public function fields(){

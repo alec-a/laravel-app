@@ -110,3 +110,22 @@ and open the template in the editor.
 .version .issue:last-child{
 	margin-bottom: 0px;
 }
+
+@media screen and (min-width: 769px), print {
+	#worklogModal {
+		width: 90% !important;
+	}
+}
+
+#worklogModal .task .task-head{
+	height:60px;
+	border-bottom: 1px solid hsl(0, 0%, 71%);
+}
+#worklogModal .task{
+	border-left: 2px solid hsl(0, 0%, 71%);
+}
+
+#worklogModal .field-row{
+	margin-bottom:0px;
+}
+

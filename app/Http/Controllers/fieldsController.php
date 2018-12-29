@@ -53,7 +53,7 @@ class fieldsController extends Controller
 		}
 		else{
 			$server = $request->server();
-			$farmId = intval(str_replace($server['HTTP_ORIGIN'].'/farms/', '', $server['HTTP_REFERER']));
+			$farmId = intval(str_replace($server['HTTP_ORIGIN'].'/farm/', '', $server['HTTP_REFERER']));
 			$fieldData['name'] = $request->name;
 			$fieldData['crop_id'] = intval($request->crop_id);
 			$fieldData['farm_id'] = $farmId;

@@ -171,7 +171,7 @@
 				
 					<div class="field {{$pageData->farm->fields->count() > 0? '':'hidden'}}" id="newWorklogContent">
 						<div class="control">
-							<button class="button is-primary is-fullwidth">New Worklog</button>
+							<a href="{{url('/farm/'.$pageData->farm->id.'/worklog/create')}}" class="button is-primary is-fullwidth">New Worklog</a>
 						</div>
 					</div>
 				</div>

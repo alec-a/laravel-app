@@ -7,6 +7,9 @@
 @section('content')
 <h1 class="title is-1">Worklogs</h1>
 <p class="subtitle">{{$pageData->farm->name}}</p>
+<article class="notification is-warning">
+	This is still under development and may be broken but it's here to look at!
+</article>
 	@if($pageData->farm->worklogs->count() > 0)
 	<div class="columns is-multiline is-mobile">
 		@foreach($pageData->farm->worklogs as $worklog)
