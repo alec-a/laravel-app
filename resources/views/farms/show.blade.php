@@ -63,7 +63,7 @@
 			<div class="dropdown-menu" id="dropdown-menu1" role="menu">
 				<div class="dropdown-content">
 					
-					<form method="post" action="{{url('farms/leave/'.$pageData->farm->id)}}" id="leave">
+					<form method="post" action="{{url('farm/leave/'.$pageData->farm->id)}}" id="leave">
 						@csrf
 						@method('put')						
 						<a class="dropdown-item" onclick="document.getElementById('leave').submit();">
@@ -241,7 +241,7 @@
 @else
 <div class='columns'>
 	<div class="column is-two-thirds top">
-		<form method='post' action='{{url('/farms/join/'.$pageData->farm->id)}}'>
+		<form method='post' action='{{url('/farm/join/'.$pageData->farm->id)}}'>
 			@csrf
 			@method('put')
 			<div class='field'>

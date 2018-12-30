@@ -26,7 +26,7 @@ class AddDeleteDatesToWorklogsTable extends Migration
     public function down()
     {
         Schema::table('worklogs', function (Blueprint $table) {
-            //
+             $table->dropSoftDeletes();
         });
     }
 }

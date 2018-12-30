@@ -18,6 +18,7 @@
     </header>
 	  <section class="modal-card-body">
 		@foreach($worklog->fields as $field)
+		
 			<div class="columns field-row">
 				<div class="column field">
 					<div class="columns field-head">
@@ -42,9 +43,9 @@
 												<input type="checkbox"/>
 										</div>
 									
-										<div class="control">
+										<!--<div class="control">
 												<input type="checkbox"/>										
-										</div>
+										</div>-->
 									
 										<div class="control">
 											
