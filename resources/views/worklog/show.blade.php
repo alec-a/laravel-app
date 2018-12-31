@@ -1,68 +1,45 @@
-@php $worklog = $pageData->worklog @endphp
-@extends('layouts.userArea')
+@php extract((array)$pageData) @endphp
 
+@extends('layouts.worklog')
 @section('scripts')
-<script src="{{asset('js/farms.js')}}"></script>
-@endsection
 
+<script src="{{asset('js/worklog.js')}}"></script>
+
+@endsection
 @section('content')
 
-<h1 class="title is-1">{{empty($worklog->name)? 'Season '.$worklog->season:$worklog->name}}</h1>
+<h1 class="title is-1">{{empty($worklog->name)? 'Season '.$worklog->season : $worklog->name}}</h1>
 {!! empty($worklog->name)? '':'<p class="subtitle">Season '.$worklog->season.'</p>' !!}
-<div class="modal is-active">
-  <div class="modal-background"></div>
-  <div class="modal-card" id="worklogModal">
-	  <header class="modal-card-head">
-      <p class="modal-card-title">All Fields & Tasks</p>
-      <a href="{{url()->previous()}}" class="delete" aria-label="close"></a>
-    </header>
-	  <section class="modal-card-body">
-		@foreach($worklog->fields as $field)
-		
-			<div class="columns field-row">
-				<div class="column field">
-					<div class="columns field-head">
-						<div class="column has-text-weight-bold">Field</div>
-					</div>
-					<div class="columns">
-						<div class="column has-text-weight-bold">{{$field->info->name}}</div>
-					</div>
-				</div>
-				@foreach($field->tasks as $task)
-				
-				<div class="column task">
-					<div class="columns task-head">
-						<div class="column has-text-weight-bold is-size-7">{{ $task->info->task }}</div>
-					</div>
-					<div class="columns">
-						<div class="column">
-							<div class="field is-grouped">
-								
-										<div class="control">
-											
-												<input type="checkbox"/>
-										</div>
-									
-										<!--<div class="control">
-												<input type="checkbox"/>										
-										</div>-->
-									
-										<div class="control">
-											
-												<input type="checkbox" />
-										</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				@endforeach
-				
-			</div>
+<div class="tabs is-boxed is-small is-centered">
+	<ul>
+		@foreach($tasks as $task)	
+		<li class="{{$loop->iteration == 1? 'is-active':''}}" data-task="{{$task->id}}"><a data-task="{{$task->id}}">{{$task->task}}</a></li>
 		@endforeach
-	  </section>
-  </div>
+	</ul>
 </div>
+@foreach($tasks as $task)
+	<div data-task="{{$task->id}}" class="content {{$loop->iteration > 1? 'is-invisible':''}} task">
+		<h5 class="title is-5">{{$task->task}}</h5>
+		@if($loop->iteration == 1)
+		
+			<div class="columns is-multiline is-marginless" id="wlTasks">
+			@foreach($worklog->tasks->where('task_id','=',$task->id) as $wlt)
+			<div class="column is-one-tenth has-background-{{$wlt->getColour()->bgColour}} has-text-{{$wlt->getColour()->txtColour}} wltask {{$loop->iteration%10 == 0? 'is-last-in-row':''}}" data-wlt="{{$wlt->id}}">
+				<div class="columns">
+					<div class="column">
+						{{$wlt->field->info->name}}
+					</div>
+				</div>
+				<div class="columns">
+					<div class="column">
+						{{!empty($wlt->field->crop)? $wlt->field->crop->name:''}}
+					</div>
+				</div>
+			</div>
+			@endforeach
+			</div>
+		@endif
+		
+	</div>
+	@endforeach
 @endsection
-
-

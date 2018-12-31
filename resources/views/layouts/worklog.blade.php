@@ -97,41 +97,15 @@ if(isset($dumpTop)){
 			</nav>
 		@endif
 		<div id="modal">
-			
+
 		</div>
 		@yield('scripts')
         <section class="section">
             <div class="container">
 				<div class='columns'>
-					<div class='column is-one-quarter has-background-light is-fullheight' id="dashboardSideNav">
-						<aside class="menu">
-							<p class="menu-label is-size-6">
-							  General
-							</p>
-							<ul class="menu-list">
-								<li><a href="{{url('/dashboard')}}" class="{{$pageData->activeNav=='dashboard'? 'is-active':''}}">Dashboard</a></li>
-							  <li><a href="{{url('/farms')}}" class="{{$pageData->activeNav=='farms'? 'is-active':''}}">Farms</a></li>
-							  <li><a href="{{url('/account')}}" class="{{$pageData->activeNav=='account'? 'is-active':''}}">Account</a></li>
-							  <li><a href="{{url('/account/messages')}}" class="{{$pageData->activeNav=='messages'? 'is-active':''}}">Messages</a></li>
-							</ul>
-							<p class="menu-label is-size-6">
-							  Administration
-							</p>
-							<ul class="menu-list">
-							  <li>
-								<a >Content</a>
-								<ul class="subMenu">
-								  <li><a>All Pages</a></li>
-								  <li><a>New Page</a></li>
-								</ul>
-							  </li>
-							  <li><a>Applications</a></li>
-							  <li><a>Users</a></li>
-							</ul>
-						</aside>
-					</div>
+					
 				
-					<div class='column is-four-fifths top is-capitalized' id='container'>
+					<div class='column is-full top is-capitalized' id='container'>
 						@include('layouts.notification')
 						@yield('content')
 					</div>

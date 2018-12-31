@@ -136,4 +136,34 @@ and open the template in the editor.
 	
 }
 
+#container {
+	position: relative;
+}
 
+.message {
+	width: 100%;
+	position: absolute;
+	z-index:100;
+	top: 100px;
+	box-shadow: 0px 30px 50px rgba(0, 0, 0, 0.5098039215686274);
+}
+
+.field.is-fullwidth {
+	width:100%;
+}
+
+.wltask {
+	border-bottom: 2px inset white;
+	border-right: 2px inset white;
+}
+.wltask.is-last-in-row{
+	border-right: 0px !important;
+}
+
+
+@media screen and (min-width: 769px), print {
+	.column.is-one-tenth, .column.is-one-tenth-tablet{
+		width: 10%;
+		flex:none;
+	}
+}

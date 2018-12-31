@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Contracts\Validation\Validator;
 use Lakeview\Page;
 use Lakeview\Version;
+use View;
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -19,17 +21,19 @@ class Controller extends BaseController
 
 
 	public function __construct() {
+		
+	
 		$mainPage = Page::where('parent',null)->first();
 		$navItems = $mainPage->children()->get();
 		
 		$this->output = new \stdClass();
 		$this->output->status = 'fail';
-		$this->output->response = null;
+		$this->output->response = new \stdClass();
 		$this->output->errors = null;
-		
-		
+				
 		$this->pageData = new \stdClass(['title', 'uri']);
 		$this->pageData->version = Version::where('active','=',true)->take(1)->get()->first();
+		$this->pageData->warnings = array();
 		$this->pageData->activeNav = '';
 		$this->pageData->navItems = $navItems;
 		$this->pageData->data = new \stdClass();
@@ -370,10 +374,21 @@ class Controller extends BaseController
 			"13" => "(GMT+13:00) Nuku'alofa",
 		);
 		
+		
+		View::share('pageData', $this->pageData);
+		View::share('warningMsg',null);
+		View::share('dangerMsg',null);
+		View::share('successMsg',null);
+		View::share('infoMsg',null);
+		View::share('linkMsg',null);
+		View::share('dangerMsg',null);
+		View::share('darkMsg',null);
+		View::share('primaryMsg',null);
+		
 	}
 	
 	protected function failedValidation(Validator $validator) {
         throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
-	
+		
 }

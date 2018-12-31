@@ -11,11 +11,10 @@ use Illuminate\Http\Request;
 
 class worklogController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
+	
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+	
 	public function __construct() {
 		parent::__construct();
 		$this->middleware('auth');
@@ -23,24 +22,29 @@ class worklogController extends Controller
 		$uri = request()->server('PATH_INFO');
 		$this->ajax = strpos($uri, 'ajax');
 	}
+	/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 	
+	/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request, Farm $farm)
     {
 		$this->pageData->farm = $farm;
 		$this->output->status = 'success';
-		$this->output->response = new \stdClass();
-		$this->output->response->farm = $farm;
 		
+		$this->output->response->farm = $farm;
 		if($this->ajax){
 			$this->output = json_encode($this->output);
 		}
 		else{
-			$this->output = view('worklog.index',['pageData'=>$this->pageData])->render();
+			$this->output = view('worklog.index')->with('dangerMsg',"This Is Still Under Development And May Be Broken But It's Here To Look At!");
 		}
-		
 		return $this->output;
-		
     }
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
     /**
      * Show the form for creating a new resource.
@@ -50,17 +54,20 @@ class worklogController extends Controller
     public function create(Farm $farm)
     {
 		$this->pageData->farm = $farm;
-		
+		$this->message = "There is a worklog for this season, creating a new one will overwite the current worklog!";
         if($this->ajax){
-			$this->output = json_encode($this->output);
+			$this->pageData->farm = $farm;
+			$this->output->status = 'success';
+			$this->output->response = !empty($farm->currentWorklog)? view('worklog.modals.create')->with('warningMsg',$this->message)->render(): view('worklog.modals.create')->render();
 		}
 		else{
-			$this->output = view('worklog.create',['pageData'=>$this->pageData])->render();
+			$this->output = (!empty($farm->currentWorklog))? view('worklog.create')->with('warningMsg',$this->message):$this->output = view('worklog.create');	
 		}
-		
 		return $this->output;
     }
 
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+	
     /**
      * Store a newly created resource in storage.
      *
@@ -70,61 +77,85 @@ class worklogController extends Controller
     public function store(Request $request, Farm $farm)
     {
 		$tasks = Task::all();
+		
+		if(!empty($farm->currentWorklog)){
+			$farm->currentWorklog->delete();
+		}
+		
 		$worklogattrs['farm_id'] = $farm->id;
 		$worklogattrs['name'] = (empty($request->name)? null:$request->name);
 		$worklogattrs['season'] = $farm->season;
-				
+		
 		$worklog = Worklog::create($worklogattrs);
         if($worklog->exists()){
-			$fieldsattrs = array();
 			
 			foreach($farm->fields as $field){
-				$fieldsattrs[] = array(
-					'worklog_id' => $worklog->id,
-					'field_id' => $field->id,
-					'crop_id' => 0);
-				$taskattrs = array();
-				
+				$createField = array('field_id' => $field->id, 'crop_id' => $field->crop_id);
+				$wlField = $worklog->fields()->create($createField);
 				foreach($tasks as $task){
-				$taskattrs[] = array(
-					'worklog_id' => $worklog->id,
-					'field_id' => $field->id,
-					'task_id' => $task->id);
+					$createTask = array('worklog_field_id'=>$wlField->id,'task_id' => $task->id, 'worklog_id' => $worklog->id);
+					$wlField->tasks()->create($createTask);
 				}
-				$worklogTasks = WorklogTask::insert($taskattrs);
-			}
-			
-			
-			
-			$worklogFields = WorklogField::insert($fieldsattrs);
-			
+			}			
 		}
 		
-		return json_encode($worklog);
+		
+		if($this->ajax){
+			$this->output->status = 'success';
+			$this->output->response = $worklog;
+			$this->output = json_encode($this->output);
+		}
+		else
+		{
+			$this->output = redirect('/farm/'.$worklog->farm_id)->with('success','Created Worklog <strong>'.$worklog->name.'</strong> for Season <strong>'.$worklog->season.'</strong>');
+		}
+		return $this->output;
     }
 
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+	
     /**
      * Display the specified resource.
      *
      * @param  \Lakeview\Worklog  $worklog
      * @return \Illuminate\Http\Response
      */
-    public function show(Farm $farm, Worklog $worklog)
+    public function show(Request $request, Farm $farm, Worklog $worklog)
     {
+		$task = Task::all();
 		$this->pageData->worklog = $worklog;
+		$this->pageData->tasks = $task;
+//		$this->pageData->priorityTasks = WorklogTask::where('worklog_id','=',$worklog->id)->where('status','=',1)->orderBy('priority','desc')->get();
+//		$this->pageData->requiredTasks = WorklogTask::where('worklog_id','=',$worklog->id)->where('status','=',1)->orderBy('task_id','desc')->get();
+//		$this->pageData->completedTasks = WorklogTask::where('worklog_id','=',$worklog->id)->where('status','=',3)->orderBy('task_id','desc')->get();
+		
+		/**
+		 * Ajax should have a task_id it wants to fetch tasks for
+		 */
+		if(!empty($request->task_id)){
+			//get worklogTasks for this id
+			$worklogTask = $worklog->tasks->where('id', '=',$request->task_id)->first();
+			$worklogTask->info;
+			$worklogTask->field;
+			$worklogTask->field->info;
+			$worklogTask->worklog;
+			$this->output->response->worklogTask = $worklogTask;
+		}
+		
 		$this->output->status = 'success';
-		$this->output->response = $worklog;
 		
 		if($this->ajax){
 			$this->output = json_encode($this->output);
 		}
 		else{
-			$this->output = view('worklog.show', ['pageData' => $this->pageData])->render();
+			$this->output = view('modalBuild')->with('dumpBottom',true);
 		}
 		
 		return $this->output;
     }
 
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+	
     /**
      * Show the form for editing the specified resource.
      *
@@ -136,6 +167,8 @@ class worklogController extends Controller
         //
     }
 
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+	
     /**
      * Update the specified resource in storage.
      *
@@ -148,6 +181,8 @@ class worklogController extends Controller
         //
     }
 
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+	
     /**
      * Remove the specified resource from storage.
      *

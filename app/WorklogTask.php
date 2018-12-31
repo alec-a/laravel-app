@@ -7,20 +7,40 @@ use Illuminate\Database\Eloquent\Model;
 class WorklogTask extends Model
 {
 	protected $guarded = ['id','created_at','updated_at'];
-	public function worklogField(){
-		return $this->hasOne(WorklogField::class,'field_id','field_id')->where('worklog_id', '=', 'worklog_id');
-	}
-	
-	public function worklogID(){
-		return $this->belongsTo(WorklogTask::class,'worklog_id','worklog_id');
-	}
-	
+		
 	public function info(){
-		return $this->hasOne(Task::class,'id','task_id');
+		return $this->belongsTo(Task::class,'task_id');
 	}
 	
 	public function field(){
-		return $this->hasOne(Fields::class,'id','field_id');
+		return $this->belongsTo(WorklogField::class,'worklog_field_id');
+	}
+	
+	public function worklog(){
+		return $this->belongsTo(Worklog::class,'worklog_id');
+	}
+	
+	public function getColour(){
+		switch($this->status){
+			
+			case 1:
+				$this->bgColour = 'info';
+				$this->txtColour = 'light';
+				break;
+			case 2:
+				$this->bgColour = 'warning';
+				$this->txtColour = 'grey-dark';
+				break;
+			case 3:
+				$this->bgColour = 'success';
+				$this->txtColour = 'light';
+				break;
+			default:
+				$this->bgColour = 'grey-lighter';
+				$this->txtColour = 'black';
+				break;
+		}
+		return $this;
 	}
 	
 }

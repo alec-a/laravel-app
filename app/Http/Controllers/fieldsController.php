@@ -66,7 +66,7 @@ class fieldsController extends Controller
 
 			$field = Fields::create($fieldData);
 			if($field->exists){
-				if($farm->worklogs->count() > 0 && $farm->currentWorklog->first()->exists)
+				if($farm->worklogs->count() > 0 && $farm->currentWorklog->exists)
 				{
 					$worklogField = new WorklogField;
 					$worklogField->worklog_id = $farm->currentWorklog->first()->id;
@@ -78,7 +78,7 @@ class fieldsController extends Controller
 					foreach($tasks as $task){
 						$worklogTask = new WorklogTask;
 						$worklogTask->worklog_id = $farm->currentWorklog->first()->id;
-						$worklogTask->field_id = $field->id;
+						$worklogTask->worklog_field_id = $worklogField->id;
 						$worklogTask->task_id = $task->id;
 						$worklogTask->save();
 					}
