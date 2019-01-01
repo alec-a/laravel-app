@@ -150,7 +150,7 @@ class worklogController extends Controller
 			$this->output = json_encode($this->output);
 		}
 		else{
-			$this->output = view('worklog.show')->with('dumpBottom',true);
+			$this->output = view('worklog.show')->render();
 		}
 		
 		return $this->output;
