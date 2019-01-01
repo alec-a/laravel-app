@@ -1,6 +1,6 @@
 
 @if ($message = Session::get('warning') || !empty($warningMsg))
-<article class="message is-warning">
+<article class="message is-warning is-over">
   <div class="message-header">
 	  <p></p>
     <button class="delete" aria-label="delete"></button>
@@ -12,7 +12,7 @@
 @endif
 
 @if ($message = Session::get('danger') || !empty($dangerMsg))
-<article class="message is-danger">
+<article class="message is-danger is-over">
   <div class="message-header">
 	  <p></p>
     <button class="delete" aria-label="delete"></button>
@@ -24,7 +24,7 @@
 @endif
 
 @if ($message = Session::get('success') || !empty($successMsg))
-<article class="message is-success">
+<article class="message is-success is-over">
   <div class="message-header">
     <p></p>
     <button class="delete" aria-label="delete"></button>
@@ -36,7 +36,7 @@
 @endif
 
 @if ($message = Session::get('info') || !empty($infoMsg))
-<article class="message is-info">
+<article class="message is-info is-over">
   <div class="message-header">
     <p></p>
     <button class="delete" aria-label="delete"></button>
@@ -48,7 +48,7 @@
 @endif
 
 @if ($message = Session::get('link') || !empty($linkMsg))
-<article class="message is-link">
+<article class="message is-link is-over">
   <div class="message-header">
     <p></p>
     <button class="delete" aria-label="delete"></button>
@@ -60,7 +60,7 @@
 @endif
 
 @if ($message = Session::get('dark') || !empty($darkMsg))
-<article class="message is-link">
+<article class="message is-link is-over">
   <div class="message-header">
     <p></p>
     <button class="delete" aria-label="delete"></button>
@@ -72,7 +72,7 @@
 @endif
 
 @if ($message = Session::get('primary') || !empty($primaryMsg))
-<article class="message is-primary">
+<article class="message is-primary is-over">
   <div class="message-header">
 	  <p></p>
     <button class="delete" aria-label="delete"></button>
