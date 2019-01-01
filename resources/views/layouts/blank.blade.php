@@ -8,7 +8,7 @@
 		<link href="{{ asset('css/style.css') }}" rel="stylesheet">
 		
 	</head>
-	<body>
+	<body class="is-capitalized">
 		@yield('content')
 	</body>
 </html>

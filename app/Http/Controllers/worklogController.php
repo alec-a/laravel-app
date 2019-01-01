@@ -139,7 +139,9 @@ class worklogController extends Controller
 			$worklogTask->field;
 			$worklogTask->field->info;
 			$worklogTask->worklog;
+			$worklogTask->getColour();
 			$this->output->response->worklogTask = $worklogTask;
+			
 		}
 		
 		$this->output->status = 'success';
@@ -148,7 +150,7 @@ class worklogController extends Controller
 			$this->output = json_encode($this->output);
 		}
 		else{
-			$this->output = view('modalBuild')->with('dumpBottom',true);
+			$this->output = view('worklog.show')->with('dumpBottom',true);
 		}
 		
 		return $this->output;

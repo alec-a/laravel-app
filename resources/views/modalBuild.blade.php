@@ -2,27 +2,27 @@
 @extends('layouts.blank')
 
 @section('content')
-<div class="modal is-active">
+<div class="modal is-active is-transparent">
 	<div class="modal-background is-light-dim"></div>
 	<div class="modal-card has-shadow">
-		<header class="modal-card-head has-background-info "><p class="modal-card-title has-text-centered has-text-white">1st Fertilizer On Field: 5</p><div class="delete"></div></header>
+		<header class="modal-card-head has-background-warning "><p class="modal-card-title has-text-centered has-text-dark">1st Fertilizer On Field: 5</p><div class="delete"></div></header>
 		<section class="modal-card-body">
 			<div class="content">
 				<div class="columns">
 					<div class="column is-one-quarter">
-						<button class="button is-dark is-outlined is-fullwidth">Not Required</button>
+						<a class="button is-dark is-outlined is-fullwidth">Not Required</a>
 					</div>
 					<div class="column is-one-quarter">
-						<button class="button is-hovered is-info  is-fullwidth">Required</button>
+						<a class="button is-outlined is-info  is-fullwidth">Required</a>
 					</div>
 					<div class="column is-one-quarter">
-						<button class="button is-warning is-outlined is-fullwidth">In Progess</button>
+						<a class="button is-warning is-hovered is-fullwidth">In Progess</a>
 					</div>
 					<div class="column is-one-quarter">
-						<button class="button is-success is-outlined is-fullwidth">Completed</button>
+						<a class="button is-success is-outlined is-fullwidth">Completed</a>
 					</div>
 				</div>
-				@include('withNote')
+				<div id="taskModalContent"></div>
 			</div>
 		</section>
 	</div>

@@ -97,7 +97,7 @@ if(isset($dumpTop)){
 			</nav>
 		@endif
 		<div id="modal">
-
+			<div></div>
 		</div>
 		@yield('scripts')
         <section class="section">

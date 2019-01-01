@@ -22,7 +22,10 @@ class WorklogTask extends Model
 	
 	public function getColour(){
 		switch($this->status){
-			
+			default:
+				$this->bgColour = 'grey-lighter';
+				$this->txtColour = 'black';
+				break;
 			case 1:
 				$this->bgColour = 'info';
 				$this->txtColour = 'light';
@@ -35,10 +38,7 @@ class WorklogTask extends Model
 				$this->bgColour = 'success';
 				$this->txtColour = 'light';
 				break;
-			default:
-				$this->bgColour = 'grey-lighter';
-				$this->txtColour = 'black';
-				break;
+			
 		}
 		return $this;
 	}

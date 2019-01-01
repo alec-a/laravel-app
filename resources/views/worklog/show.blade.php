@@ -2,7 +2,7 @@
 
 @extends('layouts.worklog')
 @section('scripts')
-
+<script src="{{asset('js/taskModal.js')}}"></script>
 <script src="{{asset('js/worklog.js')}}"></script>
 
 @endsection
