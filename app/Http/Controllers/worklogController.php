@@ -19,8 +19,7 @@ class worklogController extends Controller
 		parent::__construct();
 		$this->middleware('auth');
 		$this->pageData->activeNav = 'farms';
-		$uri = request()->server('PATH_INFO');
-		dump($uri);
+		$uri = request()->server('REQUEST_URI');
 		$this->ajax = strpos($uri, 'ajax');
 	}
 	/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
