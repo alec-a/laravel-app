@@ -62,7 +62,7 @@ class LoginController extends Controller
             return redirect()->intended('dashboard');
         }
 		else{
-			return back()->withInput($request->only('email','remember'))->withErrors(['email' => "Login Failed, Check your Username or Password. If this is the first time you're logging in your account many not be active yet"],$this->errors());
+			return back()->withInput($request->only('email','remember'))->withErrors(['email' => "Login Failed, Check your Username or Password. If this is the first time you're logging in your account many not be active yet"]);
 		}
     }
 }
