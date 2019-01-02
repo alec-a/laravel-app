@@ -25,7 +25,8 @@ class Controller extends BaseController
 	
 		$mainPage = Page::where('parent',null)->first();
 		$navItems = $mainPage->children()->get();
-		
+		$uri = request()->server('REQUEST_URI');
+		$this->ajax = strpos($uri, 'ajax');
 		$this->output = new \stdClass();
 		$this->output->status = 'fail';
 		$this->output->response = new \stdClass();

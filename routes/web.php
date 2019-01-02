@@ -20,16 +20,18 @@
 
 
 Route::get('dashboard','dashboardController@index');
-
+/*farm*/
 route::resource('farms','farmController')->only(['index','store']);
 Route::resource('farm','farmController')->except(['index','store']);
 Route::put('farm/join/{farm}','farmController@join');
 Route::put('farm/leave/{farm}','farmController@leave');
 
-Route::delete('/fields/{fields}', 'fieldsController@destroy');
 
+/*Field*/
+Route::delete('/fields/{fields}', 'fieldsController@destroy');
 Route::resource('ajax/field','fieldsController')->parameters(['field' => 'fields']);
 
+/*worklog */
 Route::resource('farm/{farm}/worklogs','worklogController')->only(['index','store']);
 Route::resource('farm/{farm}/worklog','worklogController')->except(['index','store']);
 Route::post('ajax/farm/{farm}/worklogs', 'worklogController@index');
@@ -44,6 +46,16 @@ Route::resource('farm/{farm}/worklog/{worklog}/field','worklogFieldController')-
 Route::resource('ajax/farm/{farm}/worklog/{worklog}/fields','worklogFieldController')->only(['index','store'])->parameters(['field' => 'worklogField']);
 Route::resource('ajax/farm/{farm}/worklog/{worklog}/field','worklogFieldController')->except(['index','store'])->parameters(['field' => 'worklogField']);
 
+
+
+/* Worklog Task*/
+
+Route::post('ajax/farm/{farm}/task', 'worklogTaskController@index');
+Route::post('ajax/farm/{farm}/task/store', 'worklogTaskController@store');
+Route::post('ajax/farm/{farm}/task/edit', 'worklogTaskController@edit');
+Route::post('ajax/farm/{farm}/task/create', 'worklogTaskController@create');
+Route::post('ajax/farm/{farm}/task/{worklogTask}', 'worklogTaskController@show');
+Route::resource('ajax/farm/{farm}/task','worklogTaskController')->parameters(['task' => 'worklogTask'])->except(['index','store','edit','create']);
 
 Route::resource('farm/{farm}/worklog/{worklog}/field/{worklogField}/tasks','worklogTaskController')->only(['index','store']);
 Route::resource('farm/{farm}/worklog/{worklog}/field/{worklogField}/tasks','worklogTaskController')->except(['index','store']);

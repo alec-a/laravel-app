@@ -7,6 +7,7 @@
 		<link href="{{ asset('css/bulma-divider.min.css') }}" rel="stylesheet">
 		<link href="{{ asset('css/style.css') }}" rel="stylesheet">
 		
+		 <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
 	</head>
 	<body class="is-capitalized">
 		@yield('content')
