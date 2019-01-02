@@ -71,7 +71,7 @@ class taskModal{
 			var completedTime = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit'}).format(date);
 			
 			this.content += `
-								<div class="columns is-marginless ${((this.task.status == 3)? 'is-completed-opened':'is-closed')}" id="completed">
+								<div class="columns is-marginless ${((this.task.status == 3)? 'is-completed-opened':'is-completed-closed')}" id="completed">
 									<div class="column is-full is-paddingless-top">
 
 											<p class="subtitle has-text-centered">Completed On <b>${completedDate}</b> At <b>${completedTime}</b> By <b>Alec Aldous</b></p>
@@ -154,7 +154,7 @@ class taskModal{
 		this.html+=this.foot;
 		console.log(this);
 		$("#modal").append(this.html);
-		$('#taskModal .is-completed').hide();
+		$('#taskModal .is-completed-closed').hide();
 		$('#taskModal .is-closed').hide();
 		$('#taskModal').hide().addClass('is-active');
 		$('#taskModal').delay(100).fadeIn(300, function(){
