@@ -1,7 +1,8 @@
 @php
 
 if(isset($dumpTop)){
-	dump('##################  Available Varibles On This Page  ##################');
+	dump('############################################  Available Varibles On This Page  ############################################');
+	dump('################## ensure you have (AT)php extract((array)$pageData) (AT)endphp in the top of your view  ##################');
 	dump($pageData);
 }
 
@@ -49,8 +50,18 @@ if(isset($dumpTop)){
 						<span aria-hidden="true"></span>
 					</a>
 				</div>
+				
 				<div class="navbar-menu">
-					
+					<div class="navbar-item">
+					<nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
+					<ul>
+					  <li><a href="{{url('/farms')}}">Farms</a></li>
+					  <li><a href="{{url('/farm/'.$farm->id)}}">{{$farm->name}}</a></li>
+					  <li><a href="{{url('/farm/'.$farm->id.'/worklogs')}}">Worklogs</a></li>
+					  <li class="is-active"><a aria-current="page">{{empty($worklog->name)? 'Season '.$worklog->season:$worklog->name}}</a></li>
+					</ul>
+				  </nav>
+				</div>
 				</div>
 				<div class="navbar-end">
 					
@@ -119,8 +130,8 @@ if(isset($dumpTop)){
 
 @php
 if(isset($dumpBottom)){
-	dump('##################  Available Varibles On This Page  ##################');
-	dump($pageData);
-}
+	dump('############################################  Available Varibles On This Page  ############################################');
+	dump('################## ensure you have (AT)php extract((array)$pageData) (AT)endphp in the top of your view  ##################');
+	dump($pageData);}
 @endphp
 

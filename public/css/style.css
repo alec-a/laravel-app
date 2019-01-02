@@ -151,6 +151,13 @@ and open the template in the editor.
 .field.is-fullwidth {
 	width:100%;
 }
+.task{
+	display: none;
+}
+
+.task.activeTask{
+	display: block;
+}
 
 .wltask {
 	border-bottom: 2px inset white;

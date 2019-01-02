@@ -122,6 +122,7 @@ class worklogController extends Controller
     public function show(Request $request, Farm $farm, Worklog $worklog)
     {
 		$task = Task::all();
+		$this->pageData->farm = $farm;
 		$this->pageData->worklog = $worklog;
 		$this->pageData->tasks = $task;
 //		$this->pageData->priorityTasks = WorklogTask::where('worklog_id','=',$worklog->id)->where('status','=',1)->orderBy('priority','desc')->get();
@@ -140,6 +141,29 @@ class worklogController extends Controller
 			$worklogTask->worklog;
 			$worklogTask->getColour();
 			$this->output->response->worklogTask = $worklogTask;
+			
+		}
+		
+		if(!empty($request->task)){
+			//get worklogTasks for this id
+			$wlTasks = $worklog->tasks->where('task_id', '=',$request->task);
+			$worklogTasks = array();
+			$i=0;
+			foreach($wlTasks as $wlTask){
+				$wlTask->field->info;
+				$wlTask->field->crop;
+				$wlTask->getColour();
+				$worklogTasks[$i] = $wlTask;
+				
+				
+				$i++;
+			}
+//			$worklogTask->info;
+//			$worklogTask->field;
+//			$worklogTask->field->info;
+//			$worklogTask->worklog;
+//			$worklogTask->getColour();
+			$this->output->response->worklogTasks = $worklogTasks;
 			
 		}
 		
