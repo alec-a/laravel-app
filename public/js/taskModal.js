@@ -64,7 +64,7 @@ class taskModal{
 	
 	content(){
 		this.content = `<div id="taskModalContent">`;
-							
+			
 			var date = new Date(this.task.completed_on);
 			var completedDate = new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit'}).format(date);
 			completedDate = completedDate.replace(/\//g,'-');
@@ -74,7 +74,7 @@ class taskModal{
 								<div class="columns is-marginless ${((this.task.status == 3)? 'is-completed-opened':'is-completed-closed')}" id="completed">
 									<div class="column is-full is-paddingless-top">
 
-											<p class="subtitle has-text-centered">Completed On <b>${completedDate}</b> At <b>${completedTime}</b> By <b>Alec Aldous</b></p>
+											<p class="subtitle has-text-centered">Completed On <b>${completedDate}</b> At <b>${completedTime}</b> By <b>${(this.task.completed_user)? this.task.completed_user.name:''}</b></p>
 											
 									</div>
 								</div>`;
@@ -210,11 +210,12 @@ class taskModal{
 							//if the user has completed the task show it in the modal
 							if(data.completed_by_id != null)
 							{
+								console.log(data);
 								var date = new Date(data.completed_on);
 								var completedDate = new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit'}).format(date);
 								completedDate = completedDate.replace(/\//g,'-');
 								var completedTime = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit'}).format(date);
-								$('#taskModal #completed p').html(`Completed On <b>${completedDate}</b> At <b>${completedTime}</b> By <b>Alec Aldous</b>`);
+								$('#taskModal #completed p').html(`Completed On <b>${completedDate}</b> At <b>${completedTime}</b> By <b>${data.completed_user.name}</b>`);
 								$('#taskModal #note,#taskModal #comments').slideUp(300, function(){$(this).addClass('is-closed')}).fadeOut(150);
 								$('#taskModal #completed').slideDown(300, function(){$(this).addClass('is-completed').removeClass('is-closed');}).fadeIn(150);
 								

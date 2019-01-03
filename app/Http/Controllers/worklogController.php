@@ -136,6 +136,7 @@ class worklogController extends Controller
 			//get worklogTasks for this id
 			$worklogTask = $worklog->tasks->where('id', '=',$request->task_id)->first();
 			$worklogTask->info;
+			$worklogTask->completedUser;
 			$worklogTask->field;
 			$worklogTask->field->info;
 			$worklogTask->worklog;
