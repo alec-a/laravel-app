@@ -76,7 +76,7 @@ class worklogController extends Controller
     public function store(Request $request, Farm $farm)
     {
 		$tasks = Task::all();
-		dd($farm->currentWorklog);
+		
 		if(!empty($farm->currentWorklog)){
 			$farm->currentWorklog->delete();
 		}
@@ -148,21 +148,38 @@ class worklogController extends Controller
 			//get worklogTasks for this id
 			$wlTasks = $worklog->tasks->where('task_id', '=',$request->task);
 			$worklogTasks = array();
+			$fieldName = array();
 			$i=0;
 			foreach($wlTasks as $wlTask){
 				$wlTask->field->info;
 				$wlTask->field->crop;
 				$wlTask->getColour();
 				$worklogTasks[$i] = $wlTask;
-				
-				
+				$fieldName[$i] = $wlTask->field->info->name;
+				$cropType[$i] = $wlTask->field->crop->name;
 				$i++;
 			}
-//			$worklogTask->info;
-//			$worklogTask->field;
-//			$worklogTask->field->info;
-//			$worklogTask->worklog;
-//			$worklogTask->getColour();
+
+			$sortFlag = SORT_ASC;
+			$sortArray = $fieldName;
+			switch($request->sortBy){
+				case 0:
+					$sortArray = $fieldName;
+				break;
+				case 1:
+					$sortArray = $cropType;
+				break;
+			}
+			switch($request->sortDir){
+				case 0:
+					$sortFlag = SORT_ASC;
+				break;
+				case 1:
+					$sortFlag = SORT_DESC;
+				break;
+			}
+			
+			array_multisort($sortArray, $sortFlag, $worklogTasks);
 			$this->output->response->worklogTasks = $worklogTasks;
 			
 		}

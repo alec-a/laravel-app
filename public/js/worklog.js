@@ -35,9 +35,13 @@ $(document).ready(function(){
 function populateTask(){
 	
 	var taskId = $('#tasksTabs .is-active').data('task');
+	var sortByType = $('#sortBy').data('sortBy');;
+	var sortDirection = $('#sortDir').data('sortDir');
 	var formData = {
 		_token:$("#token input").val(),
-		task:taskId
+		task:taskId,
+		sortBy:sortByType,
+		sortDir:sortDirection
 	};
 	var ajax_url = '/ajax'+window.location.pathname;
 	$.ajax({
@@ -84,6 +88,45 @@ function populateTask(){
 }
 
 $(document).on("click",'.wltask ',function(){
-			var tm = new taskModal;
-			tm.getData($(this).data('wlt'));
-		});
+	var tm = new taskModal;
+	tm.getData($(this).data('wlt'));
+});
+
+$(document).on("click",'#sortDir', function(e){
+	e.preventDefault();
+	console.log($(this).data());
+	var oldDir = $(this).data('sortDir');
+	
+	
+	if(oldDir == 0){
+		
+		$(this).children().find('i').first().switchClass('fa-angle-up','fa-angle-down');
+		$(this).data('sortDir',1);
+		populateTask();
+	}
+	else{
+		$(this).data('sortDir','0');
+		$(this).children().find('i').first().switchClass('fa-angle-down','fa-angle-up',{complete:function(){
+				populateTask();
+		}});
+	}
+});
+
+$(document).on("click",'#changeSortBy',function(e){
+	e.preventDefault();
+	var newSortBy = {value:$(this).data('sortBy'),
+					 text:$(this).text()
+	};
+	
+	var oldSortBy = {
+		value:$("#sortBy").data('sortBy'),
+		text:$("#sortBy").text()
+	};
+	
+	$(this).data('sortBy',oldSortBy.value);
+	$("#sortBy").data('sortBy',newSortBy.value);
+	$(this).text(oldSortBy.text);
+	$("#sortBy").text(newSortBy.text);
+	
+	populateTask();
+});

@@ -184,7 +184,7 @@
 					@if(!empty($pageData->farm->worklogs))
 					
 					<section id="worklogList">
-						@foreach($pageData->farm->worklogs as $worklog)
+						@foreach($pageData->farm->worklogs()->orderBy('season','Desc')->get() as $worklog)
 							@if($loop->iteration < 3)
 								<div class="columns worklog">
 									<div class="column">

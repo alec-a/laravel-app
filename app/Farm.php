@@ -30,7 +30,7 @@ class Farm extends Model
 	public function currentWorklog(){
 		
 		$rel = $this->hasOne(Worklog::class,'farm_id','id')->where('season', '=',$this->season);
-		dump($rel->toSql());
+	
 		return $rel;
 	}
 }
