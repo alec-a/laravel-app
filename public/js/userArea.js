@@ -27,7 +27,7 @@ $(document).ready(function(){
 			dropdown.removeClass('is-active');
 		}
 	});
-	$('.message').delay(2000).fadeOut(400,function(){$(this).remove();});
+	$('.message').delay(1500).fadeOut(400,function(){$(this).remove();});
 });
 
 function insertModal(data, textStatus, jqXHR){
