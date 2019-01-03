@@ -182,6 +182,7 @@
 					</div>
 					
 					@if(!empty($pageData->farm->worklogs))
+					
 					<section id="worklogList">
 						@foreach($pageData->farm->worklogs as $worklog)
 							@if($loop->iteration < 3)
@@ -194,9 +195,6 @@
 													{{empty($worklog->name)? 'Season '.$worklog->season:$worklog->name.' (Season '.$worklog->season.')'}}
 												</p>
 											</header>
-											<div class="card-content">
-												<p>Hello</p>
-											</div>
 										</div>
 										</a>
 									</div>

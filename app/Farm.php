@@ -24,10 +24,13 @@ class Farm extends Model
 	}
 	
 	public function worklogs(){
-		return $this->hasMany(Worklog::class);
+		return $this->hasMany(Worklog::class, 'farm_id','id');
 	}
 	
 	public function currentWorklog(){
-		return $this->hasOne(Worklog::class)->whereHas('farm', function($query){ $query->where('season', '=', $this->season); });
+		
+		$rel = $this->hasOne(Worklog::class,'farm_id','id')->where('season', '=',$this->season);
+		dump($rel->toSql());
+		return $rel;
 	}
 }

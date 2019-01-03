@@ -20,7 +20,7 @@ class Worklog extends Model
 	}
 	
 	public function farm(){
-		return $this->belongsTo(Farm::class);
+		return $this->belongsTo(Farm::class,'farm_id');
 	}
 	
 	public function current()

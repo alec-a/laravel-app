@@ -76,7 +76,7 @@ class worklogController extends Controller
     public function store(Request $request, Farm $farm)
     {
 		$tasks = Task::all();
-		
+		dd($farm->currentWorklog);
 		if(!empty($farm->currentWorklog)){
 			$farm->currentWorklog->delete();
 		}
