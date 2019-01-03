@@ -152,7 +152,6 @@ class taskModal{
 		this.html += this.buttons;
 		this.html+=this.content;
 		this.html+=this.foot;
-		console.log(this);
 		$("#modal").append(this.html);
 		$('#taskModal .is-completed-closed').hide();
 		$('#taskModal .is-closed').hide();
@@ -195,7 +194,6 @@ class taskModal{
 						data:formData,
 						success: function(data){
 							data = JSON.parse(data);
-							console.log(data);
 							var oldClass = 'has-background-'+self.task.bgColour;
 							var oldtxtClass = 'has-text-'+self.task.txtColour;
 							var newClass = 'has-background-'+data.bgColour;

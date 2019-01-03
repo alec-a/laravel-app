@@ -5,7 +5,7 @@
  */
 
 $(function(){
-	
+	populateTask();
 	$('.wltask ').click(function(){
 			var tm = new taskModal;
 			tm.getData($(this).data('wlt'));
@@ -14,21 +14,27 @@ $(function(){
 	$('#tasksTabs li').click(function(){
 		var tab = $(this);
 		var oldTab = $("#tasksTabs .is-active");
-		var taskId = $(this).data('task');
+		
 		
 		$(oldTab).switchClass('is-active','',300);
 		$(tab).switchClass('','is-active',300);
 		
 		$('.activeTask').fadeOut(300,function(){
 			$(this).removeClass('activeTask');
-			populateTask(taskId);
+			populateTask();
 		});
 		
 	});
+	setInterval(function(){populateTask();},5000);
 });
 
-function populateTask(taskId){
+$(document).ready(function(){
 	
+});
+
+function populateTask(){
+	
+	var taskId = $('#tasksTabs .is-active').data('task');
 	var formData = {
 		_token:$("#token input").val(),
 		task:taskId
@@ -47,10 +53,9 @@ function populateTask(taskId){
 			else{
 				$('.task[data-task="'+taskId+'"]').append('<div class="columns is-multiline is-marginless" id="wlTasks"></div>');
 			}
-			console.log(data);			
+					
 			for(var i=0; i < data.response.worklogTasks.length; i++){
 				var task = data.response.worklogTasks[i];
-				console.log(task);
 				var appendHtml =	`<div class="column is-one-tenth has-background-${task.bgColour} has-text-${task.txtColour} wltask " data-wlt="${task.id}">
 										<div class="columns">
 											<div class="column">
@@ -66,11 +71,16 @@ function populateTask(taskId){
 				$('.task[data-task="'+taskId+'"] #wlTasks').append(appendHtml);
 			}
 			
-			$('.task[data-task="'+taskId+'"]').fadeIn(300,function(){
-				$(this).addClass('activeTask');
-			});
+			if(!$('.task[data-task="'+taskId+'"]').hasClass('activeTask'))
+			{
+				$('.task[data-task="'+taskId+'"]').fadeIn(300,function(){
+					$(this).addClass('activeTask');
+				});
+			}
+			
 		}
 	});
+	
 }
 
 $(document).on("click",'.wltask ',function(){
