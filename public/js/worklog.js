@@ -6,6 +6,7 @@
 
 $(function(){
 	populateTask();
+	tabColours();
 	$('.wltask ').click(function(){
 			var tm = new taskModal;
 			tm.getData($(this).data('wlt'));
@@ -33,7 +34,7 @@ $(document).ready(function(){
 });
 
 function populateTask(){
-	
+	tabColours();
 	var taskId = $('#tasksTabs .is-active').data('task');
 	var sortByType = $('#sortBy').data('sortBy');;
 	var sortDirection = $('#sortDir').data('sortDir');
@@ -86,6 +87,31 @@ function populateTask(){
 	});
 	
 }
+function tabColours(){
+	var formData = {
+		_token:$("#token input").val(),
+		tabColours:true
+	};
+	var ajax_url = '/ajax'+window.location.pathname;
+	$.ajax({
+		type:'post',
+		data:formData,
+		url:ajax_url,
+		success:function(data){
+			data = JSON.parse(data);
+			var tabClasses = data.response.tabClasses;
+			
+			tabClasses = Object.entries(tabClasses);
+			new Map(tabClasses).forEach(changeTabColour);
+		}
+	});
+	
+}
+
+function changeTabColour(tabClass,taskId,map){
+	
+	$('#tasksTabs li[data-task="'+taskId+'"] a').attr('class',tabClass);
+}
 
 $(document).on("click",'.wltask ',function(){
 	var tm = new taskModal;
@@ -94,7 +120,7 @@ $(document).on("click",'.wltask ',function(){
 
 $(document).on("click",'#sortDir', function(e){
 	e.preventDefault();
-	console.log($(this).data());
+	
 	var oldDir = $(this).data('sortDir');
 	
 	

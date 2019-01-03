@@ -121,10 +121,10 @@ class worklogController extends Controller
      */
     public function show(Request $request, Farm $farm, Worklog $worklog)
     {
-		$task = Task::all();
+		$tasks = Task::all();
 		$this->pageData->farm = $farm;
 		$this->pageData->worklog = $worklog;
-		$this->pageData->tasks = $task;
+		$this->pageData->tasks = $tasks;
 //		$this->pageData->priorityTasks = WorklogTask::where('worklog_id','=',$worklog->id)->where('status','=',1)->orderBy('priority','desc')->get();
 //		$this->pageData->requiredTasks = WorklogTask::where('worklog_id','=',$worklog->id)->where('status','=',1)->orderBy('task_id','desc')->get();
 //		$this->pageData->completedTasks = WorklogTask::where('worklog_id','=',$worklog->id)->where('status','=',3)->orderBy('task_id','desc')->get();
@@ -182,6 +182,25 @@ class worklogController extends Controller
 			array_multisort($sortArray, $sortFlag, $worklogTasks);
 			$this->output->response->worklogTasks = $worklogTasks;
 			
+		}
+		
+		if(!empty($request->tabColours)){
+			$taskTabClasses = array();
+			foreach($tasks as $task){
+				$requiredTasks = $worklog->tasks()->where('task_id', '=',$task->id)->where('status', '=','1')->get();
+				$completedTasks =  $worklog->tasks()->where('task_id', '=',$task->id)->where('status', '=','3')->get();;
+				
+				if($requiredTasks->count() > 0 ){
+					$taskTabClasses[$task->id] = 'has-text-info has-text-weight-bold';
+				}
+				elseif($completedTasks->count() > 0){
+					$taskTabClasses[$task->id] = 'has-text-success';
+				}
+				else{
+					$taskTabClasses[$task->id] = '';
+				}
+			}
+			$this->output->response->tabClasses = $taskTabClasses;
 		}
 		
 		$this->output->status = 'success';
