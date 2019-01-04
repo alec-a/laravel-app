@@ -142,7 +142,7 @@ class worklogTaskController extends Controller
 						$updated = false;
 						foreach($fertTasks as $fertTask)
 						{
-							if($fertTask->status < 3 && $worklogTask->task_option = 1 && !$updated){
+							if($fertTask->status < 3 && $worklogTask->task_option == 1 && !$updated){
 								$now = now();
 								$fertTask->update(['status' => 3, 'completed_on' => $now, 'completed_by_id' => auth()->user()->id]);
 								$updated = true;
@@ -156,7 +156,7 @@ class worklogTaskController extends Controller
 						$updated = false;
 						foreach($fertTasks as $fertTask)
 						{
-							if($fertTask->status == 3 && !$updated){
+							if($fertTask->status == 3 && $worklogTask->task_option == 1 && !$updated){
 								$now = now();
 								$fertTask->update(['status' => 1, 'completed_on' => null, 'completed_by_id' => null]);
 								$updated = true;
