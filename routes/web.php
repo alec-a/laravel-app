@@ -23,6 +23,7 @@ Route::get('dashboard','dashboardController@index');
 /*farm*/
 route::resource('farms','farmController')->only(['index','store']);
 Route::resource('farm','farmController')->except(['index','store']);
+Route::get('farm/{farm}/next-season','farmController@nextSeason');
 Route::put('farm/join/{farm}','farmController@join');
 Route::put('farm/leave/{farm}','farmController@leave');
 

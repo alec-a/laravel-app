@@ -39,7 +39,7 @@
 					<a class="dropdown-item is-bold has-text-centered has-text-light is-static" id="addFields">
 						<strong>Add Fields</strong>
 					</a>
-					<a class="dropdown-item is-bold has-text-centered has-text-light is-static" id="season">
+					<a class="dropdown-item is-bold has-text-centered" href="{{url('/farm/'.$pageData->farm->id.'/next-season')}}" id="season">
 						<strong>Next Season</strong>
 					</a>
 					<hr class="dropdown-divider">

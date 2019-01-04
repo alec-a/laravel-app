@@ -20,7 +20,6 @@ class farmController extends Controller
     {
 		parent::__construct();
         $this->middleware('auth');
-		
     }
 	
     public function index()
@@ -169,5 +168,21 @@ class farmController extends Controller
 		$user->farm_id = null;
 		$user->save();
 		return back();
+	}
+	
+	public function nextSeason(Request $request, Farm $farm){
+		$currentSeason = $farm->season;
+		$farm->season = $currentSeason+1;
+		$farm->save();
+		$this->output->status = 'success';
+		$this->output->response = $farm;
+		
+		if($this->ajax){
+			$this->output = json_encode($this->output);
+		}
+		else{
+			$this->output = back();
+		}
+		return $this->output;
 	}
 }
