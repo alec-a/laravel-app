@@ -377,6 +377,7 @@ class Controller extends BaseController
 		
 		
 		View::share('pageData', $this->pageData);
+		View::share(compact($this->pageData));
 		View::share('warningMsg',null);
 		View::share('dangerMsg',null);
 		View::share('successMsg',null);

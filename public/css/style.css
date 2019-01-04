@@ -35,7 +35,17 @@ and open the template in the editor.
 .hidden {
 	display:none;
 }
-
+.tabs.has-box-content{
+	margin-bottom: 0px;
+	margin-left: -1px;
+}
+.tabs.has-box-content ul{
+	border-bottom: 0px;
+	
+}
+.box.is-radiusless-top{
+	border-radius: 2px 2px 6px 6px;
+}
 #dashboardSideNav {
 	border-radius: 6px;
 }
@@ -182,6 +192,9 @@ and open the template in the editor.
 }
 .is-divider.is-half-margin{
 	margin: 1rem ;
+}
+hr.is-half-margin{
+	margin: 0.75rem 0;
 }
 .is-marginless-bottom{
 	margin-bottom: 0px !important;

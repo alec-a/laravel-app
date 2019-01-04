@@ -1,3 +1,4 @@
+@php extract((array)$pageData) @endphp
 @extends('layouts.userArea')
 
 @section('scripts')
@@ -5,11 +6,11 @@
 @endsection
 
 @section('content')
-<div class="hidden" id="farmId"><input type="hidden" name="id" value="{{$pageData->farm->id}}"/></div>
+<div class="hidden" id="farmId"><input type="hidden" name="id" value="{{$farm->id}}"/></div>
 <div class="columns">
 	<div class="column is-four-fifths has-text-left" id="farmName">
-		<h1 class="title is-1 " >{{$pageData->farm->name}}</h1>
-		<form method="post" class="hidden" action="{{url('/farms/'.$pageData->farm->id.'')}}">
+		<h1 class="title is-1 " >{{$farm->name}}</h1>
+		<form method="post" class="hidden" action="{{url('/farms/'.$farm->id.'')}}">
 			@csrf
 			@method('put')
 			<div class="field has-addons">
@@ -26,7 +27,7 @@
 		</form>
 	</div>
 	<div class="column is-one-fifth has-text-right">
-		@if(auth()->user()->id == $pageData->farm->owner)
+		@if(auth()->user()->id == $farm->owner)
 		<div class="dropdown">
 			<div class="dropdown-trigger">
 				<button class="button is-success" type="button" aria-haspopup="true" aria-controls="dropdown-menu1">
@@ -36,7 +37,7 @@
 			</div>
 			<div class="dropdown-menu" id="dropdown-menu1" role="menu">
 				<div class="dropdown-content ">
-					<a class="dropdown-item is-bold has-text-centered" href="{{url('/farm/'.$pageData->farm->id.'/next-season')}}" id="season">
+					<a class="dropdown-item is-bold has-text-centered" href="{{url('/farm/'.$farm->id.'/next-season')}}" id="season">
 						<strong>Next Season</strong>
 					</a>
 					<hr class="dropdown-divider">
@@ -49,7 +50,7 @@
 				</div>
 			</div>
 		</div>
-		@elseif(auth()->user()->farm_id == $pageData->farm->id)
+		@elseif(auth()->user()->farm_id == $farm->id)
 		<div class="dropdown">
 			<div class="dropdown-trigger">
 				<button class="button is-warning" type="button" aria-haspopup="true" aria-controls="dropdown-menu1">
@@ -60,7 +61,7 @@
 			<div class="dropdown-menu" id="dropdown-menu1" role="menu">
 				<div class="dropdown-content">
 					
-					<form method="post" action="{{url('farm/leave/'.$pageData->farm->id)}}" id="leave">
+					<form method="post" action="{{url('farm/leave/'.$farm->id)}}" id="leave">
 						@csrf
 						@method('put')						
 						<a class="dropdown-item" onclick="document.getElementById('leave').submit();">
@@ -76,167 +77,65 @@
 </div>
 
 
-@if(auth()->user()->id == $pageData->farm->owner || auth()->user()->farm_id == $pageData->farm->id)
-<div class='columns'>
-	<div class="column is-two-thirds">
-		<div class="box has-text-weight-bold expandable" id="fieldsBox">
-			<h3 class="title is-3 has-text-centered">Fields</h3>
-			<div class="is-clipped expandContainer" >
-				<div id="fields" class="expandContent">
-					<form id="editFieldForm" method="post" class="hidden">
-							@csrf
-							@method('PUT')
-							<div class="field has-addons">
-								<div class="control is-expanded">
-									<input id="fieldName" type="text" name="fieldName" class="input" placeholder="Name Or Number"/>
-								</div>
-								<div class="control">
-									<div class="select">
-										<select id="fieldCrop" name="crop_id">
-											<option disabled selected>Crop</option>
-											@foreach(Lakeview\Crops::all() as $crop)
-											<option value="{{$crop->id}}">{{$crop->name}}</option>
-											@endforeach
-										</select>
-									</div>
-								</div>
-								<div class="control">
-									<button class="button is-primary" type="submit" id="saveField"><span class="icon is-small"><i class="fas fa-check"></i></span><span class="hidden">save</span></button>
-								</div>
-								<div class="control">
-									<button class="button is-warning" type="button" id="cancelEditField"><span class="icon is-small"><i class="fas fa-times"></i></span><span class="hidden">Cancel</span></button>
-								</div>
-							</div>
-						</form>
-					<article class="notification is-primary {{$pageData->farm->fields->count() > 0 ? 'hidden':''}}" id="fieldsNotification">Please Add Fields To The Farm</article>
-					@if($pageData->farm->fields->count() > 0)
-						@foreach($pageData->farm->fields as $field)
-						<div class="columns farmField" id="field_{{$field->id}}">
-							<div class="column is-one-fifth options">
-								<div class="hidden">
-									 <div class="field is-grouped">
-										<div class="control">
-											<button name="fieldId" value="{{$field->id}}" class="button is-danger deleteField"><span class="icon is-small"><i class="fas fa-trash-alt"></i></span></button>
-										</div>
-										<div class="control">
-											<button name="fieldId" value="{{$field->id}}" class="button is-link editField"><span class="icon is-small"><i class="fas fa-pencil-alt"></i></span></button>
-										</div>
-									 </div>
-								</div>
-							</div>
-							<div class="column is-two-fifths fieldName">{{$field->name}}</div>
-							<div class="column is-two-fifths fieldCrop">{{($field->crop)? $field->crop->name:''}}</div>
+@if(auth()->user()->id == $farm->owner || auth()->user()->farm_id == $farm->id)
+<div id="farmContentContainer">
+	<div class="tabs is-boxed has-box-content">
+		<ul>
+			<li class="is-active">
+				<a>Info</a>
+			</li>
+			<li>
+				<a>Fields</a>
+			</li>
+			<li>
+				<a>Worklogs</a>
+			</li>
+		</ul>
+	</div>
 
-						</div>
-						@endforeach
-					@endif
-				</div>
-			</div>
-			<div class="columns" id="newFieldFormContainer">
-				<div class="column">
-					<form id="newFieldForm" method="post">
-						@csrf
-						<div class="field has-addons">
-							<div class="control is-expanded">
-								<input type="text" name="name" class="input" placeholder="Name Or Number"/>
-							</div>
-							<div class="control">
-								<div class="select">
-									<select name="crop_id">
-										<option disabled selected>Crop</option>
-										@foreach(Lakeview\Crops::all() as $crop)
-										<option value="{{$crop->id}}">{{$crop->name}}</option>
-										@endforeach
-									</select>
-								</div>
-							</div>
-							<div class="control">
-								<button class="button is-primary" type="submit" id="newField"><span class="icon is-small"><i class="fas fa-plus"></i></span><span>Add</span></button>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-		<div class="box has-text-weight-bold" id="worklogsBox">
-			<h3 class="title is-3 has-text-centered">Worklogs</h3>
-				<div id="worklogs" class="">
-					<article id ="worklogNotification" class="notification is-warning {{$pageData->farm->fields->count() > 0? 'hidden':''}}">
-						<p>Worklogs Can Only Be Created When The Farm Has Fields</p>
-					</article>
-				
-					<div class="field {{$pageData->farm->fields->count() > 0? '':'hidden'}} is-grouped" id="newWorklogContent">
-						
-							@if(!empty($pageData->farm->worklogs))
-							<div class="control is-expanded">
-								<a href="{{url('/farm/'.$pageData->farm->id.'/worklogs')}}" class="button is-link is-fullwidth">View All Worklogs</a>
-							</div>
-							@endif
-						
-						<div class="control {{empty($pageData->farm->worklogs)? 'is-expanded':''}}">
-							<a href="{{url('/farm/'.$pageData->farm->id.'/worklog/create')}}" class="button is-primary {{empty($pageData->farm->worklogs)? 'is-fullwidth':''}}">New Worklog</a>
+
+	<div class="content box is-radiusless-top" id="info">
+		<h5 class="title is-5">Info</h5>
+		<div class="columns">
+			
+			<div class="column is-half">
+					<div class="is-divider is-half-margin" data-content="Members"></div>
+					
+					<div class="card">
+						<div class="card-content">
+							<p class="subtitle has-text-primary has-text-centered has-text-weight-bold is-marginless-bottom">Owner</p>
+							<hr class="has-background-primary is-half-margin">
+							<p class="has-text-primary has-text-weight-semibold"><span class="icon"><i class="fas fa-user-tie"></i></span><span> {{$farm->farmOwner->name}}</span></p>
+							<p class="subtitle has-text-info has-text-centered has-text-weight-bold is-marginless-bottom">Workers</p>
+							<hr class="has-background-info is-half-margin">
+							@foreach($farm->workers as $worker)
+							<p class="has-text-info"><span class="icon"><i class="fas fa-tractor"></i></span><span> {{$worker->name}}</span></p>
+							@endforeach
 						</div>
 					</div>
-					
-					@if(!empty($pageData->farm->worklogs))
-					
-					<section id="worklogList">
-						@foreach($pageData->farm->worklogs()->orderBy('season','Desc')->get() as $worklog)
-							@if($loop->iteration < 3)
-								<div class="columns worklog">
-									<div class="column">
-										<a href="{{url('/farm/'.$pageData->farm->id.'/worklog/'.$worklog->id)}}">
-										<div class="card">
-											<header class="card-header">
-												<p class="card-header-title">
-													{{empty($worklog->name)? 'Season '.$worklog->season:$worklog->name.' (Season '.$worklog->season.')'}}
-												</p>
-											</header>
-										</div>
-										</a>
-									</div>
-								</div>
-							@endif
-						@endforeach
-					</section>
-					@endif
+			</div>
+		<div class="column is-half">
+				<div class="is-divider is-half-margin" data-content="Season"></div>
+				<div class="card">
+					<div class="card-content">
+						<p class="has-text-weight-semibold has-text-centered">Current Season - <b>{{$farm->season}}</b></p>
+						<div class="field">
+							<div class="control is-expanded">
+								<button id="nextSeason" class="button is-primary is-fullwidth">Next Season</button>
+							</div>
+						</div>
+			</div>
 				</div>
+			</div>
 		</div>
-		<div class="box has-text-weight-bold">
-			<h3 class="title is-3 has-text-centered">Discussion</h3>
-		</div>
-	</div>
-		
-	<div class="column is-one-third">
-		<div class="box has-text-weight-bold is-radiusless is-shadowless is-paddingless">
-			<h3 class="title is-3 has-text-centered">Info</h3>
-			<p>Season: {{$pageData->farm->season}}</p>
-			<p>Owner: {{$pageData->farm->farmOwner->name}}</p>
-		</div>
-		<hr/>
-		<div class="box has-text-weight-bold  is-radiusless is-shadowless is-paddingless">
-			<h3 class="title is-3 has-text-centered">{{$pageData->farm->workers->count() }} Member{{($pageData->farm->workers->count() < 1 || $pageData->farm->workers->count() > 1)?'s':''}}</h3>
-			@if ($pageData->farm->workers->count() > 0 )
-				<ul id="workers">
-				@foreach($pageData->farm->workers as $worker)
-					<li>{{$worker->name}}</li>
-				@endforeach
-				</ul>
-			@else
-			
-				<article class="notification is-info">The Farm Has No Staff, Get Recruiting!</article>
-			@endif
-		</div>
-		<hr/>
 	</div>
 </div>
-	
-	
-	
+
+
 @else
 <div class='columns'>
 	<div class="column is-two-thirds top">
-		<form method='post' action='{{url('/farm/join/'.$pageData->farm->id)}}'>
+		<form method='post' action='{{url('/farm/join/'.$farm->id)}}'>
 			@csrf
 			@method('put')
 			<div class='field'>

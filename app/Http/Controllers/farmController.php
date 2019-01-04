@@ -90,7 +90,7 @@ class farmController extends Controller
     {
         $this->pageData->activeNav = 'farms';
 		$this->pageData->farm = $farm;
-		return view('farms.show',['pageData' => $this->pageData]);
+		return view('farms.show')->with('dumpBottom',true);
     }
 
     /**

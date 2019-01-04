@@ -1,7 +1,8 @@
 @php
 
 if(isset($dumpTop)){
-	dump('##################  Available Varibles On This Page  ##################');
+	dump('############################################  Available Varibles On This Page  ############################################');
+	dump('################## ensure you have (AT)php extract((array)$pageData) (AT)endphp in the top of your view  ##################');
 	dump($pageData);
 }
 
@@ -144,9 +145,11 @@ if(isset($dumpTop)){
 </html>
 
 @php
+
 if(isset($dumpBottom)){
-	dump('##################  Available Varibles On This Page  ##################');
+	dump('############################################  Available Varibles On This Page  ############################################');
+	dump('################## ensure you have (AT)php extract((array)$pageData) (AT)endphp in the top of your view  ##################');
 	dump($pageData);
 }
-@endphp
 
+@endphp
