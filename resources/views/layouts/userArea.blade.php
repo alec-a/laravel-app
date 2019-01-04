@@ -43,7 +43,7 @@ if(isset($dumpTop)){
 							<img src='{{ asset('img/logo.png') }}' />
 						</a>
 
-					 <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+					 <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navBar">
 						<span aria-hidden="true"></span>
 						<span aria-hidden="true"></span>
 						<span aria-hidden="true"></span>

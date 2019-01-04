@@ -12,7 +12,7 @@
 		@foreach($pageData->farm->worklogs as $worklog)
 		
 			<div class="column is-one-third">
-				<a href="{{url('/farm/'.$worklog->farm->id.'/worklog/'.$worklog->id)}}">
+				<a href="{{url('/farm/'.$worklog->farm->id.'/worklog/'.$worklog->id)}}" target="_self">
 				<div class="box has-text-centered">
 						<h3 class="title is-3">{{empty($worklog->name)? 'season '.$worklog->season : $worklog->name}}</h3>
 						{!! empty($worklog->name)? '' : '<p class="subtitle">season '.$worklog->season.'</p>' !!}

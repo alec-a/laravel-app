@@ -28,18 +28,20 @@ $(document).ready(function(){
 		}
 	});
 	$('.message').delay(1500).fadeOut(400,function(){$(this).remove();});
+	
+	$('.navbar-burger').click(function(){
+		var target = '#'+$(this).data('target');
+		$(this).toggleClass('is-active');
+		$(target).toggleClass('is-active');
+	});
 });
 
 function insertModal(data, textStatus, jqXHR){
 	$("#modal").html(data);
 }
 
-function getModal(controller, name, extras=null){
-$.ajaxSetup({
-		headers: {
-			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		}
-	});
+function getModal(controller, name, extras){
+
 	var formData = [];
 
 
