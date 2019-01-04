@@ -324,10 +324,7 @@ class taskModal{
 		for(var i = 0;i < this.crops.length; i++)
 		{
 			
-			var selected = '';
-			if(task_option && task_option.selectedCrop){
-				selected = (this.task.field.crop_id == this.crops[i].id)? 'selected':'';
-			}
+			var selected = (this.task.field.crop_id == this.crops[i].id)? 'selected':'';
 			options += '<option value="'+this.crops[i].id+'" '+selected+'>'+this.crops[i].name+'</option>';
 		}
 		return options;
