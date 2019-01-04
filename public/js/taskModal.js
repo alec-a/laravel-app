@@ -317,7 +317,6 @@ class taskModal{
 				'updateNote':true,
 				'note': newNoteText
 			};
-			console.log(formData);
 			$.ajax({
 				type:'post',
 				url:'/ajax/farm/'+this.task.worklog.farm_id+'/task/'+this.task.id,
@@ -326,6 +325,13 @@ class taskModal{
 					$("#noteText").switchClass('','is-success',{duration: 800, complete:function(){
 							$("#noteText").switchClass('is-success','',{duration: 800});
 					}});
+					if(newNoteText != null){
+						$('.wltask[data-wlt="'+self.task.id+'"] #noteIcon').switchClass('is-invisible', '',200);
+					}
+					else
+					{
+						$('.wltask[data-wlt="'+self.task.id+'"] #noteIcon').switchClass('', 'is-invisible',200);
+					}
 				}
 			});
 		}
