@@ -51,7 +51,7 @@
 <div class="tabs is-boxed is-small is-centered">
 	<ul id="tasksTabs">
 		@foreach($tasks as $task)	
-		<li class="{{$loop->iteration == 1? 'is-active':''}}" data-task="{{$task->id}}"><a data-task="{{$task->id}}">{{$task->task}}</a></li>
+		<li class="{{$loop->iteration == 1? 'is-active':''}}" data-task="{{$task->id}}"><a data-task="{{ $task->id}}">{!! $task->note? '<span class="icon"><i class="fas fa-sticky-note"></i></span>':'' !!}<span> {{$task->task}}</span></a></li>
 		@endforeach
 	</ul>
 </div>

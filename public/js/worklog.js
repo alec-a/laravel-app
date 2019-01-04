@@ -113,9 +113,11 @@ function tabColours(){
 		success:function(data){
 			data = JSON.parse(data);
 			var tabClasses = data.response.tabClasses;
-			
+			var tabIcons = data.response.tabIcons;
 			tabClasses = Object.entries(tabClasses);
+			tabIcons = Object.entries(tabIcons);
 			new Map(tabClasses).forEach(changeTabColour);
+			new Map(tabIcons).forEach(changeTabIcon);
 		}
 	});
 	
@@ -124,6 +126,10 @@ function tabColours(){
 function changeTabColour(tabClass,taskId,map){
 	
 	$('#tasksTabs li[data-task="'+taskId+'"] a').attr('class',tabClass);
+}
+function changeTabIcon(tabIcon,taskId,map){
+	$('#tasksTabs li[data-task="'+taskId+'"]').find('.icon').remove();
+	$('#tasksTabs li[data-task="'+taskId+'"] a').prepend(tabIcon);
 }
 
 $(document).on("click",'.wltask ',function(){

@@ -26,6 +26,9 @@ and open the template in the editor.
 	margin: 0px auto 16px auto;
 	padding-top: 0px;
 }
+.tabs a{
+	margin-bottom: -6px;
+}
 .is-fullheight {
 	height: 100%;
 }
