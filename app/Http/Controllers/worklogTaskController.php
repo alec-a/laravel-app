@@ -111,6 +111,15 @@ class worklogTaskController extends Controller
 				]);
 			}
 			
+			if(!is_null($request->updateNote)){
+				$this->output->response = $request->note;
+				$worklogTask->update([
+					'note' => $request->note
+				]);
+				
+				return json_encode($this->output);
+			}
+			
 			if(isset($request->taskStatus) && $request->taskStatus >= 0 && $request->taskStatus <= 3){
 				$date = new \DateTime('NOW');
 				

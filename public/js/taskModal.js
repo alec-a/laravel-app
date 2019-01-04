@@ -107,31 +107,7 @@ class taskModal{
 								<div class="is-divider is-half-margin is-marginless-bottom" data-content="Note"></div>
 							</div>
 							<div class="column is-full">
-								<textarea class="textarea is-fullwidth" placeholder="${(this.task.note == null)? 'Click to add a note...':''}">${(this.task.note == null)? '':this.task.note}</textarea>
-							</div>
-						</div>
-						<div class="columns is-multiline ${((this.task.status == 3)? 'is-closed':'')}" id="comments">
-							<div class="column is-full is-paddingless-top">
-								<div class="is-divider is-half-margin is-marginless-bottom" data-content="Comments"></div>
-							</div>
-							<div class="column is-full">
-								<div class="card">
-									<div class="card-content">
-										<div class="media">
-											<div class="media-left">
-												<p class="title is-5">John Smith</p>
-												<p class="subtitle is-7"><time class=" is-7" datetime="2016-1-1">11:09 PM - 1 Jan 2016</time></p>
-											</div>
-											<div class="media-content">
-
-											</div>
-										</div>
-										<div class="content is-size-7 has-text-weight-bold">
-											Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-											Phasellus nec iaculis mauris.
-										</div>
-									</div>
-								</div>
+								<textarea id="noteText" class="textarea is-fullwidth" placeholder="${(this.task.note == null)? 'Click to add a note...':''}">${(this.task.note == null)? '':this.task.note}</textarea>
 							</div>
 						</div>`;
 		this.content += '</div>';
@@ -202,6 +178,15 @@ class taskModal{
 		$('#crop #fertilizer').click(function(){
 			self.updateOption($(this));
 		});
+		
+		$("#noteText").focusin(function(){
+			self.oldNoteText = $(this).val();
+			return self;
+		});
+		$("#noteText").focusout(function(){
+			self.updateNote();		
+		});
+		
 	}
 	
 	updateStatus(target){
@@ -316,6 +301,34 @@ class taskModal{
 			}
 		});
 		
+	}
+	
+	updateNote(){
+		var self = this;
+		var newNoteText = $("#noteText").val();
+		
+		
+		
+		if(newNoteText != self.oldNoteText){
+			newNoteText = (newNoteText.length > 0)? newNoteText:null;
+			var formData = {
+				'_token':$("#token input").val(),
+				'_method':'put',
+				'updateNote':true,
+				'note': newNoteText
+			};
+			console.log(formData);
+			$.ajax({
+				type:'post',
+				url:'/ajax/farm/'+this.task.worklog.farm_id+'/task/'+this.task.id,
+				data:formData,
+				success:function(){
+					$("#noteText").switchClass('','is-success',{duration: 800, complete:function(){
+							$("#noteText").switchClass('is-success','',{duration: 800});
+					}});
+				}
+			});
+		}
 	}
 	
 	cropOptions(){
