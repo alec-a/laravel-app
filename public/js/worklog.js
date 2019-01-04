@@ -61,6 +61,7 @@ function populateTask(){
 					
 			for(var i=0; i < data.response.worklogTasks.length; i++){
 				var task = data.response.worklogTasks[i];
+				
 				var appendHtml =	`<div class="column is-one-tenth has-background-${task.bgColour} has-text-${task.txtColour} wltask " data-wlt="${task.id}">
 										<div class="columns">
 											<div class="column">
@@ -68,8 +69,8 @@ function populateTask(){
 											</div>
 										</div>
 										<div class="columns">
-											<div class="column">
-												${task.field.crop.name}
+											<div class="column cropType">
+												${displayCrop(task)}
 											</div>
 										</div>
 									</div>`;
@@ -87,6 +88,16 @@ function populateTask(){
 	});
 	
 }
+
+function displayCrop(task){
+	if(task.task_id == 6 || task.field.is_planted){
+		return task.field.crop.name;
+	}
+	else{
+		return '';
+	}
+}
+
 function tabColours(){
 	var formData = {
 		_token:$("#token input").val(),

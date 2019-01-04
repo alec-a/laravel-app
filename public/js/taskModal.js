@@ -26,6 +26,7 @@ class taskModal{
 	build(data){
 		this.data = JSON.parse(data);
 		this.task = this.data.response.worklogTask;
+		this.crops = this.data.response.crops;
 		var self = this;
 		
 		this.head().buttons().content().foot(function(){ self.show(); });
@@ -63,6 +64,7 @@ class taskModal{
 	}
 	
 	content(){
+		
 		this.content = `<div id="taskModalContent">`;
 			
 			var date = new Date(this.task.completed_on);
@@ -78,7 +80,28 @@ class taskModal{
 											
 									</div>
 								</div>`;
-		
+		if(this.task.task_id == 6){
+			this.content += `<div class="columns is-multiline ${((this.task.status == 3)? 'is-closed':'')}" id="crop">
+							<div class="column is-half is-paddingless-top">
+								<div class="is-divider is-half-margin is-marginless-bottom" data-content="Crop"></div>
+							</div>
+							<div class="column is-half is-paddingless-top">
+								<div class="is-divider is-half-margin is-marginless-bottom" data-content="Planted With Fertilizer"></div>
+							</div>
+							<div class="column is-half">
+								<div class="select is-fullwidth">
+									<select>${this.cropOptions()}</select>
+								</div>
+							</div>
+							<div class="column is-half has-text-centered">
+								<p class='is-size-7'><span id="fertilizer" class="fa-stack fa-lg">
+									<i class="far fa-square fa-stack-2x"></i>
+									<i class="fas fa-check fa-ban fa-stack-1x has-text-success ${(this.task.task_option == 1)? '':'is-invisible'}"></i>
+
+								</span></p>
+							</div>
+						</div>`;
+		}
 		this.content += `<div class="columns is-multiline ${((this.task.status == 3)? 'is-closed':'')}" id="note">
 							<div class="column is-full is-paddingless-top">
 								<div class="is-divider is-half-margin is-marginless-bottom" data-content="Note"></div>
@@ -167,12 +190,18 @@ class taskModal{
 	
 	addListners(){
 		var self = this;
-		$('.button').click(function(){
+		$('#statusButtons .button').click(function(){
 			if($(this).data('wlt-status') != null){
 				self.updateStatus($(this));
 			}
 		});
-	
+		
+		$('#crop select').change(function(){
+			self.updateCrop($(this));
+		});
+		$('#crop #fertilizer').click(function(){
+			self.updateOption($(this));
+		});
 	}
 	
 	updateStatus(target){
@@ -210,13 +239,13 @@ class taskModal{
 							//if the user has completed the task show it in the modal
 							if(data.completed_by_id != null)
 							{
-								console.log(data);
+								
 								var date = new Date(data.completed_on);
 								var completedDate = new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit'}).format(date);
 								completedDate = completedDate.replace(/\//g,'-');
 								var completedTime = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit'}).format(date);
 								$('#taskModal #completed p').html(`Completed On <b>${completedDate}</b> At <b>${completedTime}</b> By <b>${data.completed_user.name}</b>`);
-								$('#taskModal #note,#taskModal #comments').slideUp(300, function(){$(this).addClass('is-closed')}).fadeOut(150);
+								$('#taskModal #note,#taskModal #comments, #taskModal #crop').slideUp(300, function(){$(this).addClass('is-closed')}).fadeOut(150);
 								$('#taskModal #completed').slideDown(300, function(){$(this).addClass('is-completed').removeClass('is-closed');}).fadeIn(150);
 								
 							}
@@ -232,6 +261,76 @@ class taskModal{
 			}});
 		}
 		return self;
+	}
+	
+	updateCrop(select){
+		var self = this;
+		var selected = $(select).val();
+		var selectText = $(select).find("option:selected").text();
+		var formData = {
+			'_token':$("#token input").val(),
+			'_method':'put',
+			'cropId': parseInt(selected)
+		};
+		
+		
+		$.ajax({
+			type:'post',
+			url:'/ajax/farm/'+this.task.worklog.farm_id+'/task/'+this.task.id,
+			data:formData,
+			success:function(){
+				$('.wltask[data-wlt="'+self.task.id+'"] .cropType').text(selectText);
+			}
+		});
+		
+	}
+	
+	updateOption(fertilizer){
+		var self = this;
+		
+		var option = ($(fertilizer).find('.fa-check').hasClass('is-invisible'))? 1:0;
+		
+		var formData = {
+			'_token':$("#token input").val(),
+			'_method':'put',
+			'option': option
+		};
+		
+		
+		$.ajax({
+			type:'post',
+			url:'/ajax/farm/'+this.task.worklog.farm_id+'/task/'+this.task.id,
+			data:formData,
+			success:function(){
+				if(option == 1){
+					$(fertilizer).find('.fa-check').fadeIn(200,function(){
+						$(this).removeClass('is-invisible');
+					});
+				}
+				else
+				{
+					$(fertilizer).find('.fa-check').fadeOut(200,function(){
+						$(this).addClass('is-invisible');
+					});
+				}
+			}
+		});
+		
+	}
+	
+	cropOptions(){
+		var options = '';
+		var task_option = (this.task.task_option)? JSON.parse(this.task.task_option):null;
+		for(var i = 0;i < this.crops.length; i++)
+		{
+			
+			var selected = '';
+			if(task_option && task_option.selectedCrop){
+				selected = (task_option.selectedCrop == this.crops[i].id)? 'selected':'';
+			}
+			options += '<option value="'+this.crops[i].id+'" '+selected+'>'+this.crops[i].name+'</option>';
+		}
+		return options;
 	}
 }
 

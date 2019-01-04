@@ -89,7 +89,7 @@ class worklogController extends Controller
         if($worklog->exists()){
 			
 			foreach($farm->fields as $field){
-				$createField = array('field_id' => $field->id, 'crop_id' => $field->crop_id);
+				$createField = array('field_id' => $field->id, 'crop_id' => 1);
 				$wlField = $worklog->fields()->create($createField);
 				foreach($tasks as $task){
 					$createTask = array('worklog_field_id'=>$wlField->id,'task_id' => $task->id, 'worklog_id' => $worklog->id);
@@ -133,20 +133,22 @@ class worklogController extends Controller
 		 * Ajax should have a task_id it wants to fetch tasks for
 		 */
 		if(!empty($request->task_id)){
-			//get worklogTasks for this id
+			//get a worklogTask by id
 			$worklogTask = $worklog->tasks->where('id', '=',$request->task_id)->first();
 			$worklogTask->info;
 			$worklogTask->completedUser;
 			$worklogTask->field;
 			$worklogTask->field->info;
 			$worklogTask->worklog;
+			
 			$worklogTask->getColour();
 			$this->output->response->worklogTask = $worklogTask;
+			$this->output->response->crops = \Lakeview\Crops::all();
 			
 		}
 		
 		if(!empty($request->task)){
-			//get worklogTasks for this id
+			//get All worklogTasks for the task id
 			$wlTasks = $worklog->tasks->where('task_id', '=',$request->task);
 			$worklogTasks = array();
 			$fieldName = array();
@@ -182,7 +184,7 @@ class worklogController extends Controller
 			
 			array_multisort($sortArray, $sortFlag, $worklogTasks);
 			$this->output->response->worklogTasks = $worklogTasks;
-			
+			$this->output->response->crops = \Lakeview\Crops::all();
 		}
 		
 		if(!empty($request->tabColours)){

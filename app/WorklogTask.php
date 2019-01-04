@@ -16,6 +16,10 @@ class WorklogTask extends Model
 		return $this->belongsTo(WorklogField::class,'worklog_field_id');
 	}
 	
+	public function allCrops(){
+		return Crops::all();
+	}
+	
 	public function worklog(){
 		return $this->belongsTo(Worklog::class,'worklog_id');
 	}

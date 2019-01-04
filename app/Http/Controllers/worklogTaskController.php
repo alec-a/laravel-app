@@ -3,6 +3,7 @@
 namespace Lakeview\Http\Controllers;
 
 use Lakeview\WorklogTask;
+use Lakeview\Field;
 use Lakeview\Farm;
 use Illuminate\Http\Request;
 
@@ -60,6 +61,7 @@ class worklogTaskController extends Controller
 			$worklogTask->completedUser;
 			$worklogTask->field->info;
 			$worklogTask->worklog;
+			
 			$worklogTask->getColour();
 			$this->output->response->worklogTask = $worklogTask;
 		
@@ -97,12 +99,26 @@ class worklogTaskController extends Controller
     public function update(Request $request, Farm $farm, WorklogTask $worklogTask)
     {
 		if($this->ajax){
+			if(!empty($request->cropId)){
+				$worklogTask->field()->update([
+					'crop_id' => $request->cropId
+				]);
+			}
+			
+			if(!empty($request->option)){
+				$worklogTask->update([
+					'task_option' => $request->option
+				]);
+			}
+			
 			if(isset($request->taskStatus) && $request->taskStatus >= 0 && $request->taskStatus <= 3){
 				$date = new \DateTime('NOW');
 				
 				$worklogTask->completed_by_id = ($request->taskStatus == 3)? auth()->user()->id:null;
 				$worklogTask->completed_on = ($request->taskStatus == 3)? $date->format('Y-m-d G:i:s'):null;
 				$worklogTask->status = $request->taskStatus;
+				
+				
 				$worklogTask->save();
 				$worklogTask->info;
 				$worklogTask->completedUser;
@@ -110,6 +126,60 @@ class worklogTaskController extends Controller
 				$worklogTask->field->info;
 				$worklogTask->worklog;
 				$worklogTask->getColour();
+				
+				//if the task is plant(tasks.id = 6) update the farm field crop and if the planter had fert find the task for fertilizing that is required for the field
+				
+				if($worklogTask->task_id == 6){
+											
+					$worklogTask->field->info()->update(['crop_id' => $request->taskStatus == 3? $worklogTask->field->crop_id:1]);
+					$worklogTask->field()->update(['is_planted' => $request->taskStatus == 3? true:false]);
+					
+					//search for the two fertilizer tasks for this field
+					
+					
+					if($request->taskStatus == 3){
+						$fertTasks = WorklogTask::where('worklog_field_id','=',$worklogTask->field->id)->where(function($q){$q->where('task_id','=',1)->orWhere('task_id','=',2); })->orderBy('task_id','ASC')->get();
+						$updated = false;
+						foreach($fertTasks as $fertTask)
+						{
+							if($fertTask->status < 3 && $worklogTask->task_option = 1 && !$updated){
+								$now = now();
+								$fertTask->update(['status' => 3, 'completed_on' => $now, 'completed_by_id' => auth()->user()->id]);
+								$updated = true;
+							}
+							
+						}
+					}
+					else{
+						$fertTasks = WorklogTask::where('worklog_field_id','=',$worklogTask->field->id)->where(function($q){$q->where('task_id','=',1)->orWhere('task_id','=',2); })->orderBy('task_id','DESC')->get();
+						
+						$updated = false;
+						foreach($fertTasks as $fertTask)
+						{
+							if($fertTask->status == 3 && !$updated){
+								$now = now();
+								$fertTask->update(['status' => 1, 'completed_on' => null, 'completed_by_id' => null]);
+								$updated = true;
+							}
+							
+						}
+					}
+					
+					
+				}elseif($worklogTask->task_id == 8){
+						if($request->taskStatus == 3){
+							$worklogTask->field->info()->update(['crop_id' => 1]);
+						}else{
+							$worklogTask->field->info()->update(['crop_id' => $worklogTask->field->crop_id]);
+						}
+				}
+				else
+				{
+					$worklogTask->field->info()->update(['crop_id' => $worklogTask->field->crop_id]);
+				}
+				
+				
+				
 				return json_encode($worklogTask);
 			}
 		}

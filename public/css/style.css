@@ -181,7 +181,7 @@ and open the template in the editor.
 	padding-top:0px !important;
 }
 .is-divider.is-half-margin{
-	margin: 1rem !important;
+	margin: 1rem ;
 }
 .is-marginless-bottom{
 	margin-bottom: 0px !important;
