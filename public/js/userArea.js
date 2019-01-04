@@ -28,6 +28,24 @@ $(document).ready(function(){
 		}
 	});
 	$('.message').delay(1500).fadeOut(400,function(){$(this).remove();});
+	
+	$('#farmContentContainer .tabs li a').click(function(){
+		var target = $(this).data('tab');
+		if($('#farmContentContainer .content[data-tab="'+target+'"]').hasClass('is-active')){
+			
+		}
+		else{
+		
+			$('#farmContentContainer .tabs .is-active').switchClass('is-active','');
+			$(this).parent().switchClass('','is-active');
+			$('#farmContentContainer .content.is-active').slideUp(300, function(){
+				$(this).removeClass('is-active');
+				$('#'+target).slideDown(300, function(){
+					$(this).addClass('is-active');
+				}).fadeIn(300);
+			}).fadeOut(300);
+		}
+	});
 });
 
 function insertModal(data, textStatus, jqXHR){

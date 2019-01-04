@@ -255,6 +255,12 @@ hr.is-half-margin{
     -webkit-animation: loader-figure-black 1.15s infinite cubic-bezier(.215, .61, .355, 1);
     animation: loader-figure-black 1.15s infinite cubic-bezier(.215, .61, .355, 1);
 }
+.tab-container .content.is-active{
+	display:block;
+}
+.tab-container .content{
+	display: none;
+}
 
 @-webkit-keyframes loader-figure-black{
 	0%{

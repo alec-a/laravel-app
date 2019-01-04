@@ -385,8 +385,8 @@ function optionEvents(){
 	$(document).on("click", '.editField', function(){ editField($(this)); });
 	$(document).on("click", '.deleteField', function(){ deleteField($(this)); });
 	$(document).on("click", '#saveFarmName', function(evt){ updateFarmName(evt); });
-	$(document).on("mouseenter", '#fields .columns', function(){ fieldHover($(this)); });
-	$(document).on("mouseleave", '#fields .columns', function(){ fieldUnhover($(this)); });
+	//$(document).on("mouseenter", '#fields .columns', function(){ fieldHover($(this)); });
+	//$(document).on("mouseleave", '#fields .columns', function(){ fieldUnhover($(this)); });
 	$(document).on( "click", ".expandable .title", function(evt){ clickContainer($(this).parent('.expandable')); });
 //	$(document).on( "focusout", "#fieldsBox", function(){ collpaseBox($(this)); });
 }
