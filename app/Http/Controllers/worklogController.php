@@ -38,7 +38,7 @@ class worklogController extends Controller
 			$this->output = json_encode($this->output);
 		}
 		else{
-			$this->output = view('worklog.index')->with('dangerMsg',"This Is Still Under Development And May Be Broken But It's Here To Look At!");
+			$this->output = view('worklog.index');
 		}
 		return $this->output;
     }
