@@ -36,9 +36,6 @@
 			</div>
 			<div class="dropdown-menu" id="dropdown-menu1" role="menu">
 				<div class="dropdown-content ">
-					<a class="dropdown-item is-bold has-text-centered has-text-light is-static" id="addFields">
-						<strong>Add Fields</strong>
-					</a>
 					<a class="dropdown-item is-bold has-text-centered" href="{{url('/farm/'.$pageData->farm->id.'/next-season')}}" id="season">
 						<strong>Next Season</strong>
 					</a>
