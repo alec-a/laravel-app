@@ -47,53 +47,41 @@ if(isset($dumpTop)){
 						<span aria-hidden="true"></span>
 						<span aria-hidden="true"></span>
 						<span aria-hidden="true"></span>
-					</a>
+					</a>		
 				</div>
 				<div class="navbar-menu">
 					
 				</div>
 				<div class="navbar-end">
-					
-							
-								
-								@guest
-									<div class="navbar-item">
-										<div class="buttons">
-											<a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-												@if (Route::has('register'))
-                                
-													<a class="navbar-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-												@endif
-										</div>
-									</div>
-								@else
-								<div class="navbar-item">
-									<a href="/issue/create" class="button is-primary is-fullwidth is-normal"><strong>Report A New Issue</strong></a>
-								</div>
-                            <div class="navbar-item">
-								<div class='field has-addons'>
-									<p class="control">
-										<a class='nav-link button is-static is-outlined'>
-											<span>{{ Auth::user()->name }} 0 </span><span class="icon"><i class="far fa-envelope"></i></span>
-										</a>
-									</p>
-								</div>
+					@guest
+						<div class="navbar-item">
+							<div class="buttons">
+								<a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+								@if (Route::has('register'))
+
+									<a class="navbar-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+								@endif
 							</div>
-							<div class="navbar-item">
+						</div>
+						@else
+						<div class="navbar-item">
+							<div class="buttons">
+								<a href="/issue/create" class="button is-primary is-normal"><strong>Report A New Issue</strong></a>
+								<a class='nav-link button is-static is-outlined'>
+									<span>{{ Auth::user()->name }} 0 </span><span class="icon"><i class="far fa-envelope"></i></span>
+								</a>
 								<a class="nav-link button is-primary is-outlined" href="{{ route('logout') }}"
 								   onclick="event.preventDefault();
 												 document.getElementById('logout-form').submit();">
 									{{ __('Logout') }}
 								</a>
 
-								<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+								<form id="logout-form" action="{{ route('logout') }}" method="POST" class="is-hidden">
 									@csrf
 								</form>
-							</div>  
-                        @endguest
-							
-						</div>
-					</div>
+							</div>
+						</div>  
+					@endguest
 				</div>
 			</nav>
 		@endif
