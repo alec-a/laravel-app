@@ -189,10 +189,11 @@ class worklogController extends Controller
 		
 		if(!empty($request->tabColours)){
 			$taskTabClasses = array();
+			$taskTabIcons = array();
 			foreach($tasks as $task){
 				$requiredTasks = $worklog->tasks()->where('task_id', '=',$task->id)->where('status', '=','1')->get();
 				$completedTasks =  $worklog->tasks()->where('task_id', '=',$task->id)->where('status', '=','3')->get();;
-				
+				$noteTasks = $worklog->tasks()->where('task_id', '=',$task->id)->whereRaw('note <> ""')->get();
 				if($requiredTasks->count() > 0 ){
 					$taskTabClasses[$task->id] = 'has-text-info has-text-weight-bold';
 				}
@@ -202,8 +203,14 @@ class worklogController extends Controller
 				else{
 					$taskTabClasses[$task->id] = '';
 				}
+				if($noteTasks->count() > 0 ){
+					$taskTabIcons[$task->id] = '<span class="icon"><i class="fas fa-sticky-note"></i></span>';
+				}else{
+					$taskTabIcons[$task->id] = '';
+				}
 			}
 			$this->output->response->tabClasses = $taskTabClasses;
+			$this->output->response->tabIcons = $taskTabIcons;
 		}
 		
 		$this->output->status = 'success';
