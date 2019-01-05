@@ -36,7 +36,6 @@ class Controller extends BaseController
 		$this->pageData->version = Version::where('active','=',true)->take(1)->get()->first();
 		$this->pageData->warnings = array();
 		$this->pageData->activeNav = '';
-		
 		$this->pageData->navItems = $navItems;
 		$this->pageData->data = new \stdClass();
 		$this->pageData->data->countries = array(
@@ -375,8 +374,10 @@ class Controller extends BaseController
 			"12" => "(GMT+12:00) Fiji, Kamchatka, Marshall Is.",
 			"13" => "(GMT+13:00) Nuku'alofa",
 		);
-
+		
+		
 		View::share('pageData', $this->pageData);
+		View::share(compact($this->pageData));
 		View::share('warningMsg',null);
 		View::share('dangerMsg',null);
 		View::share('successMsg',null);
@@ -391,6 +392,5 @@ class Controller extends BaseController
 	protected function failedValidation(Validator $validator) {
         throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
-	
-	
+		
 }

@@ -20,15 +20,13 @@ class farmController extends Controller
     {
 		parent::__construct();
         $this->middleware('auth');
-		
     }
 	
     public function index()
     {
-		$this->pageData->currentUser = auth()->user()->name;
         $this->pageData->activeNav = 'farms';
 		$this->pageData->farms = Farm::all();
-		return view('farms.index');
+		return view('farms.index',['pageData' => $this->pageData]);
     }
 
     /**
@@ -91,7 +89,6 @@ class farmController extends Controller
     public function show(Farm $farm)
     {
         $this->pageData->activeNav = 'farms';
-		$this->pageData->user = auth()->user();
 		$this->pageData->farm = $farm;
 		return view('farms.show')->with('dumpBottom',true);
     }
