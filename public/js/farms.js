@@ -11,6 +11,23 @@ $(document).ready(function(){
 	//field
 	$('#newFieldForm').submit(function(evt){ newField(evt);	});
 	
+	$('#farmContentContainer #farmTabs li a').click(function(){
+		var target = $(this).data('tab');
+		if($('#farmContentContainer .content[data-tab="'+target+'"]').hasClass('is-active')){
+			
+		}
+		else{
+		
+			$('#farmContentContainer #farmTabs .is-active').switchClass('is-active','');
+			$(this).parent().switchClass('','is-active');
+			$('#farmContentContainer .content.is-active').slideUp(300, function(){
+				$(this).removeClass('is-active');
+				$('#farmContentContainer .content[data-tab="'+target+'"]').slideDown(300, function(){
+					$(this).addClass('is-active');
+				}).fadeIn(300);
+			}).fadeOut(300);
+		}
+	});
 });
 optionEvents();
 
@@ -380,6 +397,38 @@ function clickContainer(expandable){
 	}
 }
 
+function fieldClick(field){
+	
+	var selectable = parseInt($("#fields").data('selectable'));
+	console.log(selectable);
+	if(selectable == 1){
+		$(field).toggleClass('selected');
+		if($('.farmField.selected').length == 1){
+			if(!$("#newField").hasClass('opened')){
+				$("#options .opened").slideUp(100, function(){
+					$(this).removeClass('opened');
+					$("#newField").slideDown(100).addClass('opened');
+				});
+			}
+			$("#newFieldButton").html('Edit Field');
+			$("#newFieldButton").attr('id','editFieldButton');
+		}
+		else if($('.farmField.selected').length > 1){
+			$("#newField").slideUp(100, function(){
+				$(this).removeClass('opened');
+				$("#selectedOptions").slideDown(100).addClass('opened');
+			});
+
+		}
+		else
+		{
+			$("#editFieldButton").html('New Field').attr('id','newFieldButton');
+			$("#newField").slideDown(100).addClass('opened');
+
+		}
+	}
+}
+
 function optionEvents(){
 	
 	$(document).on("click", '.editField', function(){ editField($(this)); });
@@ -389,4 +438,7 @@ function optionEvents(){
 	//$(document).on("mouseleave", '#fields .columns', function(){ fieldUnhover($(this)); });
 	$(document).on( "click", ".expandable .title", function(evt){ clickContainer($(this).parent('.expandable')); });
 //	$(document).on( "focusout", "#fieldsBox", function(){ collpaseBox($(this)); });
+	$(document).on("click", ".farmField", function(){
+		fieldClick($(this));
+	});
 }
