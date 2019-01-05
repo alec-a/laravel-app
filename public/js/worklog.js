@@ -20,17 +20,13 @@ $(function(){
 		$(oldTab).switchClass('is-active','',300);
 		$(tab).switchClass('','is-active',300);
 		
-		$('.activeTask').fadeOut(300,function(){
+		$('.activeTask').slideUp(200,function(){
 			$(this).removeClass('activeTask');
 			populateTask();
-		});
+		}).fadeOut(200);
 		
 	});
 	setInterval(function(){populateTask();},5000);
-});
-
-$(document).ready(function(){
-	
 });
 
 function populateTask(){
@@ -81,9 +77,9 @@ function populateTask(){
 			
 			if(!$('.task[data-task="'+taskId+'"]').hasClass('activeTask'))
 			{
-				$('.task[data-task="'+taskId+'"]').fadeIn(300,function(){
+				$('.task[data-task="'+taskId+'"]').slideDown(200,function(){
 					$(this).addClass('activeTask');
-				});
+				}).fadeIn(200);
 			}
 			
 		}

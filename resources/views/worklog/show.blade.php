@@ -48,16 +48,20 @@
 		</div>
 	</div>
 </div>
-<div class="tabs is-boxed is-small is-centered">
+<div class="tabs is-boxed is-small is-centered has-box-content">
 	<ul id="tasksTabs">
 		@foreach($tasks as $task)	
 		<li class="{{$loop->iteration == 1? 'is-active':''}}" data-task="{{$task->id}}"><a data-task="{{ $task->id}}">{!! $task->note? '<span class="icon"><i class="fas fa-sticky-note"></i></span>':'' !!}<span> {{$task->task}}</span></a></li>
 		@endforeach
 	</ul>
 </div>
+<div class="box">
 @foreach($tasks as $task)
+	
 	<div data-task="{{$task->id}}" class="content {{$loop->iteration > 1? '':'activeTask'}} task">
 		<h5 class="title is-5">{{$task->task}}</h5>
 	</div>
+	
 	@endforeach
+</div>
 @endsection

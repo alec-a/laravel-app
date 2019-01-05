@@ -38,7 +38,17 @@ and open the template in the editor.
 .hidden {
 	display:none;
 }
-
+.tabs.has-box-content{
+	margin-bottom: 0px;
+	margin-left: -1px;
+}
+.tabs.has-box-content ul{
+	border-bottom: 0px;
+	
+}
+.box.is-radiusless-top{
+	border-radius: 2px 2px 6px 6px;
+}
 #dashboardSideNav {
 	border-radius: 6px;
 }
@@ -48,12 +58,6 @@ and open the template in the editor.
 }
 #hr-top{
 	margin-top: 0px;
-}
-
-#workers {
-	margin-left: 6px;
-	list-style: inside;
-	list-style-type: circle;
 }
 
 #fieldsBox {
@@ -150,7 +154,10 @@ and open the template in the editor.
 	top: 100px;
 	box-shadow: 0px 30px 50px rgba(0, 0, 0, 0.5098039215686274);
 }
-
+p.is-pulled-left.name{
+	margin-right: 13px;
+	margin-bottom: 0.4em;
+}
 .field.is-fullwidth {
 	width:100%;
 }
@@ -185,6 +192,9 @@ and open the template in the editor.
 }
 .is-divider.is-half-margin{
 	margin: 1rem ;
+}
+hr.is-half-margin{
+	margin: 0.75rem 0;
 }
 .is-marginless-bottom{
 	margin-bottom: 0px !important;
@@ -242,6 +252,23 @@ and open the template in the editor.
     -webkit-animation: loader-figure-black 1.15s infinite cubic-bezier(.215, .61, .355, 1);
     animation: loader-figure-black 1.15s infinite cubic-bezier(.215, .61, .355, 1);
 }
+.tab-container .content.is-active, #options .content.opened{
+	display:block;
+}
+.tab-container .content, #options .content{
+	display: none;
+}
+
+.column.farmField {
+	border-bottom: 2px inset white;
+	border-right: 2px inset white;
+	background-color: whitesmoke !important;
+}
+.column.farmField.selected{
+	    background-color: #3273dc !important;
+		color: whitesmoke !important;
+}
+
 
 @-webkit-keyframes loader-figure-black{
 	0%{

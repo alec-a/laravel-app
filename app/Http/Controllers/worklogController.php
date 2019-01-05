@@ -38,7 +38,7 @@ class worklogController extends Controller
 			$this->output = json_encode($this->output);
 		}
 		else{
-			$this->output = view('worklog.index');
+			$this->output = view('worklog.index')->with('dumpTop',true);
 		}
 		return $this->output;
     }
