@@ -116,7 +116,6 @@ if(isset($dumpTop)){
 							  <li><a href="{{url('/account')}}" class="{{$pageData->activeNav=='account'? 'is-active':''}}">Account</a></li>
 							  <li><a href="{{url('/account/messages')}}" class="{{$pageData->activeNav=='messages'? 'is-active':''}}">Messages</a></li>
 							</ul>
-							@if(auth()->user()->role == 1)
 							<p class="menu-label is-size-6">
 							  Administration
 							</p>
@@ -131,7 +130,6 @@ if(isset($dumpTop)){
 							  <li><a>Applications</a></li>
 							  <li><a>Users</a></li>
 							</ul>
-							@endif
 						</aside>
 					</div>
 				
