@@ -818,7 +818,7 @@ function worklogRename(button){
 			{duration: 200, complete:function(){
 					$('#modal #worklogName').focus();
 					$(document).on( "keydown", "#modal #worklogName",function(event){if(event.which == 13) { worklogDoRename(worklog_Id); }else if(event.which == 27){ $('.modal.is-active').fadeOut(200,function(){$(this).remove();}); } });
-					$(document).on( "click", "#modal #worklogNameButton",function(){ worklogDoReanme(worklog_Id); });
+					$(document).on( "click", "#modal #worklogNameButton",function(){ worklogDoRename(worklog_Id); });
 		}});
 	});
 }
