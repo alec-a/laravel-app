@@ -320,10 +320,10 @@ function updateFieldList(target){
 					var trashedDate = new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit'}).format(date);
 					trashedDate = trashedDate.replace(/\//g,'-');
 					var trashedTime = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit'}).format(date);
-					htmlString += `<div class="column is-one-fifth farmField is-unselectable" data-field-id="${field.id}"><p class="has-text-weight-bold is-marginless">${field.name}</p> <p class="is-size-7"><span class="icon"><i class="fas fa-trash-alt"></i></span><span> ${trashedTime}<br/>${trashedDate}</span></p></div>`;
+					htmlString += `<div class="column is-one-fifth farmField is-unselectable" data-name="${field.name}" data-field-id="${field.id}"><p class="has-text-weight-bold is-marginless">${field.name}</p> <p class="is-size-7"><span class="icon"><i class="fas fa-trash-alt"></i></span><span> ${trashedTime}<br/>${trashedDate}</span></p></div>`;
 				}
 				else{
-					htmlString += `<div class="column is-one-fifth farmField is-unselectable" data-field-id="${field.id}"><p class="has-text-weight-bold is-marginless">${field.name}</p> <p class="is-size-7">${field.crop.name}</p></div>`;
+					htmlString += `<div class="column is-one-fifth farmField is-unselectable" data-name="${field.name}" data-field-id="${field.id}"><p class="has-text-weight-bold is-marginless">${field.name}</p> <p class="is-size-7">${field.crop.name}</p></div>`;
 				}
 			}
 			
