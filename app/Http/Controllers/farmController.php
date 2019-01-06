@@ -26,7 +26,7 @@ class farmController extends Controller
     public function index()
     {
 		$this->pageData->currentUser = auth()->user()->name;
-        $this->pageData->activeNav = 'farms';
+		$this->pageData->activeNav = 'farms';
 		$this->pageData->farms = Farm::all();
 		return view('farms.index');
     }
@@ -90,10 +90,18 @@ class farmController extends Controller
      */
     public function show(Farm $farm)
     {
-        $this->pageData->activeNav = 'farms';
-		$this->pageData->user = auth()->user();
-		$this->pageData->farm = $farm;
-		return view('farms.show')->with('dumpBottom',true);
+        if($this->ajax){
+			$farm->workers;
+			$farm->farmOwner;
+			$this->output->farm = $farm;
+			$this->output = json_encode($this->output);
+		}else{
+			$this->pageData->activeNav = 'farms';
+			$this->pageData->user = auth()->user();
+			$this->pageData->farm = $farm;
+			$this->output =  view('farms.show');
+		}
+		return $this->output;
     }
 
     /**

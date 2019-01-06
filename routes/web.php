@@ -20,18 +20,24 @@
 
 
 Route::get('dashboard','dashboardController@index');
+Route::get('dashboard/modalDev','modalController@index');
 /*farm*/
 route::resource('farms','farmController')->only(['index','store']);
 Route::resource('farm','farmController')->except(['index','store']);
+Route::post('ajax/farm/{farm}','farmController@show');
 Route::get('farm/{farm}/next-season','farmController@nextSeason');
+Route::post('ajax/farm/{farm}/next-season','farmController@nextSeason');
 Route::put('farm/join/{farm}','farmController@join');
 Route::put('farm/leave/{farm}','farmController@leave');
 
 
 /*Field*/
 Route::delete('/fields/{fields}', 'fieldsController@destroy');
-Route::resource('ajax/field','fieldsController')->parameters(['field' => 'fields']);
-
+Route::resource('ajax/field','fieldsController')->parameters(['field' => 'fields'])->only(['update','store']);
+Route::post('ajax/fields/','fieldsController@index');
+Route::delete('ajax/fields/trash','fieldsController@trash');
+Route::delete('ajax/fields/delete','fieldsController@delete');
+Route::put('ajax/fields/restore','fieldsController@restore');
 /*worklog */
 Route::resource('farm/{farm}/worklogs','worklogController')->only(['index','store']);
 Route::resource('farm/{farm}/worklog','worklogController')->except(['index','store']);
@@ -40,7 +46,12 @@ Route::post('ajax/farm/{farm}/worklogs/store', 'worklogController@store');
 Route::post('ajax/farm/{farm}/worklog/edit', 'worklogController@edit');
 Route::post('ajax/farm/{farm}/worklog/create', 'worklogController@create');
 Route::post('ajax/farm/{farm}/worklog/{worklog}', 'worklogController@show');
+
 Route::resource('ajax/farm/{farm}/worklog','worklogController')->except(['index','store','edit','create']);
+Route::delete('ajax/farm/{farm}/worklog/{worklog}/trash', 'worklogController@trash');
+Route::delete('ajax/farm/{farm}/worklog/{worklog}/delete', 'worklogController@destroy');
+Route::put('ajax/farm/{farm}/worklog/{worklog}/restore', 'worklogController@restore');
+
 
 Route::resource('farm/{farm}/worklog/{worklog}/fields','worklogFieldController')->only(['index','store'])->parameters(['field' => 'worklogField']);
 Route::resource('farm/{farm}/worklog/{worklog}/field','worklogFieldController')->except(['index','store'])->parameters(['field' => 'worklogField']);

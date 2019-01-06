@@ -118,30 +118,6 @@ and open the template in the editor.
 	margin-bottom: 0px;
 }
 
-@media screen and (min-width: 769px), print {
-	#worklogModal {
-		width: 90% !important;
-	}
-}
-
-#worklogModal .task .task-head{
-	height:60px;
-	border-bottom: 1px solid hsl(0, 0%, 71%);
-}
-#worklogModal .task{
-	border-left: 2px solid hsl(0, 0%, 71%);
-	
-}
-#worklogModal .field:not(:last-child) {
-    margin-bottom: 0px !important;
-}
-
-#worklogModal .field-row .column.field, #worklogModal .field-row .column.task{
-	margin-bottom:0px;
-	height: 108px !important;
-	border-bottom: 2px solid hsl(0, 0%, 71%);
-	
-}
 
 #container {
 	position: relative;
@@ -252,11 +228,35 @@ hr.is-half-margin{
     -webkit-animation: loader-figure-black 1.15s infinite cubic-bezier(.215, .61, .355, 1);
     animation: loader-figure-black 1.15s infinite cubic-bezier(.215, .61, .355, 1);
 }
-.tab-container .content.is-active, #options .content.opened{
+.tab-container .content.is-active, #options .content.opened, .tab-content.is-active{
 	display:block;
 }
-.tab-container .content, #options .content{
+.tab-container .content, #options .content, .tab-content{
 	display: none;
+}
+.tabs a.is-danger-tab{
+	color: #ff3860;
+}
+.tabs li.is-active a.is-danger-tab {
+    border-color: #ff3860;
+	color:white;
+	background-color: #ff3860;
+}
+.tabs a.is-success-tab{
+	color: #23d160;
+}
+.tabs li.is-active a.is-success-tab {
+    border-color: #23d160;
+	color:white;
+	background-color: #23d160;
+}
+
+.farmField {
+	max-height: 100%;
+	cursor: pointer;
+}
+#fieldsContent div[data-tab="*"]{
+	display:none;
 }
 
 .column.farmField {
@@ -448,3 +448,8 @@ hr.is-half-margin{
   border-color: #fafafa !important;
 }
 
+.tabs li.is-disabled a, .tabs li.is-disabled a:hover {
+    color: hsl(0, 0%, 86%)!important;
+    border-color: hsl(0, 0%, 96%);
+    background-color: white;
+}

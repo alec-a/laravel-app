@@ -3,7 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+$(document).on('click','.modal-background, .modal .delete',function(){
+	$(this).parents('.modal').css({opacity:'1'}).animate({opactiy:'0'},{duration:300,complete:function(){
+			$(this).remove();
+	}});
+});
 
 $(document).ready(function(){
 		
@@ -36,14 +40,10 @@ function insertModal(data, textStatus, jqXHR){
 	$("#modal").html(data);
 }
 
-function getModal(controller, name, extras=null){
-$.ajaxSetup({
-		headers: {
-			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		}
-	});
-	var formData = [];
+function getModal(controller, name, extras, callback){
 
+	var formData = [];
+	
 
 
 	formData['_token'] = $("#token input").val();
@@ -59,7 +59,9 @@ $.ajaxSetup({
 		type: "POST",
 		url: "/ajax/modal/"+controller,
 		data: formData,
-		success: insertModal
+		success: function(data){
+			callback(data);
+		}
 	});
 }
 

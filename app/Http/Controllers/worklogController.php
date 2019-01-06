@@ -31,14 +31,17 @@ class worklogController extends Controller
     public function index(Request $request, Farm $farm)
     {
 		$this->pageData->farm = $farm;
-		$this->output->status = 'success';
 		
+		$this->output->status = 'success';
+		$farm->fields;
+		$this->output->response->user = auth()->user();
 		$this->output->response->farm = $farm;
+		$this->output->response->farm->worklogs = $request->has('trashed')? $farm->worklogs()->orderBy('id','desc')->onlyTrashed()->get():$farm->worklogs()->orderBy('id','desc')->get();
 		if($this->ajax){
 			$this->output = json_encode($this->output);
 		}
 		else{
-			$this->output = view('worklog.index')->with('dumpTop',true);
+			$this->output = view('worklog.index');
 		}
 		return $this->output;
     }
@@ -100,8 +103,11 @@ class worklogController extends Controller
 		
 		
 		if($this->ajax){
+			$farm->worklogs()->orderBy('id','desc')->get();
 			$this->output->status = 'success';
-			$this->output->response = $worklog;
+			$this->output->response->user = auth()->user();
+			$this->output->response->farm = $farm;
+			$this->output->response->worklog = $worklog;
 			$this->output = json_encode($this->output);
 		}
 		else
@@ -247,9 +253,52 @@ class worklogController extends Controller
      * @param  \Lakeview\Worklog  $worklog
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Worklog $worklog)
+    public function update(Request $request, Farm $farm, Worklog $worklog)
     {
-        //
+        $this->output->status = 'success';
+		
+		$worklog->name = $request->name;
+		$worklog->save();
+		
+		$worklogs = Worklog::all();
+		$user = auth()->user();
+		
+		if($this->ajax){
+			$farm->worklogs()->orderBy('id','desc')->get();
+			$this->output->response->worklog = $worklog;
+			$this->output->response->user = $user;
+			$this->output->response->farm = $farm;
+			
+			$this->output = json_encode($this->output);
+		}
+		else
+		{
+			$this->output = back();
+		}
+		return $this->output;
+    }
+	
+	public function trash(Request $request, Farm $farm, Worklog $worklog)
+    {
+        $this->output->status = 'success';
+		
+		$farm->fields;
+		$worklog->delete();
+		
+		
+		$user = auth()->user();
+		
+		if($this->ajax){
+			$this->output->response->user = $user;
+			$this->output->response->farm = $farm;
+			$this->output->response->farm->worklogs = $farm->worklogs()->orderBy('id','desc')->get();
+			$this->output = json_encode($this->output);
+		}
+		else
+		{
+			$this->output = back();
+		}
+		return $this->output;
     }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -260,8 +309,20 @@ class worklogController extends Controller
      * @param  \Lakeview\Worklog  $worklog
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Worklog $worklog)
+    public function destroy(Request $request, Farm $farm, $worklog)
     {
-        //
+        $this->output->status = 'success';
+		$deleteWorklog = Worklog::withTrashed()->findOrFail($worklog);
+		
+		$deleteWorklog->forceDelete();
+    }
+	
+	public function restore(Request $request, Farm $farm, $worklog)
+    {
+		$trashedWorklog = Worklog::withTrashed()->findOrFail($worklog);
+		$trashedWorklog->restore();
+        $this->output->status = 'success';
+		$this->output->worklog = $trashedWorklog;
+		$this->output = json_encode($this->output);
     }
 }

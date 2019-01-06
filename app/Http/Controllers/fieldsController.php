@@ -23,9 +23,23 @@ class fieldsController extends Controller
 		parent::__construct();
 	}
 	
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $server = $request->server();
+		$farmId = intval(str_replace($server['HTTP_ORIGIN'].'/farm/', '', $server['HTTP_REFERER']));
+		$farm = Farm::find($farmId);
+		
+		$this->output->status = 'success';
+		
+		$fields = empty($request->trashed)? $farm->fields:$farm->fields()->onlyTrashed()->get();
+		foreach($fields as $field){
+			$field->crop;
+		}
+		$this->output->response->fields = $fields;
+		
+		$this->output = json_encode($this->output);
+		
+		return $this->output;
     }
 		
     /**
@@ -48,7 +62,7 @@ class fieldsController extends Controller
     {
 		
 		$validator = \Validator::make($request->all(),[
-			'name' => 'required'
+			'fieldName' => 'required'
 		]);
 		if($validator->fails()){
 			$this->output->status = 'fail';
@@ -58,8 +72,8 @@ class fieldsController extends Controller
 			$server = $request->server();
 			$farmId = intval(str_replace($server['HTTP_ORIGIN'].'/farm/', '', $server['HTTP_REFERER']));
 			$farm = Farm::find($farmId);
-			$fieldData['name'] = $request->name;
-			$fieldData['crop_id'] = intval($request->crop_id);
+			$fieldData['name'] = $request->fieldName;
+			$fieldData['crop_id'] = 1;
 			$fieldData['farm_id'] = $farmId;
 			
 			
@@ -86,8 +100,9 @@ class fieldsController extends Controller
 						$worklogTask->save();
 					}
 				}
-				
-				$this->output->response = view('fields.store',['field' => $field])->render();
+				$this->output->response->fields = $farm->fields;
+				$field->crop;
+				$this->output->response->field = $field;
 				$this->output->status = 'success';
 				
 			}
@@ -99,7 +114,7 @@ class fieldsController extends Controller
 			}
 		}
 		
-		if(isset($request->ajax)){
+		if(isset($this->ajax)){
 			$this->output = json_encode($this->output);
 		}
 		else{
@@ -141,6 +156,9 @@ class fieldsController extends Controller
      */
     public function update(Request $request, Fields $fields)
     {
+		$server = $request->server();
+		$farmId = intval(str_replace($server['HTTP_ORIGIN'].'/farm/', '', $server['HTTP_REFERER']));
+		$farm = Farm::find($farmId);
 		$validator = \Validator::make($request->all(),[
 			'fieldName' => 'required'
 		]);
@@ -150,15 +168,17 @@ class fieldsController extends Controller
 		}
 		else{
 			$fields->name = $request->fieldName;
-			$fields->crop_id = intval($request->crop_id);
 			if($fields->save()){
 				$this->output->status = 'success';
-				$this->output->response = $fields;
 				$this->output->response->crop = $fields->crop;
+				$this->output->response->field = $fields;
 			}
 			$this->output->errors[]="Field Could Not Be Saved";
 		}
-		if(isset($request->ajax)){
+		if($this->ajax){
+			$farmId = intval(str_replace($server['HTTP_ORIGIN'].'/farm/', '', $server['HTTP_REFERER']));
+			$farm = Farm::find($farmId);
+			$this->output->response->fields = $farm->fields;
 			$this->output = json_encode($this->output);
 		}
        else{
@@ -193,4 +213,33 @@ class fieldsController extends Controller
 		
 		return $this->output;
     }
+	
+	public function delete(Request $request){
+		$fields = json_decode($request->fields);
+		
+		foreach($fields as $field){
+			
+			$farmField = Fields::onlyTrashed()->find($field->id);
+			$farmField->forceDelete();
+		}
+	}
+	
+	public function restore(Request $request){
+		$fields = json_decode($request->fields);
+		
+		foreach($fields as $field){
+			
+			$farmField = Fields::onlyTrashed()->find($field->id);
+			$farmField->restore();
+		}
+	}
+	
+	public function trash(Request $request){
+		$fields = json_decode($request->fields);
+		
+		foreach($fields as $field){
+			$farmField = Fields::find($field->id);
+			$farmField->delete();
+		}
+	}
 }
