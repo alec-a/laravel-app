@@ -2,18 +2,18 @@ function optionEvents(){
 	
 	
 	$(document).on("click", '#saveFarmName', function(evt){ updateFarmName(evt); });
-	$(document).on("click", "#normFields .farmField", function(){ fieldClick($(this)); });
-	$(document).on("click", "#deletedFields .farmField", function(){ fieldClickTrashed($(this)); });
+	$(document).on("click", "#normFields .farmField", function(e){ e.preventDefault(); fieldClick($(this)); });
+	$(document).on("click", "#deletedFields .farmField", function(e){ e.preventDefault(); fieldClickTrashed($(this)); });
 	$(document).on( "keydown", "#fieldName",function(event){ if(event.which == 13) { fieldNewOrRename(); } });
-	$(document).on( "click", "#fieldNameButton",function(){ fieldNewOrRename(); });
-	$(document).on( "click", "#moveToTrashButton",function(){ fieldsTrash(); });
-	$(document).on( "click", "#emptyTrashButton, #deleteButton",function(){ emptyTrash($(this)); });
-	$(document).on( "click", "#recoverButton",function(){ fieldsRecover($(this)); });
-	$(document).on( "click", ".worklogRenameButton",function(){ worklogRename($(this)); });
-	$(document).on( "click", ".worklogTrashButton",function(){ worklogTrash($(this)); });
-	$(document).on( "click", ".worklogRecoverButton",function(){ worklogRecover($(this)); });
-	$(document).on( "click", ".worklogDeleteButton",function(){ worklogDelete($(this)); });
-	$(document).on( "click", "#nextSeason",function(){ nextSeason(); });
+	$(document).on( "click", "#fieldNameButton",function(e){ e.preventDefault(); fieldNewOrRename(); });
+	$(document).on( "click", "#moveToTrashButton",function(e){ e.preventDefault(); fieldsTrash(); });
+	$(document).on( "click", "#emptyTrashButton, #deleteButton",function(e){ e.preventDefault(); emptyTrash($(this)); });
+	$(document).on( "click", "#recoverButton",function(e){ e.preventDefault(); fieldsRecover($(this)); });
+	$(document).on( "click", ".worklogRenameButton",function(e){ e.preventDefault(); worklogRename($(this)); });
+	$(document).on( "click", ".worklogTrashButton",function(e){ e.preventDefault(); worklogTrash($(this)); });
+	$(document).on( "click", ".worklogRecoverButton",function(e){ e.preventDefault(); worklogRecover($(this)); });
+	$(document).on( "click", ".worklogDeleteButton",function(e){ e.preventDefault(); worklogDelete($(this)); });
+	$(document).on( "click", "#nextSeason",function(e){ e.preventDefault(); nextSeason(); });
 	
 	
 	
