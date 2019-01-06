@@ -2,27 +2,19 @@
 @extends('layouts.blank')
 
 @section('content')
-<div class="modal is-active is-transparent">
-	<div class="modal-background is-light-dim"></div>
+<div class="modal is-active">
+	<div class="modal-background is-transparent"></div>
 	<div class="modal-card has-shadow">
-		<header class="modal-card-head has-background-warning "><p class="modal-card-title has-text-centered has-text-dark">1st Fertilizer On Field: 5</p><div class="delete"></div></header>
+		<header class="modal-card-head"><p class="modal-card-title has-text-centered has-text-dark">Name For Worklog</p><div class="delete"></div></header>
 		<section class="modal-card-body">
-			<div class="content">
-				<div class="columns">
-					<div class="column is-one-quarter">
-						<a class="button is-dark is-outlined is-fullwidth">Not Required</a>
-					</div>
-					<div class="column is-one-quarter">
-						<a class="button is-outlined is-info  is-fullwidth">Required</a>
-					</div>
-					<div class="column is-one-quarter">
-						<a class="button is-warning is-hovered is-fullwidth">In Progess</a>
-					</div>
-					<div class="column is-one-quarter">
-						<a class="button is-success is-outlined is-fullwidth">Completed</a>
-					</div>
+			<p class="subtitle is-size-6 has-text-weight-semibold has-text-centered">Leave Blank For The Worklog To Be Named <b>"Season ${farm.season}"</b></p>
+			<div class="field has-addons">
+				<div class="control is-expanded">
+					<input type="text" id="worklogName" class="input"/>
 				</div>
-				<div id="taskModalContent"></div>
+				<div class="control">
+					<button id="worklogNameButton" type="submit" class="button is-primary">New Worklog</button>
+				</div>
 			</div>
 		</section>
 	</div>

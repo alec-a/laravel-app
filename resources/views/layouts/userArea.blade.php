@@ -31,6 +31,12 @@ if(isset($dumpTop)){
    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
     </head>
     <body>
+		<div id="data" 
+			 data-token="{{csrf_token()}}"
+			 @if(isset($farm)) data-farm-id="{{$farm->id}}" @endif
+			 
+			 
+			 ></div>
 		<div id="token">@csrf</div>
 		<script
   src="{{ asset('js/userArea.js')}}" ></script>

@@ -20,7 +20,8 @@ class Farm extends Model
 	}
 	
 	public function fields(){
-		return $this->hasMany(Fields::class);		
+		$fields = $this->hasMany(Fields::class)->orderByRaw('lpad(name, 10, 0)');
+		return $fields;		
 	}
 	
 	public function worklogs(){

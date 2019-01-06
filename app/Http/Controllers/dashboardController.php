@@ -29,4 +29,5 @@ class dashboardController extends Controller
 		//dd($this->pageData->versions);
         return view('dashboard',['pageData' => $this->pageData]);
     }
+	
 }
