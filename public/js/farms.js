@@ -373,6 +373,7 @@ function fieldNewOrRename(){
 							$('#normFields #fields .farmField[data-field-id="'+field.id+'"]').animate({width:'0%',padding:'0'},{duration:1000,easing:'easeInCirc',complete:function(){ 
 									$(this).remove();
 									$('#normFields #fields .farmField[data-field-id="'+previousId+'"]').after(newDiv);
+									$(newDiv).children('span').addClass('is-size-7');
 									$(newDiv).animate({width:'20%',padding:'0.75rem'}, {duration:1000,easing:'easeInCirc',complete:function(){ 
 										$(this).css({overflow:'inherit'});
 										$("#normFields #fieldNameButton").removeClass('is-loading');
