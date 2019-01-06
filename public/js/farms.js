@@ -368,12 +368,12 @@ function fieldNewOrRename(){
 						}
 						else
 						{
-							var newDiv = $('<div></div>').css({opacity:'1',width:'0px','padding':'0.75rem 0 0.75rem 0',overflow:'hidden'}).addClass('selected column is-one-fifth farmField is-unselectable').attr({'data-name':field.name,'data-field-id':field.id})
+							var newDiv = $('<div></div>').css({opacity:'1',width:'0px','padding':'0.75rem 0 0.75rem 0',overflow:'hidden'}).addClass('selected column is-one-fifth farmField is-unselectable').attr({'data-name':field.name,'data-field-id':field.id});
 							$(newDiv).html(`<p class="has-text-weight-bold is-marginless">${field.name}</p> <span class="is-size-7">${field.crop.name}</span>`);
 							$('#normFields #fields .farmField[data-field-id="'+field.id+'"]').animate({width:'0%',padding:'0'},{duration:1000,easing:'easeInCirc',complete:function(){ 
 									$(this).remove();
 									$('#normFields #fields .farmField[data-field-id="'+previousId+'"]').after(newDiv);
-									$(newDiv).children('span').addClass('is-size-7');
+									
 									$(newDiv).animate({width:'20%',padding:'0.75rem'}, {duration:1000,easing:'easeInCirc',complete:function(){ 
 										$(this).css({overflow:'inherit'});
 										$("#normFields #fieldNameButton").removeClass('is-loading');
@@ -403,7 +403,7 @@ function fieldNewOrRename(){
 					var field = data.response.field;
 					var fields = data.response.fields;
 					var previousId;
-					var newDiv = $('<div></div>').css({opacity:'1',width:'0px','padding':'0.75rem 0 0.75rem 0',overflow:'hidden'}).addClass('column is-one-fifth farmField is-unselectable').attr({'data-name':field.name,'data-field-id':field.id}).html(`<p class="has-text-weight-bold is-marginless">${field.name}</p> <span>${field.crop.name}</span>`);
+					var newDiv = $('<div></div>').css({opacity:'1',width:'0px','padding':'0.75rem 0 0.75rem 0',overflow:'hidden'}).addClass('column is-one-fifth farmField is-unselectable').attr({'data-name':field.name,'data-field-id':field.id}).html(`<p class="has-text-weight-bold is-marginless">${field.name}</p> <p class="is-size-7">${field.crop.name}</p>`);
 					if(fields.length > 1){
 						for(var i = 0; i < fields.length; i++){
 							if(fields[i].id == field.id){
