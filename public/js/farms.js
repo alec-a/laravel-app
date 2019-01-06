@@ -754,7 +754,7 @@ function worklogNew(){
 					
 						var updateWorklogsHtml = `
 							<div class="card has-text-centered">
-								<a href="farm/${farmId}.'/worklog/${worklog.id}" class="has-text-centered">
+								<a href="/farm/${farmId}/worklog/${worklog.id}" class="has-text-centered">
 									<header	class="card-header has-text-centered">
 										<p class="card-header-title has-text-centered">`;
 						updateWorklogsHtml += (worklog.name)? worklog.name+' - Season '+worklog.season:('Season '+worklog.season);
