@@ -363,12 +363,13 @@ function fieldNewOrRename(){
 						}
 						
 						if($('#normFields #fields .farmField[data-field-id="'+previousId+'"]').next().data('fieldId') == field.id){
-							$("#normFields #fields .farmField.selected p").text(newName);
+							$("#normFields #fields .farmField.selected p").first().text(newName);
 							$("#normFields #fieldNameButton").removeClass('is-loading');
 						}
 						else
 						{
-							var newDiv = $('<div></div>').css({opacity:'1',width:'0px','padding':'0.75rem 0 0.75rem 0',overflow:'hidden'}).addClass('selected column is-one-fifth farmField is-unselectable').attr({'data-name':field.name,'data-field-id':field.id}).html(`<p class="has-text-weight-bold is-marginless">${field.name}</p> <p class="is-size-7">${field.crop.name}</p>`);
+							var newDiv = $('<div></div>').css({opacity:'1',width:'0px','padding':'0.75rem 0 0.75rem 0',overflow:'hidden'}).addClass('selected column is-one-fifth farmField is-unselectable').attr({'data-name':field.name,'data-field-id':field.id})
+							$(newDiv).html(`<p class="has-text-weight-bold is-marginless">${field.name}</p> <span class="is-size-7">${field.crop.name}</span>`);
 							$('#normFields #fields .farmField[data-field-id="'+field.id+'"]').animate({width:'0%',padding:'0'},{duration:1000,easing:'easeInCirc',complete:function(){ 
 									$(this).remove();
 									$('#normFields #fields .farmField[data-field-id="'+previousId+'"]').after(newDiv);
