@@ -130,6 +130,7 @@
 									<button id="nextSeason" class="button is-primary is-fullwidth">Next Season</button>
 								</div>
 							</div>
+							@endif
 						</div>
 					</div>
 				</div>
