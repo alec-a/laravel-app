@@ -112,7 +112,7 @@ class farmTaskController extends Controller
         if($this->ajax){
 			$this->output->status = 'success';
 			
-			if(!empty($request['status'])){
+			if(!is_null($request['status'])){
 				$farmTask->status = $request['status'];
 				$farmTask->save();
 			}
