@@ -1431,7 +1431,7 @@ function updateTaskList(target){
 			if(tasks.length > 0){
 				for(var i = 0; i < tasks.length; i++){
 					var task = tasks[i];
-					htmlString += `<div class="column is-one-third"  >
+					htmlString += `<div class="column is-one-third">
 
 										<div class="card has-text-centered ${taskClass}" data-task-id="${task.id}">
 											
@@ -1443,10 +1443,10 @@ function updateTaskList(target){
 						
 						if(target == 'trashedTasks'){
 							
-							htmlString +=	`<div class="card-footer">
+							htmlString +=	`<footer class="card-footer">
 												<a class="card-footer-item taskRecoverButton" data-task-id="${task.id}">Restore</a>
 												<a class="card-footer-item has-text-danger taskDeleteButton" data-task-id="${task.id}">Delete</a>
-											</div>`;
+											</footer>`;
 						}
 					}
 					htmlString +=			`</div>
