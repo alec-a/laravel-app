@@ -194,6 +194,9 @@ hr.is-half-margin{
 .is-light-dim {
 	opacity: 0.2 !important;
 }
+.has-text-warning-dark {
+    color: #edcd4e !important;
+}
 
 
 #taskModalContent.is-loading {
