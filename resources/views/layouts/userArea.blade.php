@@ -111,7 +111,7 @@ if(isset($dumpTop)){
         <section class="section">
             <div class="container">
 				<div class='columns'>
-					<div class='column is-one-quarter has-background-light is-fullheight' id="dashboardSideNav">
+					<div class='column is-one-fifth is-fullheight' id="dashboardSideNav">
 						<aside class="menu">
 							<p class="menu-label is-size-6">
 							  General

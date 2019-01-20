@@ -46,7 +46,6 @@ Route::post('ajax/farm/{farm}/worklogs/store', 'worklogController@store');
 Route::post('ajax/farm/{farm}/worklog/edit', 'worklogController@edit');
 Route::post('ajax/farm/{farm}/worklog/create', 'worklogController@create');
 Route::post('ajax/farm/{farm}/worklog/{worklog}', 'worklogController@show');
-
 Route::resource('ajax/farm/{farm}/worklog','worklogController')->except(['index','store','edit','create']);
 Route::delete('ajax/farm/{farm}/worklog/{worklog}/trash', 'worklogController@trash');
 Route::delete('ajax/farm/{farm}/worklog/{worklog}/delete', 'worklogController@destroy');
@@ -58,7 +57,12 @@ Route::resource('farm/{farm}/worklog/{worklog}/field','worklogFieldController')-
 Route::resource('ajax/farm/{farm}/worklog/{worklog}/fields','worklogFieldController')->only(['index','store'])->parameters(['field' => 'worklogField']);
 Route::resource('ajax/farm/{farm}/worklog/{worklog}/field','worklogFieldController')->except(['index','store'])->parameters(['field' => 'worklogField']);
 
-
+Route::post('ajax/farm/{farm}/farmTask/store', 'farmTaskController@store');
+Route::post('ajax/farm/{farm}/farmTasks', 'farmTaskController@index');
+Route::put('ajax/farm/{farm}/farmTask/{farmTask}', 'farmTaskController@update');
+Route::delete('ajax/farm/{farm}/farmTask/{farmTask}/trash', 'farmTaskController@trash');
+Route::delete('ajax/farm/{farm}/farmTask/{farmTask}/delete', 'farmTaskController@destroy');
+Route::put('ajax/farm/{farm}/farmTask/{farmTask}/restore', 'farmTaskController@restore');
 
 /* Worklog Task*/
 

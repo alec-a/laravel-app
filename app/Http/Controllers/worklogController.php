@@ -313,8 +313,7 @@ class worklogController extends Controller
     {
         $this->output->status = 'success';
 		$deleteWorklog = Worklog::withTrashed()->findOrFail($worklog);
-		
-		$deleteWorklog->forceDelete();
+		$deleteWorklog->deleteAll();
     }
 	
 	public function restore(Request $request, Farm $farm, $worklog)

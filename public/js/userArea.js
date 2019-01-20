@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-$(document).on('click','.modal-background, .modal .delete',function(){
+$(document).on('click','.modal-background, .modal .delete, .modal .close',function(){
 	$(this).parents('.modal').css({opacity:'1'}).animate({opactiy:'0'},{duration:300,complete:function(){
 			$(this).remove();
 	}});
