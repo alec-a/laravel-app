@@ -1,5 +1,5 @@
 <div class="modal-background is-light-dim"></div>
-	<div class="modal-card has-shadow" id="worklogModal">
+	<div class="modal-card has-shadow" id="farmTaskModal" data-task-id="{{$farmTask->id}}">
 		<header class="modal-card-head has-background-{{$farmTask->bgColour}}"><p class="modal-card-title has-text-centered has-text-{{$farmTask->txtColour}}">{{$farmTask->title}}</p><div class="delete"></div></header>
 		<section class="modal-card-body">
 			

@@ -1,5 +1,5 @@
 <div class="modal-background is-light-dim"></div>
-	<div class="modal-card has-shadow" id="worklogModal">
+	<div class="modal-card has-shadow" id="newFarmTaskModal">
 		<header class="modal-card-head"><p class="modal-card-title has-text-centered has-text-dark">New Task</p><div class="delete"></div></header>
 		<section class="modal-card-body">
 			<div class="columns" id="statusButtons">

@@ -19,6 +19,24 @@ function optionEvents(){
 	$(document).on("click",".farmTask", function(e){ e.preventDefault(); e.stopImmediatePropagation(); taskView($(this));});
 	$(document).on("click",".taskDeleteButton", function(e){ e.preventDefault(); e.stopImmediatePropagation(); taskDelete($(this));});
 	$(document).on("click",".taskRecoverButton", function(e){ e.preventDefault(); e.stopImmediatePropagation(); taskRecover($(this));});
+	$(document).on('click','#farmTaskModal #statusButtons .button',function(e){
+						e.preventDefault();
+						e.stopImmediatePropagation();
+						changeTaskStatus($(this));
+					});
+
+					$(document).on( "click", "#modal #editTask",function(event){ 
+						event.stopImmediatePropagation();
+						event.preventDefault();
+						taskEdit($(this));
+					});
+					
+					$(document).on('click','#modal #trashTask', function(event){
+						event.stopImmediatePropagation();
+						event.preventDefault();
+						taskTrash($(this));
+					});
+	
 }
 
 $(document).ready(function(){
@@ -1146,7 +1164,9 @@ function taskNew(){
 				</div>`;
 			
 			var newTaskColumnDiv = $('<div></div>').css({opacity:'1',width:'0px','padding':'0.75rem 0 0.75rem 0',overflow:'hidden'}).addClass('column is-one-third').html(newTaskHtml);
-			
+			if($('#normTasks #noTasks').hasClass('showing')){
+				$('#normTasks #noTasks').switchClass('showing','is-hidden',300);
+			}
 			$('#normTasks .columns').prepend(newTaskColumnDiv);
 			$(newTaskColumnDiv).animate({width:'33.3333%',padding:'0.75rem'}, {duration:1000,easing:'easeInCirc',complete:function(){ 
 				$(this).css({overflow:'inherit'});
@@ -1165,54 +1185,9 @@ function taskView(task){
 		$(modalDiv).html(html);
 		$("#modal").append($(modalDiv));
 		$(modalDiv).css({opacity:'0'}).addClass('is-active').animate({opacity:'1'},
-			{duration: 200, complete:function(){
-
-					$(document).on('click','#statusButtons .button',function(){
-						var taskId = $(task).data('taskId');
-						if(!$(this).hasClass('is-hovered')){
-							$("#statusButtons .is-hovered").switchClass('is-hovered','is-outlined',300);
-							$(this).switchClass('is-outlined','is-hovered is-loading',{duration:300,complete:function(){
-									//make the call to change the status
-									var formData = {
-										_token:$('#data').data('token'),
-										_method:'put',
-										status:$(this).data('status')
-									};
-									self = $(this);
-									$.ajax({
-										type:'post',
-										url:'/ajax/farm/'+farm_id+'/farmTask/'+taskId,
-										data:formData,
-										success:function(data){
-											data = JSON.parse(data);
-											
-											var farmTask = data.response.farmTask;
-											$(self).removeClass('is-loading');
-											$('.modal.is-active header').attr('class','modal-card-head has-background-'+farmTask.bgColour)
-											$('.modal.is-active .modal-card-title').attr('class', 'modal-card-title has-text-centered has-text-'+farmTask.txtColour);
-											
-											$('#normTasks .farmTask[data-task-id="'+farmTask.id+'"]').find('.card-header').first().attr('class', 'card-header has-text-centered has-background-'+farmTask.bgColour);
-											$('#normTasks .farmTask[data-task-id="'+farmTask.id+'"]').find('.card-header-title').first().attr('class', 'card-header-title is-unselectable has-text-centered has-text-'+farmTask.txtColour);
-										}
-									});
-								}
-							});
-						}
-					});
-
-					$(document).on( "click", "#modal #editTask",function(event){ 
-						event.stopImmediatePropagation();
-						event.preventDefault();
-						taskEdit($(this));
-					});
-					
-					$(document).on('click','#modal #trashTask', function(event){
-						event.stopImmediatePropagation();
-						event.preventDefault();
-						taskTrash($(this));
-					});
-		}});
+			{duration: 200});
 	});
+	
 	
 }
 
@@ -1289,12 +1264,17 @@ function taskTrash(task){
 		data:formData,
 		success:function(data){
 			data = JSON.parse(data);
+			var farmTasks = data.response.farmTasks;
 			if(data.status == 'success'){
 				$('.modal.is-active').fadeOut(300,function(){
 					
 					
 					$('.farmTask[data-task-id="'+taskId+'"]').parent().css({'overflow':'hidden', opacity:'1'}).animate({width:'0%','padding':'0.75rem 0 0.75rem 0'}, {duration:1000,easing:'easeInCirc',complete:function(){ 
 						$(this).remove();
+						console.log(farmTasks.length)
+						if(farmTasks.length < 1){
+							$('#normTasks #noTasks').switchClass('is-hidden','showing').fadeIn(300);
+						}
 					}});
 				});
 			}
@@ -1343,7 +1323,7 @@ function  taskDelete(button,modalAccept){
 							  <button class="button is-danger is-large" id="deleteTaskYes">Yes</button>
 						  </div>
 						  <div class="control">
-							  <button class="button is-info is-large" id="deletTaskNo">Cancel</button>
+							  <button class="button is-info is-large" id="deleteTaskNo">Cancel</button>
 						  </div>
 					  </div>
 				  </section>
@@ -1354,7 +1334,7 @@ function  taskDelete(button,modalAccept){
 		{duration: 200, complete:function(){
 				
 				var yes = $(this).find('#deleteTaskYes');
-				var no = $(this).find('#deletTaskeNo');
+				var no = $(this).find('#deleteTaskNo');
 				var background = $(this).find('.modal-background');
 				var close = $(this).find('.delete');
 				var self=$(this);
@@ -1400,7 +1380,43 @@ function  taskDelete(button,modalAccept){
 				$(button).parents('.column').first().css({overflow:'hidden'});
 				$(button).parents('.column').first().animate({width:'0%',padding:'0'}, {duration:1000,easing:'easeInCirc',complete:function(){ 
 					$(this).remove();
+					
 				}});
+			}
+		});
+	}
+}
+
+function changeTaskStatus(button){
+	var farmId = $("#data").data('farmId');
+	var taskId = $("#farmTaskModal").data('taskId');
+	if(!$(button).hasClass('is-hovered')){
+		$("#statusButtons .is-hovered").switchClass('is-hovered','is-outlined',300);
+		$(button).switchClass('is-outlined','is-hovered is-loading',{duration:300,complete:function(){
+				//make the call to change the status
+				var formData = {
+					_token:$('#data').data('token'),
+					_method:'put',
+					status:$(button).data('status')
+				};
+				self = $(button);
+				$.ajax({
+					type:'post',
+					url:'/ajax/farm/'+farmId+'/farmTask/'+taskId,
+					data:formData,
+					success:function(data){
+						data = JSON.parse(data);
+
+						var farmTask = data.response.farmTask;
+						$(self).removeClass('is-loading');
+						$('.modal.is-active header').attr('class','modal-card-head has-background-'+farmTask.bgColour)
+						$('.modal.is-active .modal-card-title').attr('class', 'modal-card-title has-text-centered has-text-'+farmTask.txtColour);
+
+						$('#normTasks .farmTask[data-task-id="'+farmTask.id+'"]').find('.card-header').first().attr('class', 'card-header has-text-centered has-background-'+farmTask.bgColour);
+						$('#normTasks .farmTask[data-task-id="'+farmTask.id+'"]').find('.card-header-title').first().attr('class', 'card-header-title is-unselectable has-text-centered has-text-'+farmTask.txtColour);
+
+					}
+				});
 			}
 		});
 	}
@@ -1452,11 +1468,15 @@ function updateTaskList(target){
 					htmlString +=			`</div>
 										</div>`;
 				}
+				if($('#normTasks #noTasks').hasClass('showing')){
+					$('#normTasks #noTasks').switchClass('showing','is-hidden',300).fadeOut(300);
+				}
+				
 				$('#tasksContent .tab-content[data-tab="'+target+'"] .columns').html(htmlString);
 			}
 			else if(target == 'normalTasks'){
 				
-				$('#normTasks #noTasks').fadeIn(500).addClass('showing');
+				$('#normTasks #noTasks').switchClass('is-hidden','showing',300).fadeIn(300);
 				
 			}
 		}
