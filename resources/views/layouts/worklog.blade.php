@@ -56,7 +56,7 @@ if(isset($dumpTop)){
 					<nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
 					<ul>
 					  <li><a href="{{url('/farms')}}">Farms</a></li>
-					  <li><a href="{{url('/farm/'.$farm->id)}}">{{$farm->name}}</a></li>
+					  <li><a href="{{url('/farm/'.$farm->id).'#worklogs'}}">{{$farm->name}}</a></li>
 					  <li class="is-active"><a aria-current="page">Worklog: {{empty($worklog->name)? 'Season '.$worklog->season:$worklog->name}}</a></li>
 					</ul>
 				  </nav>
