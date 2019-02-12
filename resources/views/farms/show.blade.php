@@ -106,7 +106,7 @@
 
 @if(auth()->user()->id == $farm->owner || auth()->user()->farm_id == $farm->id || auth()->user()->role == 1)
 <div id="farmContentContainer">
-	<div class="tabs is-boxed has-box-content">
+	<div class="tabs is-boxed has-box-content" id="farmTabs">
 		<ul>
 			<li class="is-active">
 				<a href="#info" data-tab="info">Info</a>
