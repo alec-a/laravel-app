@@ -51,6 +51,9 @@ and open the template in the editor.
 }
 #dashboardSideNav {
 	border-radius: 6px;
+	box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.23);
+	border: 1px solid whitesmoke !important;
+	margin-top:100px;
 }
 
 #hr-top{
@@ -194,6 +197,9 @@ hr.is-half-margin{
 .is-light-dim {
 	opacity: 0.2 !important;
 }
+.has-text-warning-dark {
+    color: #edcd4e !important;
+}
 
 
 #taskModalContent.is-loading {
@@ -231,10 +237,10 @@ hr.is-half-margin{
     -webkit-animation: loader-figure-black 1.15s infinite cubic-bezier(.215, .61, .355, 1);
     animation: loader-figure-black 1.15s infinite cubic-bezier(.215, .61, .355, 1);
 }
-.tab-container .content.is-active, #options .content.opened, .tab-content.is-active{
+.tab-container .main-tab-content.is-active, #options .content.opened, .tab-content.is-active{
 	display:block;
 }
-.tab-container .content, #options .content, .tab-content{
+.tab-container .main-tab-content, #options .content, .tab-content{
 	display: none;
 }
 .tabs a.is-danger-tab{
@@ -444,4 +450,8 @@ hr.is-half-margin{
     color: hsl(0, 0%, 86%)!important;
     border-color: hsl(0, 0%, 96%);
     background-color: white;
+}
+
+.farmTask {
+	cursor: pointer;
 }

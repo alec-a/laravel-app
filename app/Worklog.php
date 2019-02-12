@@ -27,4 +27,22 @@ class Worklog extends Model
 	{
 		return $this->where('season','=', $this->farm->season)->take(1);
 	}
+	
+	public function deleteAll() {
+		$fields = $this->fields;
+		$tasks = $this->tasks;
+		
+		
+		foreach($fields as $field){
+			$field->delete();
+		}
+		
+		foreach($tasks as $task){
+			$task->delete();
+		}
+		
+		
+		return $this->forceDelete();
+		
+	}
 }

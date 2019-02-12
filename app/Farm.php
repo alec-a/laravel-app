@@ -34,4 +34,8 @@ class Farm extends Model
 	
 		return $rel;
 	}
+	
+	public function tasks(){
+		return $this->hasMany(FarmTask::class,'farm_id','id');
+	}
 }

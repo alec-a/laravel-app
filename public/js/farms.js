@@ -1,21 +1,41 @@
+var tabs = ['info','fields','worklogs','tasks','stock'];
+
 function optionEvents(){
 	
 	
 	$(document).on("click", '#saveFarmName', function(evt){ updateFarmName(evt); });
-	$(document).on("click", "#normFields .farmField", function(){ fieldClick($(this)); });
-	$(document).on("click", "#deletedFields .farmField", function(){ fieldClickTrashed($(this)); });
+	$(document).on("click", "#normFields .farmField", function(e){ e.preventDefault(); fieldClick($(this)); });
+	$(document).on("click", "#deletedFields .farmField", function(e){ e.preventDefault(); fieldClickTrashed($(this)); });
 	$(document).on( "keydown", "#fieldName",function(event){ if(event.which == 13) { fieldNewOrRename(); } });
-	$(document).on( "click", "#fieldNameButton",function(){ fieldNewOrRename(); });
-	$(document).on( "click", "#moveToTrashButton",function(){ fieldsTrash(); });
-	$(document).on( "click", "#emptyTrashButton, #deleteButton",function(){ emptyTrash($(this)); });
-	$(document).on( "click", "#recoverButton",function(){ fieldsRecover($(this)); });
-	$(document).on( "click", ".worklogRenameButton",function(){ worklogRename($(this)); });
-	$(document).on( "click", ".worklogTrashButton",function(){ worklogTrash($(this)); });
-	$(document).on( "click", ".worklogRecoverButton",function(){ worklogRecover($(this)); });
-	$(document).on( "click", ".worklogDeleteButton",function(){ worklogDelete($(this)); });
-	$(document).on( "click", "#nextSeason",function(){ nextSeason(); });
-	
-	
+	$(document).on( "click", "#fieldNameButton",function(e){ e.preventDefault(); fieldNewOrRename(); });
+	$(document).on( "click", "#moveToTrashButton",function(e){ e.preventDefault(); fieldsTrash(); });
+	$(document).on( "click", "#emptyTrashButton, #deleteButton",function(e){ e.preventDefault(); emptyTrash($(this)); });
+	$(document).on( "click", "#recoverButton",function(e){ e.preventDefault(); fieldsRecover($(this)); });
+	$(document).on( "click", ".worklogRenameButton",function(e){ e.preventDefault(); worklogRename($(this)); });
+	$(document).on( "click", ".worklogTrashButton",function(e){ e.preventDefault(); worklogTrash($(this)); });
+	$(document).on( "click", ".worklogRecoverButton",function(e){ e.preventDefault(); worklogRecover($(this)); });
+	$(document).on( "click", ".worklogDeleteButton",function(e){ e.preventDefault(); worklogDelete($(this)); });
+	$(document).on( "click", "#nextSeason",function(e){ e.preventDefault(); nextSeason(); });
+	$(document).on("click",".farmTask", function(e){ e.preventDefault(); e.stopImmediatePropagation(); taskView($(this));});
+	$(document).on("click",".taskDeleteButton", function(e){ e.preventDefault(); e.stopImmediatePropagation(); taskDelete($(this));});
+	$(document).on("click",".taskRecoverButton", function(e){ e.preventDefault(); e.stopImmediatePropagation(); taskRecover($(this));});
+	$(document).on('click','#farmTaskModal #statusButtons .button',function(e){
+						e.preventDefault();
+						e.stopImmediatePropagation();
+						changeTaskStatus($(this));
+					});
+
+					$(document).on( "click", "#modal #editTask",function(event){ 
+						event.stopImmediatePropagation();
+						event.preventDefault();
+						taskEdit($(this));
+					});
+					
+					$(document).on('click','#modal #trashTask', function(event){
+						event.stopImmediatePropagation();
+						event.preventDefault();
+						taskTrash($(this));
+					});
 	
 }
 
@@ -29,15 +49,24 @@ $(document).ready(function(){
 	
 	//field
 	$('#newFieldForm').submit(function(evt){ newField(evt);	});
+
+
+	//tabs
+	if(window.location.hash){
+		var target = window.location.hash.substring(1);
+		if(tabs.indexOf(target) > -1 && !$('#farmContentContainer .content[data-tab="'+target+'"]').hasClass('is-active')){
+			$('#farmContentContainer #farmTabs li.is-active').switchClass('is-active','',1);
+			$('#farmContentContainer #farmTabs li a[data-tab="'+target+'"]').parent().addClass('is-active');
+			$('#farmContentContainer .main-tab-content.is-active').switchClass('is-active','').hide();
+			$('#farmContentContainer .main-tab-content[data-tab="'+target+'"]').switchClass('', 'is-active',1).show();
+		}
+	}
 	
 	$('#farmContentContainer #farmTabs li a').click(function(){
 		var target = $(this).data('tab');
-		if($('#farmContentContainer .content[data-tab="'+target+'"]').hasClass('is-active')){
-			
-		}
-		else{
+		if(!$('#farmContentContainer .main-tab-content[data-tab="'+target+'"]').hasClass('is-active')){
+		
 			if(target == 'info'){
-				
 				updateInfo();
 			}
 			if(target == 'fields'){
@@ -45,15 +74,18 @@ $(document).ready(function(){
 				updateFieldList(fieldTarget);
 			}
 			if(target == 'worklogs'){
-				var worklogTarget = $("#worklogTabs li.is-active a").data('tab');
+				var worklogTarget = $("#worklogsTabs li.is-active a").data('tab');
 				updateWorklogList(worklogTarget);
 			}
-			
+			if(target == 'tasks'){
+				var taskTarget = $("#tasksTabs li.is-active a").data('tab');
+				updateTaskList(taskTarget);
+			}
 			$('#farmContentContainer #farmTabs .is-active').switchClass('is-active','');
 			$(this).parent().switchClass('','is-active');
-			$('#farmContentContainer .content.is-active').slideUp(300, function(){
+			$('#farmContentContainer .main-tab-content.is-active').slideUp(300, function(){
 				$(this).removeClass('is-active');
-				$('#farmContentContainer .content[data-tab="'+target+'"]').slideDown(300, function(){
+				$('#farmContentContainer .main-tab-content[data-tab="'+target+'"]').slideDown(300, function(){
 					$(this).addClass('is-active');
 				}).fadeIn(300);
 			}).fadeOut(300);
@@ -98,7 +130,8 @@ $(document).ready(function(){
 			}
 		}
 		else if(action == 'newWorklog'){
-			if(!$(this).hasClass('is-diabled')){
+			
+			if(!$(this).parent().hasClass('is-disabled')){
 				var farm_id = $("#data").data('farmId');;
 				getModal('farms','newWorklog',{farmId:farm_id}, function(html){
 					var modalDiv = $('<div></div>').css({opacity:0}).addClass('modal');
@@ -107,13 +140,71 @@ $(document).ready(function(){
 					$(modalDiv).css({opacity:'0'}).addClass('is-active').animate({opacity:'1'},
 						{duration: 200, complete:function(){
 								$('#modal #worklogName').focus();
-								$(document).on( "keydown", "#modal #worklogName",function(event){if(event.which == 13) { worklogNew(); }else if(event.which == 27){ $('.modal.is-active').fadeOut(200,function(){$(this).remove();}); } });
-								$(document).on( "click", "#modal #worklogNameButton",function(){ worklogNew(); });
+								$(document).on( "keydown", "#modal #worklogName",function(event){if(event.which == 13) {
+										event.stopImmediatePropagation();
+										event.preventDefault();
+										worklogNew(); }else if(event.which == 27){ $('.modal.is-active').fadeOut(200,function(){$(this).remove();});
+									} });
+								$(document).on( "click", "#modal #worklogNameButton",function(event){
+										event.stopImmediatePropagation();
+										event.preventDefault();
+										worklogNew(); });
 					}});
 				});
 				
 				
 				
+				
+			}
+		}
+	});
+	
+	
+	//task
+	$('#tasksContent #tasksTabs li a').click(function(){
+		var target = $(this).data('tab');
+		var action = $(this).data('action');
+		
+		if(target){
+			if(!$('#tasksContent div[data-tab="'+target+'"]').hasClass('is-active')){
+				updateTaskList(target);
+				$('#tasksContent #tasksTabs .is-active').switchClass('is-active','');
+				$(this).parent().switchClass('','is-active');
+				$('#tasksContent div.is-active').slideUp(300, function(){
+					$(this).removeClass('is-active');
+					$('#tasksContent div[data-tab="'+target+'"]').slideDown(300, function(){
+						$(this).addClass('is-active');
+					}).fadeIn(300);
+				}).fadeOut(300);
+			}
+		}
+		else if(action == 'newTask'){
+			
+			if(!$(this).parent().hasClass('is-disabled')){
+				var farm_id = $("#data").data('farmId');;
+				getModal('farms','newTask',{farmId:farm_id}, function(html){
+					var modalDiv = $('<div></div>').css({opacity:0}).addClass('modal');
+					$(modalDiv).html(html);
+					$("#modal").append($(modalDiv));
+					$(modalDiv).css({opacity:'0'}).addClass('is-active').animate({opacity:'1'},
+						{duration: 200, complete:function(){
+								$('#modal #worklogName').focus();
+								
+								$(document).on('click','#statusButtons .button',function(){
+									if(!$(this).hasClass('is-hovered')){
+										$("#statusButtons .is-hovered").switchClass('is-hovered','is-outlined',300);
+										$(this).switchClass('is-outlined','is-hovered',300);
+									}
+								});
+								
+								
+								$(document).on( "click", "#modal #addTask",function(event){ 
+									event.stopImmediatePropagation();
+									event.preventDefault();
+									taskNew();
+								});
+					}});
+				});
 				
 			}
 		}
@@ -210,16 +301,16 @@ function showNewFarm(data, textStatus, jqXHR){
 
 				var numInRow = $(bottomRow).children('.column').length;
 				var lastInRow  = $(bottomRow).children('.column').last();
-				console.log(numInRow)
+				
 				if(numInRow == 3){
-					console.log('new Row');
+					
 					$(bottomRow).after('<div class="columns">'+data.response+'</div>');
 				}
 				else if(numInRow == 0){
 					$(bottomRow).html(data.response);
 				}		
 				else{
-					console.log('same Row');
+					
 					$(lastInRow).after(data.response);
 				}
 			}
@@ -320,10 +411,10 @@ function updateFieldList(target){
 					var trashedDate = new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit'}).format(date);
 					trashedDate = trashedDate.replace(/\//g,'-');
 					var trashedTime = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit'}).format(date);
-					htmlString += `<div class="column is-one-fifth farmField is-unselectable" data-field-id="${field.id}"><p class="has-text-weight-bold is-marginless">${field.name}</p> <p class="is-size-7"><span class="icon"><i class="fas fa-trash-alt"></i></span><span> ${trashedTime}<br/>${trashedDate}</span></p></div>`;
+					htmlString += `<div class="column is-one-fifth farmField is-unselectable" data-name="${field.name}" data-field-id="${field.id}"><p class="has-text-weight-bold is-marginless">${field.name}</p> <p class="is-size-7"><span class="icon"><i class="fas fa-trash-alt"></i></span><span> ${trashedTime}<br/>${trashedDate}</span></p></div>`;
 				}
 				else{
-					htmlString += `<div class="column is-one-fifth farmField is-unselectable" data-field-id="${field.id}"><p class="has-text-weight-bold is-marginless">${field.name}</p> <p class="is-size-7">${field.crop.name}</p></div>`;
+					htmlString += `<div class="column is-one-fifth farmField is-unselectable" data-name="${field.name}" data-field-id="${field.id}"><p class="has-text-weight-bold is-marginless">${field.name}</p> <p class="is-size-7">${field.crop.name}</p></div>`;
 				}
 			}
 			
@@ -363,15 +454,17 @@ function fieldNewOrRename(){
 						}
 						
 						if($('#normFields #fields .farmField[data-field-id="'+previousId+'"]').next().data('fieldId') == field.id){
-							$("#normFields #fields .farmField.selected p").text(newName);
+							$("#normFields #fields .farmField.selected p").first().text(newName);
 							$("#normFields #fieldNameButton").removeClass('is-loading');
 						}
 						else
 						{
-							var newDiv = $('<div></div>').css({opacity:'1',width:'0px','padding':'0.75rem 0 0.75rem 0',overflow:'hidden'}).addClass('selected column is-one-fifth farmField is-unselectable').attr({'data-name':field.name,'data-field-id':field.id}).html(`<p class="has-text-weight-bold is-marginless">${field.name}</p> <span class="is-size-7">${field.crop.name}</span>`);
+							var newDiv = $('<div></div>').css({opacity:'1',width:'0px','padding':'0.75rem 0 0.75rem 0',overflow:'hidden'}).addClass('selected column is-one-fifth farmField is-unselectable').attr({'data-name':field.name,'data-field-id':field.id});
+							$(newDiv).html(`<p class="has-text-weight-bold is-marginless">${field.name}</p> <span class="is-size-7">${field.crop.name}</span>`);
 							$('#normFields #fields .farmField[data-field-id="'+field.id+'"]').animate({width:'0%',padding:'0'},{duration:1000,easing:'easeInCirc',complete:function(){ 
 									$(this).remove();
 									$('#normFields #fields .farmField[data-field-id="'+previousId+'"]').after(newDiv);
+									
 									$(newDiv).animate({width:'20%',padding:'0.75rem'}, {duration:1000,easing:'easeInCirc',complete:function(){ 
 										$(this).css({overflow:'inherit'});
 										$("#normFields #fieldNameButton").removeClass('is-loading');
@@ -401,7 +494,7 @@ function fieldNewOrRename(){
 					var field = data.response.field;
 					var fields = data.response.fields;
 					var previousId;
-					var newDiv = $('<div></div>').css({opacity:'1',width:'0px','padding':'0.75rem 0 0.75rem 0',overflow:'hidden'}).addClass('column is-one-fifth farmField is-unselectable').attr({'data-name':field.name,'data-field-id':field.id}).html(`<p class="has-text-weight-bold is-marginless">${field.name}</p> <span>${field.crop.name}</span>`);
+					var newDiv = $('<div></div>').css({opacity:'1',width:'0px','padding':'0.75rem 0 0.75rem 0',overflow:'hidden'}).addClass('column is-one-fifth farmField is-unselectable').attr({'data-name':field.name,'data-field-id':field.id}).html(`<p class="has-text-weight-bold is-marginless">${field.name}</p> <p class="is-size-7">${field.crop.name}</p>`);
 					if(fields.length > 1){
 						for(var i = 0; i < fields.length; i++){
 							if(fields[i].id == field.id){
@@ -543,6 +636,9 @@ function emptyTrash(button,modalAccept){
 	}
 	if(typeof(modalAccept) == 'undefined'){
 		
+		//server: get all fields from worklog_fields with the field Id's selected, then get the worklog for each one. js:each worklog needs to have it's name/season shown.
+
+
 		var modal = $('<div></div>').addClass('modal').html(
 				`<div class="modal-background"></div>
 				<div class="modal-card ">
@@ -752,7 +848,7 @@ function worklogNew(){
 					
 						var updateWorklogsHtml = `
 							<div class="card has-text-centered">
-								<a href="farm/${farmId}.'/worklog/${worklog.id}" class="has-text-centered">
+								<a href="/farm/${farmId}/worklog/${worklog.id}" class="has-text-centered">
 									<header	class="card-header has-text-centered">
 										<p class="card-header-title has-text-centered">`;
 						updateWorklogsHtml += (worklog.name)? worklog.name+' - Season '+worklog.season:('Season '+worklog.season);
@@ -818,7 +914,7 @@ function worklogRename(button){
 			{duration: 200, complete:function(){
 					$('#modal #worklogName').focus();
 					$(document).on( "keydown", "#modal #worklogName",function(event){if(event.which == 13) { worklogDoRename(worklog_Id); }else if(event.which == 27){ $('.modal.is-active').fadeOut(200,function(){$(this).remove();}); } });
-					$(document).on( "click", "#modal #worklogNameButton",function(){ worklogDoReanme(worklog_Id); });
+					$(document).on( "click", "#modal #worklogNameButton",function(){ worklogDoRename(worklog_Id); });
 		}});
 	});
 }
@@ -969,6 +1065,7 @@ function updateWorklogList(target){
 	var formData = {
 		_token:$('#data').data('token')
 	};
+	
 	if(target == 'trashedWorklogs'){
 		formData.trashed = true;
 	}
@@ -1017,10 +1114,370 @@ function updateWorklogList(target){
 				$('#worklogsContent .tab-content[data-tab="'+target+'"] .columns').html(htmlString);
 			}
 			else if(target == 'normalWorklogs'){
+				
 				$('#normalWorklogs #noWorklogs').fadeIn(500).addClass('showing');
-				if(farm.fields.length < 1 && user.id == farm.owner){
-					$('#normalWorklogs #noFields').fadeIn(500).addClass('showing');
+				
+				if(farm.fields.length < 1 && (user.id == farm.owner || user.role == 1)){
+					$('#worklogsTabs li').first().switchClass('','is-disabled',300);
+					$('#normalWorklogs #noFields').switchClass('is-hidden','showing',300);
 				}
+				else{
+					$('#normalWorklogs #noFields').switchClass('showing','is-hidden',300);
+					$('#worklogsTabs li').first().switchClass('is-disabled','',300);
+				}
+			}
+		}
+	});
+}
+
+function taskNew(){
+	var farmId = $("#data").data('farmId');
+	var taskTitle = $('#taskTitle').val();
+	var taskContent = $('#taskDescription').val();
+	var taskStatus = $('#statusButtons .is-hovered').data('status');
+	//make the ajax call
+	
+	var formData = {
+		_token:$('#data').data('token'),
+		title:taskTitle,
+		content:taskContent,
+		status: taskStatus
+	};
+	
+	$.ajax({
+		type:'post',
+		url:'/ajax/farm/'+farmId+'/farmTask/store',
+		data:formData,
+		success:function(data){
+			data = JSON.parse(data);
+			var farmTask = data.response.farmTask;
+			$('.modal.is-active').css({opacity:'1'}).animate({opactiy:'0'},{duration:300,complete:function(){
+				$(this).remove();
+			}});
+			
+			
+			
+			var newTaskHtml = `<div class="card farmTask" data-task-id="${farmTask.id}">
+					<header class="card-header has-background-${farmTask.bgColour} has-text-centered">
+						<p class="card-header-title has-text-${farmTask.txtColour} is-unselectable has-text-centered">${farmTask.title}</p>
+					</header>
+				</div>`;
+			
+			var newTaskColumnDiv = $('<div></div>').css({opacity:'1',width:'0px','padding':'0.75rem 0 0.75rem 0',overflow:'hidden'}).addClass('column is-one-third').html(newTaskHtml);
+			if($('#normTasks #noTasks').hasClass('showing')){
+				$('#normTasks #noTasks').switchClass('showing','is-hidden',300);
+			}
+			$('#normTasks .columns').prepend(newTaskColumnDiv);
+			$(newTaskColumnDiv).animate({width:'33.3333%',padding:'0.75rem'}, {duration:1000,easing:'easeInCirc',complete:function(){ 
+				$(this).css({overflow:'inherit'});
+
+			}});
+		}
+	});
+	
+}
+
+function taskView(task){
+	var farm_id = $("#data").data('farmId');
+	var showTaskId = $(task).data('taskId');
+	getModal('farms','showTask',{farmId:farm_id,farmTaskId:showTaskId}, function(html){
+		var modalDiv = $('<div></div>').css({opacity:0}).addClass('modal');
+		$(modalDiv).html(html);
+		$("#modal").append($(modalDiv));
+		$(modalDiv).css({opacity:'0'}).addClass('is-active').animate({opacity:'1'},
+			{duration: 200});
+	});
+	
+	
+}
+
+function taskEdit(task){
+	var farm_id = $("#data").data('farmId');
+	var taskId = $(task).data('taskId');
+	task = $(task).parents('.modal-card');
+	
+	var title = $(task).find('.modal-card-head p').first().text();
+	var titleHtml = $(task).find('.modal-card-head').first().html();
+	var content = $(task).find('.modal-card-body p').first().text();
+	
+	$(task).find('.delete').first().fadeOut(300, function(){
+		$(task).find('.modal-card-head p').first().html(`<div class="control"><input type="text" name="title" class="input" value="${title}"/></div>`);
+	
+		$(task).find('.modal-card-body p').first().html(`<textarea name="description" class="textarea">${content}</textarea>`);
+		$(task).find('#editTask').first().switchClass('is-primary','is-success', 300).text('Save').attr('id','saveEdit').parent('.control').after(`<div class="control is-expanded"><button class="button is-light is-fullwidth" id="cancelEdit">Cancel</button></div>`);
+	});
+	
+	
+	//save
+	$(document).on("click","#saveEdit", function(){
+		$(this).switchClass('', 'is-loading');
+		var button = $(this);
+		var formData = {
+			_token:$("#data").data('token'),
+			_method:'put',
+			title:$(task).find('input[name="title"]').first().val(),
+			content:$(task).find('textarea').first().val()
+		};
+		
+		$.ajax({
+			type:'post',
+			url:'/ajax/farm/'+farm_id+'/farmTask/'+taskId,
+			data: formData,
+			success:function(data){
+				data = JSON.parse(data);
+				var farmTask = data.response.farmTask;
+				$(task).find('.modal-card-head p').first().html(farmTask.title);
+				$(task).find('.modal-card-body p').first().html(farmTask.content);
+				$(task).find('.delete').first().fadeIn(300);
+				$(button).switchClass('is-loading','',300);
+				$(task).find("#saveEdit").first().switchClass('is-success','is-primary', 300).text('Edit Task').attr('id','editTask');
+				$(task).find("#cancelEdit").parent().first().remove();
+				$('#normTasks .farmTask[data-task-id="'+farmTask.id+'"]').find('.card-header-title').text(farmTask.title);
+			}
+		});
+	});
+	
+	//cancel Edit
+	
+	$(document).on("click", "#cancelEdit", function(){
+		$(this).parent('.control').remove();
+		$(task).find("#saveEdit").first().switchClass('is-success','is-primary', 300).text('Edit Task').attr('id','editTask');
+		$(task).find('.modal-card-head p').first().html(title);
+		$(task).find('.modal-card-body p').first().html(content);
+		$(task).find('.delete').first().fadeIn(300);
+	});
+}
+
+function taskTrash(task){
+	var farm_id = $("#data").data('farmId');
+	var taskId = $(task).data('taskId');
+	task = $(task).parents('.modal-card');
+	
+	var formData = {
+		_token:$('#data').data('token'),
+		_method:'delete'
+	};
+	
+	$.ajax({
+		type:'post',
+		url:'/ajax/farm/'+farm_id+'/farmTask/'+taskId+'/trash',
+		data:formData,
+		success:function(data){
+			data = JSON.parse(data);
+			var farmTasks = data.response.farmTasks;
+			if(data.status == 'success'){
+				$('.modal.is-active').fadeOut(300,function(){
+					
+					
+					$('.farmTask[data-task-id="'+taskId+'"]').parent().css({'overflow':'hidden', opacity:'1'}).animate({width:'0%','padding':'0.75rem 0 0.75rem 0'}, {duration:1000,easing:'easeInCirc',complete:function(){ 
+						$(this).remove();
+						console.log(farmTasks.length)
+						if(farmTasks.length < 1){
+							$('#normTasks #noTasks').switchClass('is-hidden','showing').fadeIn(300);
+						}
+					}});
+				});
+			}
+		}
+	});
+}
+
+function taskRecover(button){
+	var farmId = $("#data").data('farmId');
+	var taskId = $(button).data('taskId');
+	var formData = {
+		_token:$('#data').data('token'),
+		_method:'put',
+	};
+
+	$.ajax({
+		type:'post',
+		url:'/ajax/farm/'+farmId+'/farmTask/'+taskId+'/restore',
+		data:formData,
+		success:function(){
+			$(button).parents('.column').first().css({overflow:'hidden'});
+			$(button).parents('.column').first().animate({width:'0%',padding:'0'}, {duration:1000,easing:'easeInCirc',complete:function(){ 
+				$(this).remove();
+			}});
+		}
+	});
+}
+
+function  taskDelete(button,modalAccept){
+	var farmId = $("#data").data('farmId');
+	var taskId = $(button).data('taskId');
+	
+	if(typeof(modalAccept) == 'undefined'){
+		
+		var modal = $('<div></div>').addClass('modal').html(
+				`<div class="modal-background"></div>
+				<div class="modal-card ">
+				  <header class="modal-card-head has-background-danger">
+					<p class="modal-card-title has-text-white">Delete Task</p>
+					<div class="delete"></div>
+				  </header>
+				  <section class="modal-card-body">
+					  <p class="title is-5"><strong>Are You Sure? This Is Not Reversible</strong></p>
+					  <div class="field is-grouped">
+						  <div class="control">
+							  <button class="button is-danger is-large" id="deleteTaskYes">Yes</button>
+						  </div>
+						  <div class="control">
+							  <button class="button is-info is-large" id="deleteTaskNo">Cancel</button>
+						  </div>
+					  </div>
+				  </section>
+				</div>`
+				);
+		$("#modal").append($(modal));
+		$(modal).css({opacity:'0'}).addClass('is-active').animate({opacity:'1'},
+		{duration: 200, complete:function(){
+				
+				var yes = $(this).find('#deleteTaskYes');
+				var no = $(this).find('#deleteTaskNo');
+				var background = $(this).find('.modal-background');
+				var close = $(this).find('.delete');
+				var self=$(this);
+				$(yes).click(function(){
+					taskDelete(button,'yes');
+					$(self).fadeOut(200, function(){
+						$(self).remove();
+					});
+				});
+
+				$(no).click(function(){
+					$(self).fadeOut(200, function(){
+						$(self).remove();
+					});
+				});
+				$(background).click(function(){
+					$(self).fadeOut(200, function(){
+						$(self).remove();
+					});
+				});
+				$(close).click(function(){
+					$(self).fadeOut(200, function(){
+						$(self).remove();
+					});
+				});
+
+			}
+		});
+	}
+	else if(modalAccept == 'yes'){
+	
+		
+		var formData = {
+			_token:$('#data').data('token'),
+			_method:'delete'
+		};
+
+		$.ajax({
+			type:'post',
+			url:'/ajax/farm/'+farmId+'/farmTask/'+taskId+'/delete',
+			data:formData,
+			success:function(){
+				$(button).parents('.column').first().css({overflow:'hidden'});
+				$(button).parents('.column').first().animate({width:'0%',padding:'0'}, {duration:1000,easing:'easeInCirc',complete:function(){ 
+					$(this).remove();
+					
+				}});
+			}
+		});
+	}
+}
+
+function changeTaskStatus(button){
+	var farmId = $("#data").data('farmId');
+	var taskId = $("#farmTaskModal").data('taskId');
+	if(!$(button).hasClass('is-hovered')){
+		$("#statusButtons .is-hovered").switchClass('is-hovered','is-outlined',300);
+		$(button).switchClass('is-outlined','is-hovered is-loading',{duration:300,complete:function(){
+				//make the call to change the status
+				var formData = {
+					_token:$('#data').data('token'),
+					_method:'put',
+					status:$(button).data('status')
+				};
+				self = $(button);
+				$.ajax({
+					type:'post',
+					url:'/ajax/farm/'+farmId+'/farmTask/'+taskId,
+					data:formData,
+					success:function(data){
+						data = JSON.parse(data);
+
+						var farmTask = data.response.farmTask;
+						$(self).removeClass('is-loading');
+						$('.modal.is-active header').attr('class','modal-card-head has-background-'+farmTask.bgColour)
+						$('.modal.is-active .modal-card-title').attr('class', 'modal-card-title has-text-centered has-text-'+farmTask.txtColour);
+
+						$('#normTasks .farmTask[data-task-id="'+farmTask.id+'"]').find('.card-header').first().attr('class', 'card-header has-text-centered has-background-'+farmTask.bgColour);
+						$('#normTasks .farmTask[data-task-id="'+farmTask.id+'"]').find('.card-header-title').first().attr('class', 'card-header-title is-unselectable has-text-centered has-text-'+farmTask.txtColour);
+
+					}
+				});
+			}
+		});
+	}
+}
+
+function updateTaskList(target){
+	var farmId = $("#data").data('farmId');
+	var formData = {
+		_token:$('#data').data('token')
+	};
+	var taskClass = 'farmTask';
+	if(target == 'trashedTasks'){
+		formData.trashed = true;
+		taskClass = 'farmTaskTrashed';
+	}
+	$.ajax({
+		type:'post',
+		url:'/ajax/farm/'+farmId+'/farmTasks',
+		data:formData,
+		success:function(data){
+			data = JSON.parse(data);
+			
+			var tasks = data.response.farmTasks;
+			var farm = data.response.farm;
+			var user = data.response.user;
+			var htmlString = '';
+			
+			if(tasks.length > 0){
+				for(var i = 0; i < tasks.length; i++){
+					var task = tasks[i];
+					htmlString += `<div class="column is-one-third">
+
+										<div class="card has-text-centered ${taskClass}" data-task-id="${task.id}">
+											
+												<header	class="card-header has-text-centered has-background-${task.bgColour}">
+													<p class="card-header-title has-text-centered has-text-${task.txtColour}">${task.title}</p>
+												</header>
+											`;
+					if(user.id == farm.owner || user.role == 1){
+						
+						if(target == 'trashedTasks'){
+							
+							htmlString +=	`<footer class="card-footer">
+												<a class="card-footer-item taskRecoverButton" data-task-id="${task.id}">Restore</a>
+												<a class="card-footer-item has-text-danger taskDeleteButton" data-task-id="${task.id}">Delete</a>
+											</footer>`;
+						}
+					}
+					htmlString +=			`</div>
+										</div>`;
+				}
+				if($('#normTasks #noTasks').hasClass('showing')){
+					$('#normTasks #noTasks').switchClass('showing','is-hidden',300).fadeOut(300);
+				}
+				
+				$('#tasksContent .tab-content[data-tab="'+target+'"] .columns').html(htmlString);
+			}
+			else if(target == 'normalTasks'){
+				
+				$('#normTasks #noTasks').switchClass('is-hidden','showing',300).fadeIn(300);
+				
 			}
 		}
 	});

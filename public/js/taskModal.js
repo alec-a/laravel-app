@@ -196,7 +196,7 @@ class taskModal{
 		var self = this;
 		
 		if(status !== oldButtonStatus){
-			$(target).switchClass('is-outlined','is-hovered is-loading',{duration:300,complete:function(){;
+			$(target).switchClass('is-outlined','is-hovered is-loading',{duration:300,complete:function(){
 					var formData = {
 						'_token':$("#token input").val(),
 						'_method':'put',
