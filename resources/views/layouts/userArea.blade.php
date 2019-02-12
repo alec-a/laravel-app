@@ -133,7 +133,7 @@ if(isset($dumpTop)){
 								  <li><a>New Page</a></li>
 								</ul>
 							  </li>
-							  <li><a>Applications</a></li>
+							  <li><a href="{{url('/applications')}}" class="{{$pageData->activeNav=='applications'? 'is-active':''}}">Applications</a></li>
 							  <li><a>Users</a></li>
 							</ul>
 						</aside>

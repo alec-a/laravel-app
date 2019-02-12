@@ -96,5 +96,12 @@ route::group(array('prefix' => 'account'), function(){
 
 Route::resource('account','userController')->parameters(['account' => 'user']);
 
+
+
+
+/* Applications */
+route::resource('applications','applicationController');
+
+/* Front End Controller */
 Route::get('/{uri?}/{uri1?}/{uri2?}', 'pageController@show');
 
