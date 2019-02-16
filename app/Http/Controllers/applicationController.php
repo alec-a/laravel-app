@@ -13,7 +13,7 @@ class applicationController extends Controller
     {
 		parent::__construct();
         $this->middleware('auth');
-		
+		$this->middleware('admin');
     }
 	
    
@@ -24,7 +24,6 @@ class applicationController extends Controller
      */
     public function index()
     {
-		$this->middleware('admin');
 		$this->pageData->currentUser = auth()->user()->name;
 		$this->pageData->activeNav = 'applications';
 		$this->pageData->applications = User::where('member','=',0)->get();

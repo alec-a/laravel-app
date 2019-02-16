@@ -97,7 +97,7 @@ function updateTables(tab){
 	};
 	$.ajax({
 		type:'post',
-		url:'/ajax/applications/',
+		url:'/ajax/applications',
 		data: formData,
 		success: function(data){
 			data = JSON.parse(data);
