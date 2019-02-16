@@ -39,8 +39,9 @@ function closeIssue(issueForm){
 			<div class="content version">
 			<h4 class="title is-4 {{$version->active? 'has-text-success':'has-text-info'}} has-text-centered">{{$version->name}}</h4>
 			<p class="has-text-centered ">{!!($version->changelog)? '<b>Changelog:</b><br/><span style="white-space: pre-wrap;">'.$version->changelog.'</span>':''!!}</p>
-			<p class="subtitle has-text-centered is-size-4">All Reported Issues</p>
+			
 				@if ($version->issues->count() > 0)
+				<p class="subtitle has-text-centered is-size-4">All Reported Issues</p>
 					@foreach($version->issues as $issue)
 					<div class="card issue">
 						<header class="card-header">
