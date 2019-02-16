@@ -103,6 +103,31 @@ class taskModal{
 							</div>
 						</div>`;
 		}
+		if(this.task.task_id == 1 || this.task.task_id == 2){
+			this.content += `
+				<div class="columns is-multiline" id="fertType"">
+					<div class="column uncompleted is-full ${((this.task.status == 3)? 'is-closed':'')}">
+						<div class="columns is-multiline">
+							<div class="column is-full is-paddingless-top">
+								<div class="is-divider is-half-margin is-marginless-bottom" data-content="Fertilizer Type"></div>
+							</div>
+							<div class="column is-full">
+								<div class="select is-fullwidth">
+									<select>${this.fertOptions()}</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column is-full completed ${((this.task.status !== 3)? 'is-closed':'')}">
+						<div class="columns is-multiline">
+							
+							<div class="column is-full" id="fertText">${((this.task.status === 3 && this.task.task_option !== null)? '<p class="has-text-centered">Fertilized With '+this.task.task_option+'</p>':'')}</div>
+						</div>
+					</div>
+				</div>
+			`;
+		}
+		
 		this.content += `<div class="columns is-multiline ${((this.task.status == 3)? 'is-closed':'')}" id="note">
 							<div class="column is-full is-paddingless-top">
 								<div class="is-divider is-half-margin is-marginless-bottom" data-content="Note"></div>
@@ -180,6 +205,10 @@ class taskModal{
 			self.updateOption($(this));
 		});
 		
+		$('#fertType select').change(function(){
+			self.updateFertOption($(this));
+		});
+		
 		$("#noteText").focusin(function(){
 			self.oldNoteText = $(this).val();
 			return self;
@@ -245,13 +274,14 @@ class taskModal{
 								$('#taskModal #completed p:last-child').html(note);
 								$('#taskModal #note,#taskModal #comments, #taskModal #crop').slideUp(300, function(){$(this).addClass('is-closed')}).fadeOut(150);
 								$('#taskModal #completed').slideDown(300, function(){$(this).addClass('is-completed').removeClass('is-closed');}).fadeIn(150);
-								
+								$('#taskModal #fertType .uncompleted').slideUp(300, function(){$(this).switchClass('','is-closed'); if(data.task_option !== null){ $('#taskModal #fertType .completed #fertText').html('<p class="has-text-centered">Fertilized With '+data.task_option+'</p>'); $('#taskModal #fertType .completed').slideDown(300).switchClass('is-closed','');}});
 							}
 							else{
 								$('#taskModal .is-completed, #taskModal .is-completed-opened').slideUp(300, function(){
 									$(this).addClass('is-closed').removeClass('is-completed');
 								}).fadeOut(150);
 								$('#taskModal .is-closed').slideDown(300).fadeIn(150);
+								$('#taskModal #fertType .completed').slideUp(300, function(){$(this).switchClass('','is-closed'); $('#taskModal #fertType .completed #fertText').html(''); $('#taskModal #fertType .uncompleted').slideDown(300).switchClass('is-closed','');});
 							}
 							
 						}
@@ -316,6 +346,22 @@ class taskModal{
 		
 	}
 	
+	updateFertOption(fertilizer){
+		var self = this;
+		var formData = {
+			'_token':$("#token input").val(),
+			'_method':'put',
+			'option': $(fertilizer).val()
+		};
+		$.ajax({
+			type:'post',
+			url:'/ajax/farm/'+this.task.worklog.farm_id+'/task/'+this.task.id,
+			data:formData,
+			success:function(){
+			}
+		});
+	}
+	
 	updateNote(){
 		var self = this;
 		var newNoteText = $("#noteText").val();
@@ -360,6 +406,28 @@ class taskModal{
 			options += '<option value="'+this.crops[i].id+'" '+selected+'>'+this.crops[i].name+'</option>';
 		}
 		return options;
+	}
+	
+	fertOptions() {
+		
+		var options = '';
+		var firstOption = '';
+		var task_option = (this.task.task_option)? this.task.task_option:null;
+		var task_options = JSON.parse(this.task.info.options);
+		var hasBeenSelected = false;
+		for(var i=0;i<task_options.fertTypes.length;i++){
+			
+			var selected = (this.task.task_option == task_options.fertTypes[i])? 'selected':'';
+			if(selected){hasBeenSelected = true};
+			options += '<option value="'+task_options.fertTypes[i]+'" '+selected+'>'+task_options.fertTypes[i]+'</option>';
+			if(i === task_options.fertTypes.length-1){
+				if(!hasBeenSelected){
+					firstOption += '<option value="" disabled selected>Select Fert Type</option>';
+				}
+			}
+		}
+		
+		return firstOption+options;
 	}
 }
 
