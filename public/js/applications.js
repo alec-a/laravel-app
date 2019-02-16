@@ -26,7 +26,6 @@ $(document).ready(function(){
 		}
 	}
 	
-	
 	$('#applicationsContentContainer #applicationsTabs li a').click(function(){
 		var target = $(this).data('tab');
 		updateTables(this);
@@ -42,8 +41,114 @@ $(document).ready(function(){
 			}).fadeOut(300);
 		}
 	});
+	
+	$(document).on('click','#selectAll',function(evt){
+		evt.stopImmediatePropagation();
+		
+		if($(this).prop('checked')){
+			selectAll();
+			showOptions(true);
+		}
+		else{
+			deselectAll();
+			showOptions(false);
+		}
+	});
+	
+	$(document).on('click','#declinedApplications .table tbody input',function(evt){
+		evt.stopImmediatePropagation();
+		
+		//count all inputs and count all checked inputs
+		var inputs = $('#declinedApplications .table tbody input');
+		var numberOfInputs = $(inputs).length;
+		var numberChecked = $('#declinedApplications .table tbody input:checked').length;
+		
+		if(numberChecked > 0){
+			showOptions(true);
+		}
+		else{
+			showOptions(false);
+		}
+		
+		if(numberOfInputs === numberChecked){
+			$('#selectAll').prop('checked',true);
+			
+		}
+		else
+		{
+			$('#selectAll').prop('checked',false);
+			
+		}
+		
+	});
+	
+	$(document).on('click','#actions #delete',function(evt){
+		evt.stopImmediatePropagation();
+		var deleteIds = [];
+		var selected = $('#declinedApplications .table tbody input:checked');
+		
+		for(i=0;i<selected.length;i++){
+			deleteIds.push($(selected[i]).parents('tr').data('applicationId'));
+		}
+		
+		var formData = {
+			_token:$("#data").data('token'),
+			_method:'delete',
+			ids:deleteIds
+		}
+		
+		$.ajax({
+			type:'post',
+			url:'/ajax/applications',
+			data: formData,
+			success: function(data){
+				$(selected).each(function(){
+					$(this).prop('checked',false);
+					$(this).parents('tr').fadeOut(300,function(){
+						$(this).remove();
+						if($('#declinedApplications .table tbody input:checked').length < 1){
+							$('#selectAll').prop('checked',false);
+							showOptions(false);
+						}
+						else
+						{
+							$('#selectAll').prop('checked',true);
+							showOptions(true);
+						}
+					});
+				});
+				
+			}
+		});
+		
+	});
+	
 });
 
+function selectAll(){
+	$('#declinedApplications .table tbody input').each(function(){
+		$(this).prop('checked', true);
+	});
+}
+function deselectAll(){
+	$('#declinedApplications .table tbody input').each(function(){
+		$(this).prop('checked', false);
+	});
+}
+
+function showOptions(visible){
+	if(visible){
+		if(!$('#actions').hasClass('showing')){
+			$('#actions').slideDown(300).addClass('showing');
+		}
+	}
+	else
+	{
+		if($('#actions').hasClass('showing')){
+			$('#actions').slideUp(300).removeClass('showing');
+		}
+	}
+}
 
 function showApplicant(row){
 	var applicantId = $(row).data('applicationId');

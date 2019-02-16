@@ -86,7 +86,12 @@
 		</div>
 
 		<div class="content main-tab-content" id="declinedApplications" data-tab="declined">
-			<h4 class="title is-4">Declined Applications</h4>
+			<div class="columns">
+				<div class="column is-three-quarters"><h4 class="title is-4">Declined Applications</h4></div>
+				<div class="column is-one-quarter" style="display:none;" id="actions"><div  class="is-pulled-right">with Selected: <div class="buttons"><button class="button is-danger is-small" id="delete">Delete</button></div></div></div>
+			</div>
+			
+			
 			<table class="table">
 				<thead>
 				   <tr>

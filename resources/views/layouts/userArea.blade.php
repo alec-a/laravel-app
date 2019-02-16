@@ -31,6 +31,17 @@ if(isset($dumpTop)){
    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
     </head>
     <body>
+		@if(env('APP_DEBUG',false) == true)
+			<section class="hero is-danger">
+				<div class="hero-body" style="padding:0.3rem 1.5rem">
+				  <div class="container">
+					<h1 class="title has-text-centered">
+					  Debugging On
+					</h1>
+				  </div>
+				</div>
+		  </section>
+		@endif
 		<div id="data" 
 			 data-token="{{csrf_token()}}"
 			 @if(isset($farm)) data-farm-id="{{$farm->id}}" @endif

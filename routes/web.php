@@ -104,6 +104,7 @@ Route::resource('account','userController')->parameters(['account' => 'user']);
 route::resource('applications','applicationController');
 route::put('ajax/application/{user}','applicationController@update');
 route::post('ajax/applications','applicationController@allForStatus');
+route::delete('ajax/applications','applicationController@destroy');
 
 /* Front End Controller */
 Route::get('/{uri?}/{uri1?}/{uri2?}', 'pageController@show');

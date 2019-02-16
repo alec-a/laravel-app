@@ -26,7 +26,7 @@ class applicationController extends Controller
     {
 		$this->pageData->currentUser = auth()->user()->name;
 		$this->pageData->activeNav = 'applications';
-		$this->pageData->applications = User::where('member','=',0)->get();
+		$this->pageData->applications = User::all();
 		return view('applications.index');
     }
 
@@ -52,9 +52,10 @@ class applicationController extends Controller
      * @param  \Lakeview\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Request $request)
     {
-        //
+		$applications = User::destroy($request->ids);
+		return '';
     }
 	
 	public function allForStatus(Request $request){
