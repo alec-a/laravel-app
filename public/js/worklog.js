@@ -57,7 +57,7 @@ function populateTask(){
 					
 			for(var i=0; i < data.response.worklogTasks.length; i++){
 				var task = data.response.worklogTasks[i];
-				var note = (task.note != null)? true:false;
+				var note = (task.note != null && task.status < 3)? true:false;
 				var appendHtml =	`<div class="column is-one-tenth has-background-${task.bgColour} has-text-${task.txtColour} wltask " data-wlt="${task.id}">
 										<div class="columns">
 											<div class="column">

@@ -77,6 +77,7 @@ class taskModal{
 									<div class="column is-full is-paddingless-top">
 
 											<p class="subtitle has-text-centered">Completed On <b>${completedDate}</b> At <b>${completedTime}</b> By <b>${(this.task.completed_user)? this.task.completed_user.name:''}</b></p>
+											<p class="has-text-centered">${this.task.note}</p>
 											
 									</div>
 								</div>`;
@@ -221,6 +222,13 @@ class taskModal{
 									return self.task = data;
 							}});
 						
+							if(data.status < 3){
+								$('.wltask[data-wlt="'+data.id+'"] #noteIcon').switchClass('is-invisible', '',200);
+							}
+							else{
+								$('.wltask[data-wlt="'+data.id+'"] #noteIcon').switchClass('', 'is-invisible',200);
+							}
+						
 							//if the user has completed the task show it in the modal
 							if(data.completed_by_id != null)
 							{
@@ -229,7 +237,12 @@ class taskModal{
 								var completedDate = new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit'}).format(date);
 								completedDate = completedDate.replace(/\//g,'-');
 								var completedTime = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit'}).format(date);
-								$('#taskModal #completed p').html(`Completed On <b>${completedDate}</b> At <b>${completedTime}</b> By <b>${data.completed_user.name}</b>`);
+								$('#taskModal #completed p:first-child').html(`Completed On <b>${completedDate}</b> At <b>${completedTime}</b> By <b>${data.completed_user.name}</b>`);
+								var note = '';
+								if(data.note !== null){
+									note = data.note;
+								}
+								$('#taskModal #completed p:last-child').html(note);
 								$('#taskModal #note,#taskModal #comments, #taskModal #crop').slideUp(300, function(){$(this).addClass('is-closed')}).fadeOut(150);
 								$('#taskModal #completed').slideDown(300, function(){$(this).addClass('is-completed').removeClass('is-closed');}).fadeIn(150);
 								
@@ -325,7 +338,7 @@ class taskModal{
 					$("#noteText").switchClass('','is-success',{duration: 800, complete:function(){
 							$("#noteText").switchClass('is-success','',{duration: 800});
 					}});
-					if(newNoteText != null){
+					if(newNoteText != null ){
 						$('.wltask[data-wlt="'+self.task.id+'"] #noteIcon').switchClass('is-invisible', '',200);
 					}
 					else

@@ -31,7 +31,7 @@
 
 		<div class="content main-tab-content is-active" id="newApplications" data-tab="new">
 			<h4 class="title is-4">New Applications</h4>
-			<table class="table">
+			<table class="table is-hoverable">
 				<thead>
 				   <tr>
 					   <th>Name</th>
@@ -59,7 +59,7 @@
 
 		<div class="content main-tab-content" id="trialApplications" data-tab="trial">
 			<h4 class="title is-4">Applicants On Trial</h4>
-			<table class="table">
+			<table class="table is-hoverable">
 				<thead>
 				   <tr>
 					   <th>Name</th>
@@ -92,7 +92,7 @@
 			</div>
 			
 			
-			<table class="table">
+			<table class="table is-hoverable">
 				<thead>
 				   <tr>
 					   <th><input type="checkbox" class="checkbox" id="selectAll"/></th>

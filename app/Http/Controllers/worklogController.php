@@ -200,12 +200,12 @@ class worklogController extends Controller
 				$requiredTasks = $worklog->tasks()->where('task_id', '=',$task->id)->where('status', '=','1')->get();
 				$progressTasks =  $worklog->tasks()->where('task_id', '=',$task->id)->where('status', '=','2')->get();
 				$completedTasks =  $worklog->tasks()->where('task_id', '=',$task->id)->where('status', '=','3')->get();
-				$noteTasks = $worklog->tasks()->where('task_id', '=',$task->id)->whereRaw('note <> ""')->get();
-				if($requiredTasks->count() > 0 ){
-					$taskTabClasses[$task->id] = 'has-text-info has-text-weight-bold';
-				}
-				elseif($progressTasks->count() > 0){
+				$noteTasks = $worklog->tasks()->where([['task_id', '=',$task->id],['status','<','3']])->whereRaw('note <> ""')->get();
+				if($progressTasks->count() > 0){
 					$taskTabClasses[$task->id] = 'has-text-warning-dark has-text-weight-bold';
+				}
+				elseif($requiredTasks->count() > 0 ){
+					$taskTabClasses[$task->id] = 'has-text-info has-text-weight-bold';
 				}
 				elseif($completedTasks->count() > 0){
 					$taskTabClasses[$task->id] = 'has-text-success';
