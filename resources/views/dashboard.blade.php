@@ -32,7 +32,7 @@ function closeIssue(issueForm){
 	<div class="column">
 		<h1 class="title is-1">Dashboard</h1>
 		<div class="box">
-			<h3 class="title is-3 has-text-centered">Verions</h3>
+			<h3 class="title is-3 has-text-centered">Versions</h3>
 			
 			<hr/>
 			@foreach($pageData->versions as $version)
