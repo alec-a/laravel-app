@@ -264,6 +264,11 @@ hr.is-half-margin{
 	max-height: 100%;
 	cursor: pointer;
 }
+
+.farmField.selected{
+	background: #3273dc;
+	color: #fff;
+}
 #fieldsContent div[data-tab="*"]{
 	display:none;
 }

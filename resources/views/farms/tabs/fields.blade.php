@@ -19,7 +19,7 @@
 						{!!($user->id == $farm->owner || $user->role == 1)? '<div class="is-divider is-half-margin" data-content="Fields"></div>':''!!}
 						<div class="columns is-multiline is-marginless" style="margin-top: 0px;">
 							@foreach($farm->fields as $field)
-							<div class="column is-one-fifth farmField is-unselectable" data-name="{{$field->name}}" data-field-id="{{$field->id}}"><p class="has-text-weight-bold is-marginless">{{$field->name}}</p> <span class="is-size-7">{{$field->crop->name}}</span></div>
+							<div class="column is-one-fifth farmField {{($user->id == $farm->owner || auth()->user()->role == 1)? '':'is-unselectable'}}" data-name="{{$field->name}}" data-field-id="{{$field->id}}"><p class="has-text-weight-bold is-marginless">{{$field->name}}</p> <span class="is-size-7">{{$field->crop->name}}</span></div>
 							@endforeach
 						</div>
 
@@ -58,7 +58,7 @@
 						<div class="columns is-multiline is-marginless" style="margin-top: 0px;">
 
 							@foreach($farm->fields()->onlyTrashed()->get() as $field)
-							<div class="column is-one-fifth farmField is-unselectable" data-field-id="{{$field->id}}"><p class="has-text-weight-bold is-marginless">{{$field->name}}</p> <p class="is-size-7"><span class="icon"><i class="fas fa-trash-alt"></i></span><span> {{$field->deleted_at->format('H:i')}}<br/>{{$field->deleted_at->format('d-m-Y')}}</span></p></div>
+							<div class="column is-one-fifth farmField {{($user->id == $farm->owner || auth()->user()->role == 1)? '':'is-unselectable'}}" data-field-id="{{$field->id}}"><p class="has-text-weight-bold is-marginless">{{$field->name}}</p> <p class="is-size-7"><span class="icon"><i class="fas fa-trash-alt"></i></span><span> {{$field->deleted_at->format('H:i')}}<br/>{{$field->deleted_at->format('d-m-Y')}}</span></p></div>
 							@endforeach
 						</div>
 
