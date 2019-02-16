@@ -77,7 +77,7 @@ class taskModal{
 									<div class="column is-full is-paddingless-top">
 
 											<p class="subtitle has-text-centered">Completed On <b>${completedDate}</b> At <b>${completedTime}</b> By <b>${(this.task.completed_user)? this.task.completed_user.name:''}</b></p>
-											<p class="has-text-centered">${this.task.note}</p>
+											<p class="has-text-centered">${(this.task.note !== null)? this.task.note:''}</p>
 											
 									</div>
 								</div>`;
