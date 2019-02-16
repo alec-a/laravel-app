@@ -424,6 +424,9 @@ class taskModal{
 				if(!hasBeenSelected){
 					firstOption += '<option value="" disabled selected>Select Fert Type</option>';
 				}
+				else{
+					firstOption += '<option value="">Select Fert Type</option>';
+				}
 			}
 		}
 		
