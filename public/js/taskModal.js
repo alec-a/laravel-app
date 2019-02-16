@@ -425,7 +425,7 @@ class taskModal{
 					firstOption += '<option value="" disabled selected>Select Fert Type</option>';
 				}
 				else{
-					firstOption += '<option value="">Select Fert Type</option>';
+					firstOption += '<option value="null">Select Fert Type</option>';
 				}
 			}
 		}
