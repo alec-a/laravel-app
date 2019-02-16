@@ -105,7 +105,7 @@ class worklogTaskController extends Controller
 				]);
 			}
 			
-			if(!is_null($request->option)){
+			if(!empty($request->option)){
 				$worklogTask->update([
 					'task_option' => $request->option
 				]);
