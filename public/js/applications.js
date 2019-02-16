@@ -94,7 +94,7 @@ function updateTables(tab){
 	var formData = {
 		_token:$("#data").data('token'),
 		'application_status':statusGrop
-	}
+	};
 	$.ajax({
 		type:'post',
 		url:'/ajax/applications/',
