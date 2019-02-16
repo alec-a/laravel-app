@@ -41,7 +41,7 @@ function closeIssue(issueForm){
 			<p class="has-text-centered ">{!!($version->changelog)? '<b>Changelog:</b><br/><span style="white-space: pre-wrap;">'.$version->changelog.'</span>':''!!}</p>
 			
 				@if ($version->issues->count() > 0)
-				<p class="subtitle has-text-centered is-size-4">$version->issues->count() Issue{{($version->issues->count() == 1) ? '':'s'}}</p>
+				<p class="subtitle has-text-centered is-size-4">{{$version->issues->count()}} Issue{{($version->issues->count() == 1) ? '':'s'}}</p>
 					@foreach($version->issues as $issue)
 					<div class="card issue">
 						<header class="card-header">
