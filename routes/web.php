@@ -93,10 +93,12 @@ Route::post('ajax/modal/farms','modalController@farms');
 Route::post('ajax/modal/fields','modalController@field');
 Route::post('ajax/modal/applications','modalController@applications');
 
-route::group(array('prefix' => 'account'), function(){
+Route::group(array('prefix' => 'account'), function(){
 	Route::get('register/confirmed','Auth\RegisterController@confirmed');
 	Auth::routes();
+	
 });
+Route::get('apply','Auth\RegisterController@showRegistrationForm');
 
 Route::resource('account','userController')->parameters(['account' => 'user']);
 
