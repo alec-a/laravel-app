@@ -32,12 +32,14 @@ function closeIssue(issueForm){
 	<div class="column">
 		<h1 class="title is-1">Dashboard</h1>
 		<div class="box">
-			<h3 class="title is-3 has-text-centered">Issues</h3>
-			<p class="subtitle has-text-centered is-size-4">All Reported Issues</p>
+			<h3 class="title is-3 has-text-centered">Verions</h3>
+			
 			<hr/>
 			@foreach($pageData->versions as $version)
 			<div class="content version">
 			<h4 class="title is-4 {{$version->active? 'has-text-success':'has-text-info'}} has-text-centered">{{$version->name}}</h4>
+			<p class="has-text-centered">Changelog: {{$version->changelog}}</p>
+			<p class="subtitle has-text-centered is-size-4">All Reported Issues</p>
 				@if ($version->issues->count() > 0)
 					@foreach($version->issues as $issue)
 					<div class="card issue">
