@@ -39,6 +39,9 @@ Route::delete('ajax/fields/trash','fieldsController@trash');
 Route::delete('ajax/fields/delete','fieldsController@delete');
 Route::put('ajax/fields/restore','fieldsController@restore');
 /*worklog */
+Route::bind('worklog', function ($worklog) {
+    return Lakeview\Worklog::withTrashed()->find($worklog);
+});
 Route::resource('farm/{farm}/worklogs','worklogController')->only(['index','store']);
 Route::resource('farm/{farm}/worklog','worklogController')->except(['index','store']);
 Route::post('ajax/farm/{farm}/worklogs', 'worklogController@index');
