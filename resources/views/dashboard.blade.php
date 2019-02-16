@@ -38,7 +38,9 @@ function closeIssue(issueForm){
 			@foreach($pageData->versions as $version)
 			<div class="content version">
 			<h4 class="title is-4 {{$version->active? 'has-text-success':'has-text-info'}} has-text-centered">{{$version->name}}</h4>
-			<p>{!!($version->changelog)? '<span class="has-text-centered"><b>Changelog:</b><br/><span style="white-space: pre-wrap;">'.$version->changelog.'</span>':''!!}</p>
+			@if($version->changelog)
+			<div style="white-space: pre-wrap;"><p class="has-text-centered"><b>Changelog:</b></p>{!! $version->changelog !!}</div>
+			 @endif
 			
 				@if ($version->issues->count() > 0)
 				<p class="subtitle has-text-centered is-size-4">{{$version->issues->count()}} Issue{{($version->issues->count() == 1) ? '':'s'}}</p>
