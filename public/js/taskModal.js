@@ -351,7 +351,7 @@ class taskModal{
 		var formData = {
 			'_token':$("#token input").val(),
 			'_method':'put',
-			'option': $(fertilizer).val()
+			'option': ($(fertilizer).val().length === 0)? null:$(fertilizer).val()
 		};
 		$.ajax({
 			type:'post',
