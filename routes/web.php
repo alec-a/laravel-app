@@ -88,6 +88,7 @@ Route::resource('issue', 'issueController');
 Route::post('ajax/modal','modalController@get');
 Route::post('ajax/modal/farms','modalController@farms');
 Route::post('ajax/modal/fields','modalController@field');
+Route::post('ajax/modal/applications','modalController@applications');
 
 route::group(array('prefix' => 'account'), function(){
 	Route::get('register/confirmed','Auth\RegisterController@confirmed');
@@ -101,6 +102,8 @@ Route::resource('account','userController')->parameters(['account' => 'user']);
 
 /* Applications */
 route::resource('applications','applicationController');
+route::put('ajax/application/{user}','applicationController@update');
+route::post('ajax/applications','applicationController@allForStatus');
 
 /* Front End Controller */
 Route::get('/{uri?}/{uri1?}/{uri2?}', 'pageController@show');

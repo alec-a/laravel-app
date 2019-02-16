@@ -13,6 +13,7 @@ class applicationController extends Controller
     {
 		parent::__construct();
         $this->middleware('auth');
+		$this->middleware('admin');
     }
 	
    
@@ -29,59 +30,20 @@ class applicationController extends Controller
 		return view('applications.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \Lakeview\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \Lakeview\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Lakeview\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, User $user)
     {
         //
+		if($request->changeStatus == 1 || $request->changeStatus == 3){
+			$user->member = 1;
+		}
+		else{
+			$user->member = 0;
+		}
+		
+		$user->application_status = $request->changeStatus;
+		$user->update();
+		$user->age = Carbon::parse($user->birthday)->age;
+		return json_encode($user);
     }
 
     /**
@@ -94,4 +56,15 @@ class applicationController extends Controller
     {
         //
     }
+	
+	public function allForStatus(Request $request){
+		$applications = User::where('application_status','=',$request->application_status)->get();
+		
+		foreach($applications as $application){
+			$application->age = Carbon::parse($application->birthday)->age;
+			$application->realCountry = $this->pageData->data->countries[$application->country];
+		}
+		
+		return json_encode(['applications' => $applications, 'data' => $this->pageData->data]);
+	}
 }

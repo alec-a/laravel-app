@@ -7,6 +7,7 @@ use Lakeview\Farm;
 use Lakeview\Fields;
 use Lakeview\Worklog;
 use Lakeview\FarmTask;
+use Lakeview\User;
 
 class modalController extends Controller
 {
@@ -41,6 +42,11 @@ class modalController extends Controller
 		
 		$field = Fields::where('id',$request->fieldId)->first();
 		return view($request->controller.'.modals.'.$request->name,['fieldId' => $field->id, 'farmId' => $field->farm_id])->render();
+	}
+	
+	public function applications(Request $request){
+		$applicant = User::where('id',$request->id)->first();
+		return view($request->controller.'.modals.'.$request->name,['applicant' => $applicant]);
 	}
 	
 }

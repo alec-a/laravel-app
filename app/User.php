@@ -28,4 +28,42 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+	
+	public function bgColour(){
+		$colour = '';
+		switch($this->application_status){
+			case 0:
+				$colour =  '';
+				break;
+			case 1:
+				$colour = 'warning';
+				break;
+			case 2:
+				$colour = 'danger';
+				break;
+			case 3:
+				$colour = 'success';
+				break;
+		}
+		return $colour;
+	}
+	
+	public function txtColour(){
+		$colour = '';
+		switch($this->application_status){
+			case 0:
+				$colour =  'dark';
+				break;
+			case 1:
+				$colour = 'dark';
+				break;
+			case 2:
+				$colour = 'light';
+				break;
+			case 3:
+				$colour = 'light';
+				break;
+		}
+		return $colour;
+	}
 }
