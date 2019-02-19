@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+		<link href="{{ asset('css/style.css') }}" rel="stylesheet">
 		<link href="{{ asset('css/bulma-divider.min.css') }}" rel="stylesheet">
 		<script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -18,7 +19,8 @@
   crossorigin="anonymous"></script>
 	@yield('scripts')
     </head>
-    <body>
+    <body id="frontBody">
+		
 		@if (Route::has('login'))
 		
 			<nav class="navbar" role="navigation" aria-label="main navigation">

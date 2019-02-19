@@ -7,6 +7,19 @@ and open the template in the editor.
     Created on : Dec 16, 2018, 7:08:04 PM
     Author     : Alec
 */
+html{
+	height:100%;
+}
+#frontBody{
+	height: 100%;
+	background-image: url(https://i.imgur.com/2a6NBbX.png);
+	background-size: cover;
+	background-repeat: none;
+}
+
+#frontBody .navbar {
+	background: transparent;
+}
 
 .subMenu {
 	
